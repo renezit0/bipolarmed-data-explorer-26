@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Medical/Scientific Design System - TCC Farmácia UNICESUMAR
+   Cores inspiradas em medicina, farmácia e análise científica
+   All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Background & Surface */
+    --background: 210 15% 98%;
+    --foreground: 215 25% 15%;
+    
+    /* Medical Blue Theme */
+    --medical-primary: 210 90% 45%;
+    --medical-primary-light: 210 85% 65%;
+    --medical-primary-dark: 210 95% 25%;
+    
+    /* Pharmaceutical Green */
+    --pharma-green: 150 60% 40%;
+    --pharma-green-light: 150 50% 60%;
+    --pharma-green-dark: 150 70% 25%;
+    
+    /* Analysis Colors */
+    --analysis-orange: 25 90% 55%;
+    --analysis-purple: 260 60% 50%;
+    --analysis-teal: 180 60% 45%;
+    
+    /* Chart Colors */
+    --chart-1: 210 90% 45%;
+    --chart-2: 150 60% 40%;
+    --chart-3: 25 90% 55%;
+    --chart-4: 260 60% 50%;
+    --chart-5: 180 60% 45%;
+    --chart-6: 340 75% 55%;
+    
+    /* Surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+    
+    /* Primary System */
+    --primary: 210 90% 45%;
+    --primary-foreground: 0 0% 100%;
+    
+    /* Secondary */
+    --secondary: 210 15% 96%;
+    --secondary-foreground: 215 25% 15%;
+    
+    /* Muted */
+    --muted: 210 15% 94%;
+    --muted-foreground: 215 15% 50%;
+    
+    /* Accent */
+    --accent: 150 60% 40%;
+    --accent-foreground: 0 0% 100%;
+    
+    /* States */
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 100%;
+    
+    /* Borders & Inputs */
+    --border: 210 15% 88%;
+    --input: 210 15% 88%;
+    --ring: 210 90% 45%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    /* Dark mode for medical interface */
+    --background: 215 25% 8%;
+    --foreground: 210 15% 92%;
+    
+    --card: 215 25% 10%;
+    --card-foreground: 210 15% 92%;
+    
+    --popover: 215 25% 10%;
+    --popover-foreground: 210 15% 92%;
+    
+    --primary: 210 85% 65%;
+    --primary-foreground: 215 25% 8%;
+    
+    --secondary: 215 25% 15%;
+    --secondary-foreground: 210 15% 92%;
+    
+    --muted: 215 25% 12%;
+    --muted-foreground: 210 15% 60%;
+    
+    --accent: 150 50% 60%;
+    --accent-foreground: 215 25% 8%;
+    
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 210 15% 92%;
+    
+    --border: 215 25% 20%;
+    --input: 215 25% 20%;
+    --ring: 210 85% 65%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+  
+  /* Medical chart specific styles */
+  .chart-container {
+    @apply rounded-lg border border-border/50 bg-card/50 backdrop-blur-sm;
+  }
+  
+  /* Academic paper styling */
+  .academic-title {
+    @apply text-2xl font-bold text-primary;
+  }
+  
+  .medical-gradient {
+    background: linear-gradient(135deg, hsl(var(--medical-primary)) 0%, hsl(var(--pharma-green)) 100%);
+  }
+  
+  /* Chart legend custom styling */
+  .recharts-legend-item-text {
+    @apply text-sm text-muted-foreground !important;
+  }
+  
+  /* Scrollbar styling for data tables */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-muted/30 rounded-full;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-primary/30 rounded-full hover:bg-primary/50;
+  }
+}

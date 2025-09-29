@@ -1,0 +1,167 @@
+import { useMedicData } from '@/hooks/useMedicData';
+import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
+import { TrendChart } from '@/components/charts/TrendChart';
+import { TrendAnalysis } from '@/components/charts/TrendAnalysis';
+import { ProportionChart } from '@/components/charts/ProportionChart';
+import { SeasonalityChart } from '@/components/charts/SeasonalityChart';
+import { SeasonalityAnalysis } from '@/components/charts/SeasonalityAnalysis';
+import { MonthlyDistributionChart } from '@/components/charts/MonthlyDistributionChart';
+import { DistributionAnalysis } from '@/components/charts/DistributionAnalysis';
+import { TotalQuantityChart } from '@/components/charts/TotalQuantityChart';
+import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
+import { MedicationDetails } from '@/components/MedicationDetails';
+import { AnalysisCommentary } from '@/components/AnalysisCommentary';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Users, BarChart3 } from 'lucide-react';
+
+const Index = () => {
+  const { data, loading, error } = useMedicData();
+  const { groupingMode, setGroupingMode, processedData, isGrouped } = useMedicGrouping(data || []);
+
+  if (loading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
+          <h2 className="text-xl font-semibold mb-2">Carregando dados...</h2>
+          <p className="text-muted-foreground">Processando informações do TabWin/SUS</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Card className="w-full max-w-md">
+          <CardHeader>
+            <CardTitle className="text-destructive">Erro ao carregar dados</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground">{error}</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header - Sticky quando rolar */}
+      <header className="border-b border-border/50 bg-card/80 backdrop-blur-md sticky top-0 z-50 transition-all duration-200">
+        <div className="container mx-auto px-4 py-4 md:py-6">
+          <div className="text-center">
+            <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
+              Análise de Dados: Medicamentos para Transtorno Bipolar
+            </h1>
+            <p className="text-sm md:text-lg text-muted-foreground mb-1">
+              Paraná • Jun/2018 - Jun/2025 • Dados TabWin/SUS
+            </p>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <main className="container mx-auto px-4 py-4 md:py-8 space-y-6 md:space-y-8">
+        {/* Informações do estudo */}
+        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-semibold text-primary mb-3">
+              Informações do Estudo
+            </h2>
+            <div className="space-y-2 text-sm md:text-base text-muted-foreground">
+              <p>
+                <strong>TCC:</strong> BASES CIENTÍFICAS DO TRANSTORNO BIPOLAR: UMA ANÁLISE INTEGRATIVA DOS ASPECTOS GENÉTICOS, CLÍNICOS E FARMACOTERAPÊUTICOS
+              </p>
+              <p>
+                <strong>Autores:</strong> Flávio Renê Pereira da Silva, Kauan Munsberg Donato de Souza
+              </p>
+              <p>
+                <strong>Instituição:</strong> Universidade Cesumar (UNICESUMAR) • Curso de Farmácia • 2025
+              </p>
+              <p>
+                <strong>Fonte dos Dados:</strong> Sistema de Informações Ambulatoriais do SUS (SIA/SUS) via TabWin
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Controles de Agrupamento */}
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="flex-1">
+                <h3 className="font-semibold text-foreground mb-1">Visualização dos Dados</h3>
+                <p className="text-sm text-muted-foreground">
+                  Escolha como visualizar os medicamentos nos gráficos
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  variant={groupingMode === 'individual' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setGroupingMode('individual')}
+                  className="flex items-center gap-2"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  Individual
+                </Button>
+                <Button
+                  variant={groupingMode === 'grouped' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setGroupingMode('grouped')}
+                  className="flex items-center gap-2"
+                >
+                  <Users className="h-4 w-4" />
+                  Agrupado
+                </Button>
+              </div>
+            </div>
+            {isGrouped && (
+              <div className="mt-3 pt-3 border-t">
+                <Badge variant="secondary" className="text-xs">
+                  Medicamentos agrupados por substância ativa (ex: todas as Quetiapinas juntas)
+                </Badge>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <div className="grid gap-6 md:gap-8">
+          {/* Gráfico de Tendências com Análise */}
+          <TrendChart data={processedData as any} />
+          <TrendAnalysis data={data} />
+          
+          {/* Gráfico de Proporções */}
+          <ProportionChart data={processedData as any} />
+          
+          {/* Gráfico de Sazonalidade com Análise */}
+          <SeasonalityChart data={processedData as any} />
+          <SeasonalityAnalysis data={data} />
+          
+          {/* Gráficos secundários - Responsivo */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
+            <MonthlyDistributionChart data={processedData as any} />
+            <TimeSeriesChart data={processedData as any} />
+          </div>
+          
+          {/* Análise da Distribuição */}
+          <DistributionAnalysis data={data} />
+          
+          {/* Gráfico de quantidade total - Full width */}
+          <TotalQuantityChart data={processedData as any} />
+
+          {/* Análise Geral das quedas */}
+          <AnalysisCommentary data={data} />
+          
+          {/* Detalhes dos Medicamentos - Movido para o final */}
+          <MedicationDetails data={data} />
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default Index;
