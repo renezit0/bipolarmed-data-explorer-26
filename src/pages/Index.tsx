@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useMedicData } from '@/hooks/useMedicData';
 import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
 import { TrendChart } from '@/components/charts/TrendChart';
@@ -19,6 +20,30 @@ import { Loader2, Users, BarChart3 } from 'lucide-react';
 const Index = () => {
   const { data, loading, error } = useMedicData();
   const { groupingMode, setGroupingMode, processedData, isGrouped } = useMedicGrouping(data || []);
+  
+  // Estado para controlar visibilidade do header
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Hook para detectar scroll e esconder/mostrar header
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      if (currentScrollY < 10) {
+        setShowHeader(true);
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowHeader(false); // Esconde quando rola para baixo
+      } else if (currentScrollY < lastScrollY) {
+        setShowHeader(true); // Mostra quando rola para cima
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   if (loading) {
     return (
@@ -49,8 +74,10 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header - Fixo no topo */}
-      <header className="fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-all duration-200">
+      {/* Header - Aparece/desaparece no scroll */}
+      <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${
+        showHeader ? 'translate-y-0' : '-translate-y-full'
+      }`}>
         <div className="container mx-auto px-4 py-4 md:py-6">
           <div className="text-center">
             <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
