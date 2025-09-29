@@ -49,6 +49,35 @@ export const TrendChart = ({ data }: TrendChartProps) => {
                 border: '1px solid hsl(var(--border))',
                 borderRadius: '8px'
               }}
+              formatter={(value, name) => [
+                `${Number(value).toLocaleString()} unidades`,
+                name
+              ]}
+              labelFormatter={(label) => `Período: ${label}`}
+              itemSorter={() => 0}
+              content={({ active, payload, label }) => {
+                if (!active || !payload || payload.length === 0) return null;
+                
+                // Encontra apenas o item que está sendo hover
+                const activeItem = payload.find(item => item.value && Number(item.value) > 0);
+                if (!activeItem) return null;
+                
+                return (
+                  <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+                    <p className="text-foreground font-medium mb-2">{`Período: ${label}`}</p>
+                    <div className="flex items-center gap-2">
+                      <div 
+                        className="w-3 h-3 rounded-sm" 
+                        style={{ backgroundColor: activeItem.color }}
+                      />
+                      <span className="text-muted-foreground">{activeItem.name}:</span>
+                      <span className="text-foreground font-mono">
+                        {Number(activeItem.value).toLocaleString()} unidades
+                      </span>
+                    </div>
+                  </div>
+                );
+              }}
             />
             <Legend />
             {data.map((medic, index) => (
