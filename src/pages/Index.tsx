@@ -95,6 +95,76 @@ const Index = () => {
 
       {/* Main Content - Com espaçamento para o header fixo */}
       <main className="container mx-auto px-4 pt-24 md:pt-28 py-4 md:py-8 space-y-6 md:space-y-8">
+        {/* Informações do estudo - Com fotos dos autores */}
+        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-semibold text-primary mb-4">
+              Informações do Estudo
+            </h2>
+            <div className="space-y-4">
+              <div className="text-sm md:text-base text-muted-foreground">
+                <p className="mb-3">
+                  <strong>TCC:</strong> BASES CIENTÍFICAS DO TRANSTORNO BIPOLAR: UMA ANÁLISE INTEGRATIVA DOS ASPECTOS GENÉTICOS, CLÍNICOS E FARMACOTERAPÊUTICOS
+                </p>
+                <p className="mb-3">
+                  <strong>Instituição:</strong> Universidade Cesumar (UNICESUMAR) • Curso de Farmácia • 2025
+                </p>
+                <p>
+                  <strong>Fonte dos Dados:</strong> Sistema de Informações Ambulatoriais do SUS (SIA/SUS) via TabWin
+                </p>
+              </div>
+              
+              {/* Equipe do projeto */}
+              <div className="border-t pt-6 mt-6">
+                <h3 className="font-semibold text-foreground mb-4 text-center">Equipe do Projeto</h3>
+                
+                <div className="bg-background rounded-lg p-6 border border-border/30">
+                  <div className="flex flex-col lg:flex-row gap-8 justify-center items-center">
+                    {/* Autor 1 */}
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <img 
+                        src={flavioPhoto} 
+                        alt="Flávio Renê Pereira da Silva"
+                        className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg"
+                      />
+                      <div>
+                        <p className="font-semibold text-foreground">Flávio Renê Pereira da Silva</p>
+                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
+                      </div>
+                    </div>
+                    
+                    {/* Autor 2 */}
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <img 
+                        src={kauanPhoto} 
+                        alt="Kauan Munsberg Donato de Souza"
+                        className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg"
+                      />
+                      <div>
+                        <p className="font-semibold text-foreground">Kauan Munsberg Donato de Souza</p>
+                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
+                      </div>
+                    </div>
+                    
+                    {/* Orientadora */}
+                    <div className="flex flex-col items-center gap-3 text-center">
+                      <img 
+                        src={julianePhoto} 
+                        alt="Juliane Nadal Swiech"
+                        className="w-24 h-24 rounded-full object-cover border-4 border-accent/30 shadow-lg"
+                      />
+                      <div>
+                        <p className="font-semibold text-foreground">Juliane Nadal Swiech</p>
+                        <p className="text-sm text-muted-foreground">Professora Orientadora</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Controles de Agrupamento */}
         <Card>
           <CardContent className="p-4">
@@ -133,78 +203,6 @@ const Index = () => {
                 </Badge>
               </div>
             )}
-          </CardContent>
-        </Card>
-
-        {/* Informações do estudo - Com fotos dos autores */}
-        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
-          <CardContent className="p-4 md:p-6">
-            <h2 className="text-lg md:text-xl font-semibold text-primary mb-4">
-              Informações do Estudo
-            </h2>
-            <div className="space-y-4">
-              <div className="text-sm md:text-base text-muted-foreground">
-                <p className="mb-3">
-                  <strong>TCC:</strong> BASES CIENTÍFICAS DO TRANSTORNO BIPOLAR: UMA ANÁLISE INTEGRATIVA DOS ASPECTOS GENÉTICOS, CLÍNICOS E FARMACOTERAPÊUTICOS
-                </p>
-                <p className="mb-3">
-                  <strong>Instituição:</strong> Universidade Cesumar (UNICESUMAR) • Curso de Farmácia • 2025
-                </p>
-                <p>
-                  <strong>Fonte dos Dados:</strong> Sistema de Informações Ambulatoriais do SUS (SIA/SUS) via TabWin
-                </p>
-              </div>
-              
-              {/* Equipe do projeto */}
-              <div className="border-t pt-4">
-                <h3 className="font-semibold text-foreground mb-3">Equipe do Projeto</h3>
-                
-                {/* Autores */}
-                <div className="mb-6">
-                  <p className="text-sm font-medium text-muted-foreground mb-4 text-center">Autores:</p>
-                  <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-                    <div className="flex flex-col items-center gap-3 text-center">
-                      <img 
-                        src={flavioPhoto} 
-                        alt="Flávio Renê Pereira da Silva"
-                        className="w-20 h-20 rounded-full object-cover border-3 border-primary/30 shadow-lg"
-                      />
-                      <div>
-                        <p className="font-semibold text-foreground">Flávio Renê Pereira da Silva</p>
-                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-center gap-3 text-center">
-                      <img 
-                        src={kauanPhoto} 
-                        alt="Kauan Munsberg Donato de Souza"
-                        className="w-20 h-20 rounded-full object-cover border-3 border-primary/30 shadow-lg"
-                      />
-                      <div>
-                        <p className="font-semibold text-foreground">Kauan Munsberg Donato de Souza</p>
-                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* Orientadora */}
-                <div className="border-t pt-4">
-                  <p className="text-sm font-medium text-muted-foreground mb-4 text-center">Professora Orientadora:</p>
-                  <div className="flex flex-col items-center gap-3 text-center">
-                    <img 
-                      src={julianePhoto} 
-                      alt="Juliane Nadal Swiech"
-                      className="w-20 h-20 rounded-full object-cover border-3 border-accent/30 shadow-lg"
-                    />
-                    <div>
-                      <p className="font-semibold text-foreground">Juliane Nadal Swiech</p>
-                      <p className="text-sm text-muted-foreground">Professora Orientadora</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
           </CardContent>
         </Card>
 
