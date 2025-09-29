@@ -19,11 +19,19 @@ import { Loader2, Users, BarChart3 } from 'lucide-react';
 import kauanPhoto from '@/assets/kauan.png';
 import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
-
 const Index = () => {
-  const { data, loading, error } = useMedicData();
-  const { groupingMode, setGroupingMode, processedData, isGrouped } = useMedicGrouping(data || []);
-  
+  const {
+    data,
+    loading,
+    error
+  } = useMedicData();
+  const {
+    groupingMode,
+    setGroupingMode,
+    processedData,
+    isGrouped
+  } = useMedicGrouping(data || []);
+
   // Estado para controlar visibilidade do header
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -32,7 +40,6 @@ const Index = () => {
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
       if (currentScrollY < 10) {
         setShowHeader(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
@@ -40,29 +47,24 @@ const Index = () => {
       } else if (currentScrollY < lastScrollY) {
         setShowHeader(true); // Mostra quando rola para cima
       }
-      
       setLastScrollY(currentScrollY);
     };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('scroll', handleScroll, {
+      passive: true
+    });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
-
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+    return <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">Carregando dados...</h2>
           <p className="text-muted-foreground">Processando informações do TabWin/SUS</p>
         </div>
-      </div>
-    );
+      </div>;
   }
-
   if (error) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+    return <div className="flex min-h-screen items-center justify-center bg-background">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-destructive">Erro ao carregar dados</CardTitle>
@@ -71,17 +73,12 @@ const Index = () => {
             <p className="text-muted-foreground">{error}</p>
           </CardContent>
         </Card>
-      </div>
-    );
+      </div>;
   }
-
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       {/* Header - Aparece/desaparece no scroll */}
-      <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${
-        showHeader ? 'translate-y-0' : '-translate-y-full'
-      }`}>
-        <div className="container mx-auto px-4 py-4 md:py-6">
+      <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
+        <div className="container mx-auto px-4 md:py-6 py-[16px]">
           <div className="text-center">
             <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
               Análise de Dados: Medicamentos para Transtorno Bipolar
@@ -122,11 +119,7 @@ const Index = () => {
                   <div className="flex flex-col lg:flex-row gap-8 justify-center items-center">
                     {/* Autor 1 */}
                     <div className="flex flex-col items-center gap-3 text-center">
-                      <img 
-                        src={flavioPhoto} 
-                        alt="Flávio Renê Pereira da Silva"
-                        className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg"
-                      />
+                      <img src={flavioPhoto} alt="Flávio Renê Pereira da Silva" className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg" />
                       <div>
                         <p className="font-semibold text-foreground">Flávio Renê Pereira da Silva</p>
                         <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
@@ -135,11 +128,7 @@ const Index = () => {
                     
                     {/* Autor 2 */}
                     <div className="flex flex-col items-center gap-3 text-center">
-                      <img 
-                        src={kauanPhoto} 
-                        alt="Kauan Munsberg Donato de Souza"
-                        className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg"
-                      />
+                      <img src={kauanPhoto} alt="Kauan Munsberg Donato de Souza" className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg" />
                       <div>
                         <p className="font-semibold text-foreground">Kauan Munsberg Donato de Souza</p>
                         <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
@@ -148,11 +137,7 @@ const Index = () => {
                     
                     {/* Orientadora */}
                     <div className="flex flex-col items-center gap-3 text-center">
-                      <img 
-                        src={julianePhoto} 
-                        alt="Juliane Nadal Swiech"
-                        className="w-24 h-24 rounded-full object-cover border-4 border-accent/30 shadow-lg"
-                      />
+                      <img src={julianePhoto} alt="Juliane Nadal Swiech" className="w-24 h-24 rounded-full object-cover border-4 border-accent/30 shadow-lg" />
                       <div>
                         <p className="font-semibold text-foreground">Juliane Nadal Swiech</p>
                         <p className="text-sm text-muted-foreground">Professora Orientadora</p>
@@ -176,33 +161,21 @@ const Index = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button
-                  variant={groupingMode === 'individual' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setGroupingMode('individual')}
-                  className="flex items-center gap-2"
-                >
+                <Button variant={groupingMode === 'individual' ? 'default' : 'outline'} size="sm" onClick={() => setGroupingMode('individual')} className="flex items-center gap-2">
                   <BarChart3 className="h-4 w-4" />
                   Individual
                 </Button>
-                <Button
-                  variant={groupingMode === 'grouped' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setGroupingMode('grouped')}
-                  className="flex items-center gap-2"
-                >
+                <Button variant={groupingMode === 'grouped' ? 'default' : 'outline'} size="sm" onClick={() => setGroupingMode('grouped')} className="flex items-center gap-2">
                   <Users className="h-4 w-4" />
                   Agrupado
                 </Button>
               </div>
             </div>
-            {isGrouped && (
-              <div className="mt-3 pt-3 border-t">
+            {isGrouped && <div className="mt-3 pt-3 border-t">
                 <Badge variant="secondary" className="text-xs">
                   Medicamentos agrupados por substância ativa (ex: todas as Quetiapinas juntas)
                 </Badge>
-              </div>
-            )}
+              </div>}
           </CardContent>
         </Card>
 
@@ -237,8 +210,6 @@ const Index = () => {
           <MedicationDetails data={data} />
         </div>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
