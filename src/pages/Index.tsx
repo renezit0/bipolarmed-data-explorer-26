@@ -160,46 +160,46 @@ const Index = () => {
                 <h3 className="font-semibold text-foreground mb-3">Equipe do Projeto</h3>
                 
                 {/* Autores */}
-                <div className="mb-4">
-                  <p className="text-sm font-medium text-muted-foreground mb-3">Autores:</p>
-                  <div className="flex flex-wrap gap-4">
-                    <div className="flex items-center gap-3">
+                <div className="mb-6">
+                  <p className="text-sm font-medium text-muted-foreground mb-4 text-center">Autores:</p>
+                  <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                    <div className="flex flex-col items-center gap-3 text-center">
                       <img 
                         src={flavioPhoto} 
                         alt="Flávio Renê Pereira da Silva"
-                        className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                        className="w-20 h-20 rounded-full object-cover border-3 border-primary/30 shadow-lg"
                       />
                       <div>
-                        <p className="font-medium text-foreground">Flávio Renê Pereira da Silva</p>
-                        <p className="text-xs text-muted-foreground">Acadêmico de Farmácia</p>
+                        <p className="font-semibold text-foreground">Flávio Renê Pereira da Silva</p>
+                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col items-center gap-3 text-center">
                       <img 
                         src={kauanPhoto} 
                         alt="Kauan Munsberg Donato de Souza"
-                        className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                        className="w-20 h-20 rounded-full object-cover border-3 border-primary/30 shadow-lg"
                       />
                       <div>
-                        <p className="font-medium text-foreground">Kauan Munsberg Donato de Souza</p>
-                        <p className="text-xs text-muted-foreground">Acadêmico de Farmácia</p>
+                        <p className="font-semibold text-foreground">Kauan Munsberg Donato de Souza</p>
+                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
                       </div>
                     </div>
                   </div>
                 </div>
                 
                 {/* Orientadora */}
-                <div>
-                  <p className="text-sm font-medium text-muted-foreground mb-3">Professora Orientadora:</p>
-                  <div className="flex items-center gap-3">
+                <div className="border-t pt-4">
+                  <p className="text-sm font-medium text-muted-foreground mb-4 text-center">Professora Orientadora:</p>
+                  <div className="flex flex-col items-center gap-3 text-center">
                     <img 
                       src={julianePhoto} 
                       alt="Juliane Nadal Swiech"
-                      className="w-12 h-12 rounded-full object-cover border-2 border-accent/20"
+                      className="w-20 h-20 rounded-full object-cover border-3 border-accent/30 shadow-lg"
                     />
                     <div>
-                      <p className="font-medium text-foreground">Juliane Nadal Swiech</p>
-                      <p className="text-xs text-muted-foreground">Professora Orientadora</p>
+                      <p className="font-semibold text-foreground">Juliane Nadal Swiech</p>
+                      <p className="text-sm text-muted-foreground">Professora Orientadora</p>
                     </div>
                   </div>
                 </div>
