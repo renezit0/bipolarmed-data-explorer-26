@@ -78,7 +78,7 @@ const Index = () => {
   return <div className="min-h-screen bg-background">
       {/* Header - Aparece/desaparece no scroll */}
       <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="container px-4 md:py-6 py-[12px]">
+        <div className="container px-4 md:py-6 py-[10px]">
           <div className="text-center">
             <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
               Análise de Dados: Medicamentos para Transtorno Bipolar
