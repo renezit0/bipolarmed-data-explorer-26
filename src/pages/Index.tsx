@@ -49,8 +49,8 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header - Sticky quando rolar */}
-      <header className="border-b border-border/50 bg-card/80 backdrop-blur-md sticky top-0 z-50 transition-all duration-200">
+      {/* Header - Fixo no topo */}
+      <header className="fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-all duration-200">
         <div className="container mx-auto px-4 py-4 md:py-6">
           <div className="text-center">
             <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
@@ -63,8 +63,8 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-4 md:py-8 space-y-6 md:space-y-8">
+      {/* Main Content - Com espaçamento para o header fixo */}
+      <main className="container mx-auto px-4 pt-24 md:pt-28 py-4 md:py-8 space-y-6 md:space-y-8">
         {/* Informações do estudo */}
         <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
           <CardContent className="p-4 md:p-6">
