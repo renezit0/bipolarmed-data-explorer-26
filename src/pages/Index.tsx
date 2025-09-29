@@ -16,6 +16,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Users, BarChart3 } from 'lucide-react';
+import kauanPhoto from '@/assets/kauan.png';
+import flavioPhoto from '@/assets/flavio.jpeg';
+import julianePhoto from '@/assets/juliane.png';
 
 const Index = () => {
   const { data, loading, error } = useMedicData();
@@ -92,29 +95,6 @@ const Index = () => {
 
       {/* Main Content - Com espaçamento para o header fixo */}
       <main className="container mx-auto px-4 pt-24 md:pt-28 py-4 md:py-8 space-y-6 md:space-y-8">
-        {/* Informações do estudo */}
-        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
-          <CardContent className="p-4 md:p-6">
-            <h2 className="text-lg md:text-xl font-semibold text-primary mb-3">
-              Informações do Estudo
-            </h2>
-            <div className="space-y-2 text-sm md:text-base text-muted-foreground">
-              <p>
-                <strong>TCC:</strong> BASES CIENTÍFICAS DO TRANSTORNO BIPOLAR: UMA ANÁLISE INTEGRATIVA DOS ASPECTOS GENÉTICOS, CLÍNICOS E FARMACOTERAPÊUTICOS
-              </p>
-              <p>
-                <strong>Autores:</strong> Flávio Renê Pereira da Silva, Kauan Munsberg Donato de Souza
-              </p>
-              <p>
-                <strong>Instituição:</strong> Universidade Cesumar (UNICESUMAR) • Curso de Farmácia • 2025
-              </p>
-              <p>
-                <strong>Fonte dos Dados:</strong> Sistema de Informações Ambulatoriais do SUS (SIA/SUS) via TabWin
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
         {/* Controles de Agrupamento */}
         <Card>
           <CardContent className="p-4">
@@ -153,6 +133,78 @@ const Index = () => {
                 </Badge>
               </div>
             )}
+          </CardContent>
+        </Card>
+
+        {/* Informações do estudo - Com fotos dos autores */}
+        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
+          <CardContent className="p-4 md:p-6">
+            <h2 className="text-lg md:text-xl font-semibold text-primary mb-4">
+              Informações do Estudo
+            </h2>
+            <div className="space-y-4">
+              <div className="text-sm md:text-base text-muted-foreground">
+                <p className="mb-3">
+                  <strong>TCC:</strong> BASES CIENTÍFICAS DO TRANSTORNO BIPOLAR: UMA ANÁLISE INTEGRATIVA DOS ASPECTOS GENÉTICOS, CLÍNICOS E FARMACOTERAPÊUTICOS
+                </p>
+                <p className="mb-3">
+                  <strong>Instituição:</strong> Universidade Cesumar (UNICESUMAR) • Curso de Farmácia • 2025
+                </p>
+                <p>
+                  <strong>Fonte dos Dados:</strong> Sistema de Informações Ambulatoriais do SUS (SIA/SUS) via TabWin
+                </p>
+              </div>
+              
+              {/* Equipe do projeto */}
+              <div className="border-t pt-4">
+                <h3 className="font-semibold text-foreground mb-3">Equipe do Projeto</h3>
+                
+                {/* Autores */}
+                <div className="mb-4">
+                  <p className="text-sm font-medium text-muted-foreground mb-3">Autores:</p>
+                  <div className="flex flex-wrap gap-4">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={flavioPhoto} 
+                        alt="Flávio Renê Pereira da Silva"
+                        className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                      />
+                      <div>
+                        <p className="font-medium text-foreground">Flávio Renê Pereira da Silva</p>
+                        <p className="text-xs text-muted-foreground">Acadêmico de Farmácia</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src={kauanPhoto} 
+                        alt="Kauan Munsberg Donato de Souza"
+                        className="w-12 h-12 rounded-full object-cover border-2 border-primary/20"
+                      />
+                      <div>
+                        <p className="font-medium text-foreground">Kauan Munsberg Donato de Souza</p>
+                        <p className="text-xs text-muted-foreground">Acadêmico de Farmácia</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Orientadora */}
+                <div>
+                  <p className="text-sm font-medium text-muted-foreground mb-3">Professora Orientadora:</p>
+                  <div className="flex items-center gap-3">
+                    <img 
+                      src={julianePhoto} 
+                      alt="Juliane Nadal Swiech"
+                      className="w-12 h-12 rounded-full object-cover border-2 border-accent/20"
+                    />
+                    <div>
+                      <p className="font-medium text-foreground">Juliane Nadal Swiech</p>
+                      <p className="text-xs text-muted-foreground">Professora Orientadora</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
