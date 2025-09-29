@@ -7,7 +7,7 @@ interface SeasonalityChartProps {
 }
 
 export const SeasonalityChart = ({ data }: SeasonalityChartProps) => {
-  // Agregar dados por mês (ignorando ano) para análise de sazonalidade - consumo médio mensal
+  // Agregar dados por mês (somando todos os anos) para análise de sazonalidade
   const monthlyData = [
     'Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun',
     'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'
@@ -19,12 +19,10 @@ export const SeasonalityChart = ({ data }: SeasonalityChartProps) => {
         .filter(item => item.month.includes(`/${month}`))
         .map(item => item.value);
       
-      // Calcular média mensal para sazonalidade
-      const monthAverage = monthValues.length > 0 
-        ? monthValues.reduce((sum, value) => sum + value, 0) / monthValues.length 
-        : 0;
+      // Somar todos os valores do mesmo mês em todos os anos
+      const monthTotal = monthValues.reduce((sum, value) => sum + value, 0);
       
-      (monthData as any)[medic.simplifiedName] = Math.round(monthAverage);
+      (monthData as any)[medic.simplifiedName] = monthTotal;
     });
     
     return monthData;
@@ -37,7 +35,7 @@ export const SeasonalityChart = ({ data }: SeasonalityChartProps) => {
       <CardHeader>
         <CardTitle className="academic-title">Sazonalidade no Consumo</CardTitle>
         <CardDescription>
-          Padrões sazonais no consumo médio mensal de medicamentos
+          Padrões sazonais no consumo total por mês (soma de todos os anos)
         </CardDescription>
       </CardHeader>
       <CardContent>
