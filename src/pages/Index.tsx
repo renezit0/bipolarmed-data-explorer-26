@@ -34,9 +34,18 @@ const Index = () => {
     tables: string[];
     labels: string[];
   }) => {
-    setSelectedTables(config.tables);
-    setSelectedLabel(config.labels[0]);
-  }, []);
+    // Só atualiza se realmente mudou
+    const newTablesKey = config.tables.sort().join(',');
+    const currentTablesKey = selectedTables.sort().join(',');
+    
+    if (newTablesKey !== currentTablesKey) {
+      console.log('✅ Aplicando mudança:', config.tables.length, 'tabela(s) -', config.labels[0]);
+      setSelectedTables(config.tables);
+      setSelectedLabel(config.labels[0]);
+    } else {
+      console.log('⏭️ Mesmas tabelas, ignorando');
+    }
+  }, [selectedTables]);
 
   const {
     data,
@@ -75,17 +84,20 @@ const Index = () => {
   }, [lastScrollY]);
 
   if (loading) {
-    return <div className="flex min-h-screen items-center justify-center bg-background">
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">Carregando dados...</h2>
           <p className="text-muted-foreground">Processando informações do TabWin/SUS</p>
         </div>
-      </div>;
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="flex min-h-screen items-center justify-center bg-background">
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle className="text-destructive">Erro ao carregar dados</CardTitle>
@@ -94,10 +106,12 @@ const Index = () => {
             <p className="text-muted-foreground">{error}</p>
           </CardContent>
         </Card>
-      </div>;
+      </div>
+    );
   }
 
-  return <div className="min-h-screen bg-background">
+  return (
+    <div className="min-h-screen bg-background">
       {/* Header - Aparece/desaparece no scroll */}
       <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container px-4 md:py-4 py-[10px]">
@@ -177,7 +191,7 @@ const Index = () => {
 
         {/* Debug Info - REMOVER DEPOIS */}
         {process.env.NODE_ENV === 'development' && (
-          <Card className="bg-yellow-50 border-yellow-200">
+          <Card className="bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800">
             <CardContent className="p-4">
               <h3 className="font-bold text-sm mb-2">🔍 Debug Info:</h3>
               <div className="text-xs space-y-1 font-mono">
@@ -213,21 +227,33 @@ const Index = () => {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button variant={groupingMode === 'individual' ? 'default' : 'outline'} size="sm" onClick={() => setGroupingMode('individual')} className="flex items-center gap-2">
+                <Button 
+                  variant={groupingMode === 'individual' ? 'default' : 'outline'} 
+                  size="sm" 
+                  onClick={() => setGroupingMode('individual')} 
+                  className="flex items-center gap-2"
+                >
                   <BarChart3 className="h-4 w-4" />
                   Individual
                 </Button>
-                <Button variant={groupingMode === 'grouped' ? 'default' : 'outline'} size="sm" onClick={() => setGroupingMode('grouped')} className="flex items-center gap-2">
+                <Button 
+                  variant={groupingMode === 'grouped' ? 'default' : 'outline'} 
+                  size="sm" 
+                  onClick={() => setGroupingMode('grouped')} 
+                  className="flex items-center gap-2"
+                >
                   <Users className="h-4 w-4" />
                   Agrupado
                 </Button>
               </div>
             </div>
-            {isGrouped && <div className="mt-3 pt-3 border-t">
+            {isGrouped && (
+              <div className="mt-3 pt-3 border-t">
                 <Badge variant="secondary" className="text-xs">
                   Medicamentos agrupados por substância ativa (ex: todas as Quetiapinas juntas)
                 </Badge>
-              </div>}
+              </div>
+            )}
           </CardContent>
         </Card>
 
@@ -262,7 +288,8 @@ const Index = () => {
           <MedicationDetails data={data} />
         </div>
       </main>
-    </div>;
+    </div>
+  );
 };
 
 export default Index;
