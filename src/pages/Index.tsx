@@ -35,7 +35,8 @@ const Index = () => {
     tables: string[];
     labels: string[];
   }) => {
-    const newTablesKey = config.tables.sort().join(',');
+    // IMPORTANTE: Criar cópia antes de sort() para não mutar o array original!
+    const newTablesKey = [...config.tables].sort().join(',');
     
     if (newTablesKey !== previousTablesRef.current) {
       console.log('✅ Aplicando mudança:', config.tables.length, 'tabela(s) -', config.labels[0]);
@@ -45,7 +46,7 @@ const Index = () => {
     } else {
       console.log('⏭️ Mesmas tabelas, ignorando');
     }
-  }, []); // SEM DEPENDÊNCIAS para evitar loop
+  }, []);
 
   const {
     data,
