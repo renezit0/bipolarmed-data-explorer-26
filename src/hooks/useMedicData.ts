@@ -14,7 +14,7 @@ export interface ProcessedMedicData {
   totalConsumption: number;
 }
 
-export const useMedicData = () => {
+export const useMedicData = (tableName: string = 'medicbipopr') => {
   const [data, setData] = useState<ProcessedMedicData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -51,12 +51,16 @@ export const useMedicData = () => {
       try {
         setLoading(true);
         const { data: rawData, error } = await supabase
-          .from('medicbipo')
+          .from(tableName as any)
           .select('*');
 
         if (error) throw error;
+        if (!rawData) {
+          setData([]);
+          return;
+        }
 
-        const processedData = rawData.map((row: MedicData) => {
+        const processedData = rawData.map((row: any) => {
           const timeSeriesData = monthOrder
             .map(month => {
               const value = row[month];
@@ -94,7 +98,7 @@ export const useMedicData = () => {
     };
 
     fetchData();
-  }, []);
+  }, [tableName]);
 
   return { data, loading, error };
 };

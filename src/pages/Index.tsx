@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useMultiStateMedicData, ViewMode } from '@/hooks/useMultiStateMedicData';
+import { useMedicData } from '@/hooks/useMedicData';
 import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
-import { DataSelector } from '@/components/DataSelector';
-import { STATES } from '@/constants/states';
+import { DataSelector, ViewMode } from '@/components/DataSelector';
+import { STATES, StateCode } from '@/constants/states';
 import { TrendChart } from '@/components/charts/TrendChart';
 import { TrendAnalysis } from '@/components/charts/TrendAnalysis';
 import { ProportionChart } from '@/components/charts/ProportionChart';
@@ -23,35 +23,21 @@ import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
 const Index = () => {
   // Estado para gerenciar seleção de dados
-  const [dataConfig, setDataConfig] = useState<{
-    mode: ViewMode;
-    tables: string[];
-    labels: string[];
-  }>({
-    mode: 'single-state',
-    tables: ['medicbipopr'],
-    labels: ['Paraná']
-  });
+  const [selectedState, setSelectedState] = useState<StateCode>('pr');
+  const [selectedLabel, setSelectedLabel] = useState('Paraná');
 
   const {
     data,
     loading,
-    error,
-    labels
-  } = useMultiStateMedicData({ 
-    tables: dataConfig.tables,
-    labels: dataConfig.labels
-  });
-
-  // Para modo single, usar apenas o primeiro dataset
-  const singleData = data[0] || [];
+    error
+  } = useMedicData(STATES[selectedState].table);
   
   const {
     groupingMode,
     setGroupingMode,
     processedData,
     isGrouped
-  } = useMedicGrouping(singleData);
+  } = useMedicGrouping(data || []);
 
   // Estado para controlar visibilidade do header
   const [showHeader, setShowHeader] = useState(true);
@@ -105,7 +91,7 @@ const Index = () => {
               Análise de Dados: Medicamentos para Transtorno Bipolar
             </h1>
             <p className="text-sm md:text-lg text-muted-foreground mb-1">
-              {labels.join(' vs ')} • Jun/2018 - Jun/2025 • Dados TabWin/SUS
+              {selectedLabel} • Jun/2018 - Jun/2025 • Dados TabWin/SUS
             </p>
           </div>
         </div>
@@ -172,7 +158,16 @@ const Index = () => {
         </Card>
 
         {/* Seletor de Dados */}
-        <DataSelector onSelectionChange={setDataConfig} />
+        <DataSelector onSelectionChange={(config) => {
+          // Por enquanto, suporta apenas single-state
+          if (config.mode === 'single-state' && config.tables[0]) {
+            const stateCode = Object.entries(STATES).find(([_, s]) => s.table === config.tables[0])?.[0] as StateCode;
+            if (stateCode) {
+              setSelectedState(stateCode);
+              setSelectedLabel(config.labels[0]);
+            }
+          }
+        }} />
 
         {/* Controles de Agrupamento */}
         <Card>
@@ -206,14 +201,14 @@ const Index = () => {
         <div className="grid gap-6 md:gap-8">
           {/* Gráfico de Tendências com Análise */}
           <TrendChart data={processedData as any} />
-          <TrendAnalysis data={singleData} />
+          <TrendAnalysis data={data} />
           
           {/* Gráfico de Proporções */}
           <ProportionChart data={processedData as any} />
           
           {/* Gráfico de Sazonalidade com Análise */}
           <SeasonalityChart data={processedData as any} />
-          <SeasonalityAnalysis data={singleData} />
+          <SeasonalityAnalysis data={data} />
           
           {/* Gráficos secundários - Responsivo */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
@@ -222,16 +217,16 @@ const Index = () => {
           </div>
           
           {/* Análise da Distribuição */}
-          <DistributionAnalysis data={singleData} />
+          <DistributionAnalysis data={data} />
           
           {/* Gráfico de quantidade total - Full width */}
           <TotalQuantityChart data={processedData as any} />
 
           {/* Análise Geral das quedas */}
-          <AnalysisCommentary data={singleData} />
+          <AnalysisCommentary data={data} />
           
           {/* Detalhes dos Medicamentos - Movido para o final */}
-          <MedicationDetails data={singleData} />
+          <MedicationDetails data={data} />
         </div>
       </main>
     </div>;

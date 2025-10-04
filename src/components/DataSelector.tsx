@@ -5,7 +5,8 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { MapPin, Users, Globe, GitCompare } from 'lucide-react';
 import { STATES, REGIONS, StateCode, RegionName, getStatesByRegion } from '@/constants/states';
-import { ViewMode } from '@/hooks/useMultiStateMedicData';
+
+export type ViewMode = 'single-state' | 'compare-states' | 'single-region' | 'compare-regions';
 
 interface DataSelectorProps {
   onSelectionChange: (config: {
