@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +23,13 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
 
+  // Usar ref para a função callback para evitar dependência circular
+  const onSelectionChangeRef = useRef(onSelectionChange);
+  
+  useEffect(() => {
+    onSelectionChangeRef.current = onSelectionChange;
+  }, [onSelectionChange]);
+
   const handleState1Change = (value: string) => {
     setSelectedState1(value as StateCode);
   };
@@ -39,7 +46,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
     setSelectedRegion2(value as RegionName);
   };
 
-  // useEffect simplificado - incluir todas as dependências sempre
+  // CRÍTICO: NÃO incluir onSelectionChange nas dependências para evitar loop
   useEffect(() => {
     let tables: string[] = [];
     let labels: string[] = [];
@@ -61,8 +68,8 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
     }
 
     console.log('📤 DataSelector:', viewMode, '→', tables.length, 'tabela(s)', labels[0]);
-    onSelectionChange({ mode: viewMode, tables, labels });
-  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2, onSelectionChange]);
+    onSelectionChangeRef.current({ mode: viewMode, tables, labels });
+  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]); // SEM onSelectionChange!
 
   return (
     <Card>
