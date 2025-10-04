@@ -18,7 +18,10 @@ export const useMedicGrouping = (data: ProcessedMedicData[]) => {
   const [groupingMode, setGroupingMode] = useState<GroupingMode>('individual');
 
   const groupedData = useMemo(() => {
-    if (groupingMode === 'individual') {
+    console.log('🔄 useMedicGrouping: Processando', data.length, 'medicamentos, modo:', groupingMode);
+    
+    if (groupingMode === 'individual' || data.length === 0) {
+      console.log('✅ Modo individual ou sem dados, retornando', data.length, 'itens');
       return data;
     }
 
@@ -97,8 +100,10 @@ export const useMedicGrouping = (data: ProcessedMedicData[]) => {
       }
     });
 
-    return processedGroups.sort((a, b) => b.totalConsumption - a.totalConsumption);
-  }, [data, groupingMode]);
+    const result = processedGroups.sort((a, b) => b.totalConsumption - a.totalConsumption);
+    console.log('✅ Modo agrupado retornando', result.length, 'itens');
+    return result;
+  }, [data, groupingMode]); // IMPORTANTE: Adicionar 'data' nas dependências!
 
   return {
     groupingMode,
