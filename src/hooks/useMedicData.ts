@@ -21,16 +21,11 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
 
   // Função para simplificar nomes dos medicamentos
   const simplifyMedicName = (fullName: string): string => {
-    // Remove código do procedimento
     const nameWithoutCode = fullName.replace(/^\d+\s+/, '');
-    
-    // Extrai apenas o nome principal e dosagem
     const match = nameWithoutCode.match(/^([A-Z]+(?:\s+[A-Z]+)*)\s+(\d+(?:,\d+)?\s*MG)/i);
     if (match) {
       return `${match[1]} ${match[2]}`;
     }
-    
-    // Fallback: pega as primeiras palavras
     return nameWithoutCode.split(' ').slice(0, 3).join(' ');
   };
 
@@ -52,19 +47,28 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         setLoading(true);
         setError(null);
 
+        console.log('🔍 Buscando dados das tabelas:', tableNames);
+
         // Buscar dados de todas as tabelas
         const allDataPromises = tableNames.map(async (tableName) => {
           const { data: rawData, error } = await supabase
             .from(tableName as any)
             .select('*');
 
-          if (error) throw error;
+          if (error) {
+            console.error(`❌ Erro ao buscar tabela ${tableName}:`, error);
+            throw error;
+          }
+          
+          console.log(`✅ Dados carregados de ${tableName}:`, rawData?.length || 0, 'linhas');
           return rawData || [];
         });
 
         const allRawData = await Promise.all(allDataPromises);
+        const totalRows = allRawData.reduce((sum, arr) => sum + arr.length, 0);
+        console.log(`📊 Total de linhas carregadas: ${totalRows}`);
         
-        // Agregar dados por medicamento (PROCEDIMENTO)
+        // Agregar dados por medicamento (PROCEDIMENTO completo, não apenas o código)
         const medicMap = new Map<string, {
           procedimento: string;
           simplifiedName: string;
@@ -75,10 +79,14 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
 
         allRawData.flat().forEach((row: any) => {
           const fullName = row.PROCEDIMENTO || '';
-          const procedimento = fullName.split(' ')[0] || '';
+          if (!fullName) return;
           
-          if (!medicMap.has(procedimento)) {
-            medicMap.set(procedimento, {
+          // Usar o nome completo como chave para evitar misturar medicamentos diferentes
+          const medicKey = fullName.trim();
+          
+          if (!medicMap.has(medicKey)) {
+            const procedimento = fullName.split(' ')[0] || '';
+            medicMap.set(medicKey, {
               procedimento,
               simplifiedName: simplifyMedicName(fullName),
               fullName,
@@ -87,12 +95,20 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
             });
           }
 
-          const medic = medicMap.get(procedimento)!;
+          const medic = medicMap.get(medicKey)!;
           
           // Agregar valores mensais
           monthOrder.forEach(month => {
             const value = row[month];
-            const numValue = typeof value === 'string' ? parseInt(value) || 0 : (value || 0);
+            let numValue = 0;
+            
+            if (typeof value === 'string') {
+              // Remover pontos e converter vírgulas para pontos
+              const cleanValue = value.replace(/\./g, '').replace(/,/g, '.');
+              numValue = parseFloat(cleanValue) || 0;
+            } else if (typeof value === 'number') {
+              numValue = value;
+            }
             
             if (numValue > 0) {
               const currentValue = medic.monthlyData.get(month) || 0;
@@ -100,6 +116,8 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
             }
           });
         });
+
+        console.log(`💊 Total de medicamentos únicos encontrados: ${medicMap.size}`);
 
         // Converter para formato final
         const processedData = Array.from(medicMap.values()).map(medic => {
@@ -110,7 +128,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
               
               return {
                 month,
-                value,
+                value: Math.round(value), // Arredondar para inteiro
                 year
               };
             })
@@ -125,10 +143,16 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
             timeSeriesData,
             totalConsumption
           };
-        }).filter(item => item.totalConsumption > 0);
+        })
+        .filter(item => item.totalConsumption > 0)
+        .sort((a, b) => b.totalConsumption - a.totalConsumption); // Ordenar por consumo total
 
+        console.log('✨ Dados processados:', processedData.length, 'medicamentos');
+        console.log('📋 Medicamentos:', processedData.map(m => m.simplifiedName));
+        
         setData(processedData);
       } catch (err) {
+        console.error('💥 Erro no processamento:', err);
         setError(err instanceof Error ? err.message : 'Erro desconhecido');
       } finally {
         setLoading(false);
@@ -136,7 +160,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
     };
 
     fetchData();
-  }, [JSON.stringify(tableNames)]);
+  }, [JSON.stringify(tableNames)]); // Usar JSON.stringify para comparação correta de arrays
 
   return { data, loading, error };
 };
