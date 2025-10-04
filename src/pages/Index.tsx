@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useMedicData } from '@/hooks/useMedicData';
 import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
 import { DataSelector, ViewMode } from '@/components/DataSelector';
@@ -23,29 +23,29 @@ import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
 
 const Index = () => {
-  // Estado para gerenciar seleção de dados - Inicia com TODOS os estados do Brasil
   const allStateTables = Object.values(STATES).map(s => s.table);
   const [selectedTables, setSelectedTables] = useState<string[]>(allStateTables);
   const [selectedLabel, setSelectedLabel] = useState<string>('Brasil (Todos os Estados)');
   
-  // Usar useCallback para evitar recriar a função a cada render
+  // useRef para evitar loop de dependências
+  const previousTablesRef = useRef<string>('');
+  
   const handleSelectionChange = useCallback((config: {
     mode: ViewMode;
     tables: string[];
     labels: string[];
   }) => {
-    // Só atualiza se realmente mudou
     const newTablesKey = config.tables.sort().join(',');
-    const currentTablesKey = selectedTables.sort().join(',');
     
-    if (newTablesKey !== currentTablesKey) {
+    if (newTablesKey !== previousTablesRef.current) {
       console.log('✅ Aplicando mudança:', config.tables.length, 'tabela(s) -', config.labels[0]);
+      previousTablesRef.current = newTablesKey;
       setSelectedTables(config.tables);
       setSelectedLabel(config.labels[0]);
     } else {
       console.log('⏭️ Mesmas tabelas, ignorando');
     }
-  }, [selectedTables]);
+  }, []); // SEM DEPENDÊNCIAS para evitar loop
 
   const {
     data,
@@ -60,11 +60,9 @@ const Index = () => {
     isGrouped
   } = useMedicGrouping(data || []);
 
-  // Estado para controlar visibilidade do header
   const [showHeader, setShowHeader] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
 
-  // Hook para detectar scroll e esconder/mostrar header
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -77,9 +75,7 @@ const Index = () => {
       }
       setLastScrollY(currentScrollY);
     };
-    window.addEventListener('scroll', handleScroll, {
-      passive: true
-    });
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
@@ -112,7 +108,6 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header - Aparece/desaparece no scroll */}
       <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container px-4 md:py-4 py-[10px]">
           <div className="text-center">
@@ -126,9 +121,7 @@ const Index = () => {
         </div>
       </header>
 
-      {/* Main Content - Com espaçamento para o header fixo */}
       <main className="container mx-auto px-4 pt-24 md:pt-28 py-4 md:py-8 space-y-6 md:space-y-8">
-        {/* Informações do estudo - Com fotos dos autores */}
         <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
           <CardContent className="p-4 md:p-6">
             <h2 className="text-lg md:text-xl font-semibold text-primary mb-4">
@@ -147,13 +140,11 @@ const Index = () => {
                 </p>
               </div>
               
-              {/* Equipe do projeto */}
               <div className="border-t pt-6 mt-6">
                 <h3 className="font-semibold text-foreground mb-4 text-center">Equipe do Projeto</h3>
                 
                 <div className="bg-background rounded-lg p-6 border border-border/30">
                   <div className="flex flex-col lg:flex-row gap-8 justify-center items-center">
-                    {/* Autor 1 */}
                     <div className="flex flex-col items-center gap-3 text-center">
                       <img src={flavioPhoto} alt="Flávio Renê Pereira da Silva" className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg" />
                       <div>
@@ -162,7 +153,6 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    {/* Autor 2 */}
                     <div className="flex flex-col items-center gap-3 text-center">
                       <img src={kauanPhoto} alt="Kauan Munsberg Donato de Souza" className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg" />
                       <div>
@@ -171,7 +161,6 @@ const Index = () => {
                       </div>
                     </div>
                     
-                    {/* Orientadora */}
                     <div className="flex flex-col items-center gap-3 text-center">
                       <img src={julianePhoto} alt="Juliane Nadal Swiech" className="w-24 h-24 rounded-full object-cover border-4 border-accent/30 shadow-lg" />
                       <div>
@@ -186,10 +175,8 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        {/* Seletor de Dados */}
         <DataSelector onSelectionChange={handleSelectionChange} />
 
-        {/* Debug Info - REMOVER DEPOIS */}
         {process.env.NODE_ENV === 'development' && (
           <Card className="bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800">
             <CardContent className="p-4">
@@ -216,7 +203,6 @@ const Index = () => {
           </Card>
         )}
 
-        {/* Controles de Agrupamento */}
         <Card>
           <CardContent className="p-4">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -258,33 +244,20 @@ const Index = () => {
         </Card>
 
         <div className="grid gap-6 md:gap-8">
-          {/* Gráfico de Tendências com Análise */}
           <TrendChart data={processedData as any} />
           <TrendAnalysis data={data} />
-          
-          {/* Gráfico de Proporções */}
           <ProportionChart data={processedData as any} />
-          
-          {/* Gráfico de Sazonalidade com Análise */}
           <SeasonalityChart data={processedData as any} />
           <SeasonalityAnalysis data={data} />
           
-          {/* Gráficos secundários - Responsivo */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
             <MonthlyDistributionChart data={processedData as any} />
             <TimeSeriesChart data={processedData as any} />
           </div>
           
-          {/* Análise da Distribuição */}
           <DistributionAnalysis data={data} />
-          
-          {/* Gráfico de quantidade total - Full width */}
           <TotalQuantityChart data={processedData as any} />
-
-          {/* Análise Geral das quedas */}
           <AnalysisCommentary data={data} />
-          
-          {/* Detalhes dos Medicamentos - Movido para o final */}
           <MedicationDetails data={data} />
         </div>
       </main>
