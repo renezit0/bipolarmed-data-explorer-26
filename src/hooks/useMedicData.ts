@@ -14,42 +14,74 @@ export interface ProcessedMedicData {
   totalConsumption: number;
 }
 
-// Função melhorada para converter valores brasileiros para número
-const parseValue = (value: any): number => {
-  // Se já for número válido, retorna
-  if (typeof value === 'number' && !isNaN(value)) {
-    return value;
+// Função SUPER robusta para converter valores
+const parseValue = (value: any, monthName?: string, medicName?: string): number => {
+  // Log para debug (remover depois)
+  const DEBUG = false; // Mude para true para ver os logs
+  
+  // Se já for número válido
+  if (typeof value === 'number') {
+    if (isNaN(value)) {
+      if (DEBUG) console.log(`⚠️ [${medicName}/${monthName}] Number mas NaN:`, value);
+      return 0;
+    }
+    // IMPORTANTE: Se vier como number, pode estar com ponto como decimal
+    // Ex: 94.900 pode virar 94.9 se foi parseado errado antes
+    if (DEBUG && value > 0) console.log(`📊 [${medicName}/${monthName}] Number direto:`, value);
+    return Math.round(value);
   }
   
-  // Se for null, undefined ou string vazia, retorna 0
+  // Se for null, undefined ou string vazia
   if (value === null || value === undefined || value === '') {
     return 0;
   }
   
-  // Se for string, faz a conversão
+  // Se for string
   if (typeof value === 'string') {
-    // Remove espaços em branco
     let cleaned = value.trim();
     
-    // Se ficou vazio após trim, retorna 0
     if (cleaned === '' || cleaned === '-') {
       return 0;
     }
     
-    // Remove pontos (separador de milhar brasileiro)
-    cleaned = cleaned.replace(/\./g, '');
+    // LOG: ver o valor original
+    if (DEBUG && cleaned.length > 0) {
+      console.log(`🔍 [${medicName}/${monthName}] String original: "${cleaned}"`);
+    }
     
-    // Substitui vírgula por ponto (decimal brasileiro)
-    cleaned = cleaned.replace(/,/g, '.');
+    // CRÍTICO: Verificar o padrão do número
+    // Formato BR: 94.900 (ponto = milhar)
+    // Formato EN: 94,900 (vírgula = milhar)
     
-    // Tenta converter
+    // Se tem PONTO e NÃO tem vírgula = formato BR com milhar
+    if (cleaned.includes('.') && !cleaned.includes(',')) {
+      // Remove os pontos (milhar)
+      cleaned = cleaned.replace(/\./g, '');
+    }
+    // Se tem VÍRGULA = decimal brasileiro
+    else if (cleaned.includes(',')) {
+      // Remove pontos primeiro (milhar)
+      cleaned = cleaned.replace(/\./g, '');
+      // Troca vírgula por ponto (decimal)
+      cleaned = cleaned.replace(',', '.');
+    }
+    
     const num = parseFloat(cleaned);
     
-    // Se não conseguiu converter ou resultado é NaN, retorna 0
-    return isNaN(num) ? 0 : num;
+    if (isNaN(num)) {
+      if (DEBUG) console.log(`❌ [${medicName}/${monthName}] NaN após conversão de "${value}" -> "${cleaned}"`);
+      return 0;
+    }
+    
+    if (DEBUG && num > 0) {
+      console.log(`✅ [${medicName}/${monthName}] "${value}" -> ${num}`);
+    }
+    
+    return Math.round(num);
   }
   
-  // Qualquer outro tipo, retorna 0
+  // Qualquer outro tipo
+  if (DEBUG) console.log(`⚠️ [${medicName}/${monthName}] Tipo inesperado:`, typeof value, value);
   return 0;
 };
 
@@ -117,6 +149,16 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         const totalRows = allRawData.reduce((sum, arr) => sum + arr.length, 0);
         console.log(`✅ ${totalRows} linhas carregadas`);
         
+        // DEBUG: Verificar tipos de dados em uma linha de amostra
+        if (allRawData.length > 0 && allRawData[0].length > 0) {
+          const sampleRow = allRawData[0][0];
+          console.log('🔬 AMOSTRA DE TIPOS DE DADOS:');
+          monthOrder.slice(0, 5).forEach(month => {
+            const value = sampleRow[month];
+            console.log(`  ${month}: tipo=${typeof value}, valor="${value}"`);
+          });
+        }
+        
         const medicMap = new Map<string, {
           procedimento: string;
           simplifiedName: string;
@@ -147,8 +189,8 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           monthOrder.forEach(month => {
             const value = row[month];
             
-            // Usar a função melhorada de conversão
-            const numValue = parseValue(value);
+            // Passar nome do mês e medicamento para debug
+            const numValue = parseValue(value, month, medic.simplifiedName);
             
             if (numValue > 0) {
               const currentValue = medic.monthlyData.get(month) || 0;
@@ -188,6 +230,18 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         .sort((a, b) => b.totalConsumption - a.totalConsumption);
 
         console.log('✨ Processamento concluído:', processedData.length, 'medicamento(s)');
+        
+        // DEBUG: Mostrar totais de um medicamento
+        if (processedData.length > 0) {
+          const sample = processedData[0];
+          console.log(`📈 Amostra - ${sample.simplifiedName}:`);
+          console.log(`   Total: ${sample.totalConsumption.toLocaleString('pt-BR')}`);
+          console.log(`   Registros: ${sample.timeSeriesData.length} meses`);
+          if (sample.timeSeriesData.length > 0) {
+            console.log(`   Primeiro: ${sample.timeSeriesData[0].month} = ${sample.timeSeriesData[0].value.toLocaleString('pt-BR')}`);
+          }
+        }
+        
         console.log('🔍 =================================\n');
         
         setData(processedData);
