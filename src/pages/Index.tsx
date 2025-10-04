@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useMedicData } from '@/hooks/useMedicData';
+import { useMultiStateMedicData, ViewMode } from '@/hooks/useMultiStateMedicData';
 import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
+import { DataSelector } from '@/components/DataSelector';
+import { STATES } from '@/constants/states';
 import { TrendChart } from '@/components/charts/TrendChart';
 import { TrendAnalysis } from '@/components/charts/TrendAnalysis';
 import { ProportionChart } from '@/components/charts/ProportionChart';
@@ -20,17 +22,36 @@ import kauanPhoto from '@/assets/kauan.png';
 import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
 const Index = () => {
+  // Estado para gerenciar seleção de dados
+  const [dataConfig, setDataConfig] = useState<{
+    mode: ViewMode;
+    tables: string[];
+    labels: string[];
+  }>({
+    mode: 'single-state',
+    tables: ['medicbipopr'],
+    labels: ['Paraná']
+  });
+
   const {
     data,
     loading,
-    error
-  } = useMedicData();
+    error,
+    labels
+  } = useMultiStateMedicData({ 
+    tables: dataConfig.tables,
+    labels: dataConfig.labels
+  });
+
+  // Para modo single, usar apenas o primeiro dataset
+  const singleData = data[0] || [];
+  
   const {
     groupingMode,
     setGroupingMode,
     processedData,
     isGrouped
-  } = useMedicGrouping(data || []);
+  } = useMedicGrouping(singleData);
 
   // Estado para controlar visibilidade do header
   const [showHeader, setShowHeader] = useState(true);
@@ -84,7 +105,7 @@ const Index = () => {
               Análise de Dados: Medicamentos para Transtorno Bipolar
             </h1>
             <p className="text-sm md:text-lg text-muted-foreground mb-1">
-              Paraná • Jun/2018 - Jun/2025 • Dados TabWin/SUS
+              {labels.join(' vs ')} • Jun/2018 - Jun/2025 • Dados TabWin/SUS
             </p>
           </div>
         </div>
@@ -150,6 +171,9 @@ const Index = () => {
           </CardContent>
         </Card>
 
+        {/* Seletor de Dados */}
+        <DataSelector onSelectionChange={setDataConfig} />
+
         {/* Controles de Agrupamento */}
         <Card>
           <CardContent className="p-4">
@@ -182,14 +206,14 @@ const Index = () => {
         <div className="grid gap-6 md:gap-8">
           {/* Gráfico de Tendências com Análise */}
           <TrendChart data={processedData as any} />
-          <TrendAnalysis data={data} />
+          <TrendAnalysis data={singleData} />
           
           {/* Gráfico de Proporções */}
           <ProportionChart data={processedData as any} />
           
           {/* Gráfico de Sazonalidade com Análise */}
           <SeasonalityChart data={processedData as any} />
-          <SeasonalityAnalysis data={data} />
+          <SeasonalityAnalysis data={singleData} />
           
           {/* Gráficos secundários - Responsivo */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
@@ -198,16 +222,16 @@ const Index = () => {
           </div>
           
           {/* Análise da Distribuição */}
-          <DistributionAnalysis data={data} />
+          <DistributionAnalysis data={singleData} />
           
           {/* Gráfico de quantidade total - Full width */}
           <TotalQuantityChart data={processedData as any} />
 
           {/* Análise Geral das quedas */}
-          <AnalysisCommentary data={data} />
+          <AnalysisCommentary data={singleData} />
           
           {/* Detalhes dos Medicamentos - Movido para o final */}
-          <MedicationDetails data={data} />
+          <MedicationDetails data={singleData} />
         </div>
       </main>
     </div>;
