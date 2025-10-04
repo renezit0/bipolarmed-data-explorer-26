@@ -41,6 +41,8 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   };
 
   useEffect(() => {
+  // Criar uma flag para evitar disparo durante mudança de modo
+  const timeoutId = setTimeout(() => {
     let tables: string[] = [];
     let labels: string[] = [];
 
@@ -68,9 +70,13 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
         break;
     }
 
+    console.log('📤 DataSelector enviando:', { mode: viewMode, tables: tables.length, labels });
     onSelectionChange({ mode: viewMode, tables, labels });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
+  }, 50); // Pequeno delay para evitar múltiplos disparos
+
+  return () => clearTimeout(timeoutId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+}, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
 
   return (
     <Card>
