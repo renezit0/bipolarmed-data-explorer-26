@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 export interface MedicData {
@@ -18,6 +18,9 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
   const [data, setData] = useState<ProcessedMedicData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  
+  // Usar ref para comparar arrays corretamente
+  const prevTableNamesRef = useRef<string>('');
 
   const simplifyMedicName = (fullName: string): string => {
     const nameWithoutCode = fullName.replace(/^\d+\s+/, '');
@@ -40,12 +43,25 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
   ];
 
   useEffect(() => {
+    // Comparar se as tabelas realmente mudaram
+    const currentTableNames = tableNames.sort().join(',');
+    
+    if (currentTableNames === prevTableNamesRef.current) {
+      console.log('⏭️ Tabelas não mudaram, pulando fetch');
+      return;
+    }
+    
+    prevTableNamesRef.current = currentTableNames;
+
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        console.log('🔍 Carregando dados de', tableNames.length, 'tabela(s)...');
+        console.log('🔍 =================================');
+        console.log('🔍 Carregando dados de', tableNames.length, 'tabela(s)');
+        console.log('🔍 Tabelas:', tableNames);
+        console.log('🔍 =================================');
 
         const allDataPromises = tableNames.map(async (tableName) => {
           const { data: rawData, error } = await supabase
@@ -62,7 +78,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
 
         const allRawData = await Promise.all(allDataPromises);
         const totalRows = allRawData.reduce((sum, arr) => sum + arr.length, 0);
-        console.log(`✅ ${totalRows} linhas carregadas de ${tableNames.length} tabela(s)`);
+        console.log(`✅ ${totalRows} linhas carregadas`);
         
         const medicMap = new Map<string, {
           procedimento: string;
@@ -73,7 +89,6 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         }>();
 
         allRawData.flat().forEach((row: any) => {
-          // CORREÇÃO: Procedimento com P maiúsculo
           const fullName = row.Procedimento || '';
           if (!fullName) return;
           
@@ -111,7 +126,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         });
 
         const medicCount = medicMap.size;
-        console.log(`💊 ${medicCount} medicamento(s) único(s) encontrado(s)`);
+        console.log(`💊 ${medicCount} medicamento(s) encontrado(s)`);
 
         const processedData = Array.from(medicMap.values()).map(medic => {
           const timeSeriesData = monthOrder
@@ -141,10 +156,11 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         .sort((a, b) => b.totalConsumption - a.totalConsumption);
 
         console.log('✨ Processamento concluído:', processedData.length, 'medicamento(s)');
+        console.log('🔍 =================================\n');
         
         setData(processedData);
       } catch (err) {
-        console.error('💥 Erro no processamento:', err);
+        console.error('💥 Erro:', err);
         setError(err instanceof Error ? err.message : 'Erro desconhecido');
       } finally {
         setLoading(false);
@@ -152,7 +168,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
     };
 
     fetchData();
-  }, [JSON.stringify(tableNames)]);
+  }, [tableNames.join(',')]); // Dependência mais confiável
 
   return { data, loading, error };
 };
