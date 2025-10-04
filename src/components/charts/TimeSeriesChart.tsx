@@ -1,16 +1,38 @@
 import { ComposedChart, Line, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
+import { AlertCircle } from 'lucide-react';
 
 interface TimeSeriesChartProps {
   data: ProcessedMedicData[];
 }
 
 export const TimeSeriesChart = ({ data }: TimeSeriesChartProps) => {
+  if (!data || data.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Evolução Temporal Total dos Medicamentos</CardTitle>
+          <CardDescription>
+            Volume total mensal e tendência de consumo com média móvel de 3 meses
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Nenhum dado disponível para esta seleção</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Criar dados combinando barras (total mensal) e linha (tendência)
-  const chartData = data[0]?.timeSeriesData.map(item => {
+  const chartData = data[0]?.timeSeriesData?.map(item => {
     const totalMonth = data.reduce((sum, medic) => {
-      const medicData = medic.timeSeriesData.find(d => d.month === item.month);
+      const medicData = medic.timeSeriesData?.find(d => d.month === item.month);
       return sum + (medicData?.value || 0);
     }, 0);
     
@@ -20,6 +42,27 @@ export const TimeSeriesChart = ({ data }: TimeSeriesChartProps) => {
       year: item.year
     };
   }) || [];
+
+  if (chartData.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Evolução Temporal Total dos Medicamentos</CardTitle>
+          <CardDescription>
+            Volume total mensal e tendência de consumo com média móvel de 3 meses
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Dados insuficientes para gerar o gráfico</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   // Calcular média móvel para tendência
   const movingAverage = chartData.map((item, index) => {
