@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useMedicData } from '@/hooks/useMedicData';
 import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
 import { DataSelector, ViewMode } from '@/components/DataSelector';
@@ -21,11 +21,22 @@ import { Loader2, Users, BarChart3 } from 'lucide-react';
 import kauanPhoto from '@/assets/kauan.png';
 import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
+
 const Index = () => {
   // Estado para gerenciar seleção de dados - Inicia com TODOS os estados do Brasil
   const allStateTables = Object.values(STATES).map(s => s.table);
   const [selectedTables, setSelectedTables] = useState<string[]>(allStateTables);
-  const [selectedLabel, setSelectedLabel] = useState('Brasil (Todos os Estados)');
+  const [selectedLabel, setSelectedLabel] = useState<string>('Brasil (Todos os Estados)');
+  
+  // Usar useCallback para evitar recriar a função a cada render
+  const handleSelectionChange = useCallback((config: {
+    mode: ViewMode;
+    tables: string[];
+    labels: string[];
+  }) => {
+    setSelectedTables(config.tables);
+    setSelectedLabel(config.labels[0]);
+  }, []);
 
   const {
     data,
@@ -51,9 +62,9 @@ const Index = () => {
       if (currentScrollY < 10) {
         setShowHeader(true);
       } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        setShowHeader(false); // Esconde quando rola para baixo
+        setShowHeader(false);
       } else if (currentScrollY < lastScrollY) {
-        setShowHeader(true); // Mostra quando rola para cima
+        setShowHeader(true);
       }
       setLastScrollY(currentScrollY);
     };
@@ -62,6 +73,7 @@ const Index = () => {
     });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
+
   if (loading) {
     return <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
@@ -71,6 +83,7 @@ const Index = () => {
         </div>
       </div>;
   }
+
   if (error) {
     return <div className="flex min-h-screen items-center justify-center bg-background">
         <Card className="w-full max-w-md">
@@ -83,6 +96,7 @@ const Index = () => {
         </Card>
       </div>;
   }
+
   return <div className="min-h-screen bg-background">
       {/* Header - Aparece/desaparece no scroll */}
       <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
@@ -159,10 +173,34 @@ const Index = () => {
         </Card>
 
         {/* Seletor de Dados */}
-        <DataSelector onSelectionChange={(config) => {
-          setSelectedTables(config.tables);
-          setSelectedLabel(config.labels.join(' vs '));
-        }} />
+        <DataSelector onSelectionChange={handleSelectionChange} />
+
+        {/* Debug Info - REMOVER DEPOIS */}
+        {process.env.NODE_ENV === 'development' && (
+          <Card className="bg-yellow-50 border-yellow-200">
+            <CardContent className="p-4">
+              <h3 className="font-bold text-sm mb-2">🔍 Debug Info:</h3>
+              <div className="text-xs space-y-1 font-mono">
+                <p><strong>Tabelas selecionadas:</strong> {selectedTables.length}</p>
+                <p><strong>Label:</strong> {selectedLabel}</p>
+                <p><strong>Medicamentos carregados:</strong> {data.length}</p>
+                <p><strong>Loading:</strong> {loading ? 'Sim' : 'Não'}</p>
+                {data.length > 0 && (
+                  <details className="mt-2">
+                    <summary className="cursor-pointer font-bold">Ver medicamentos</summary>
+                    <ul className="ml-4 mt-1">
+                      {data.map((m, i) => (
+                        <li key={i}>
+                          {m.simplifiedName} - {m.totalConsumption.toLocaleString()} unidades
+                        </li>
+                      ))}
+                    </ul>
+                  </details>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Controles de Agrupamento */}
         <Card>
@@ -226,4 +264,5 @@ const Index = () => {
       </main>
     </div>;
 };
+
 export default Index;
