@@ -43,8 +43,8 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
   ];
 
   useEffect(() => {
-    // Comparar se as tabelas realmente mudaram
-    const currentTableNames = tableNames.sort().join(',');
+    // IMPORTANTE: Criar cópia antes de sort() para não mutar o array original!
+    const currentTableNames = [...tableNames].sort().join(',');
     
     if (currentTableNames === prevTableNamesRef.current) {
       console.log('⏭️ Tabelas não mudaram, pulando fetch');
@@ -168,7 +168,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
     };
 
     fetchData();
-  }, [tableNames.join(',')]); // Dependência mais confiável
+  }, [tableNames]); // Dependência simplificada - React compara corretamente
 
   return { data, loading, error };
 };
