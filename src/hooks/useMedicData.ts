@@ -14,12 +14,50 @@ export interface ProcessedMedicData {
   totalConsumption: number;
 }
 
+// Função melhorada para converter valores brasileiros para número
+const parseValue = (value: any): number => {
+  // Se já for número válido, retorna
+  if (typeof value === 'number' && !isNaN(value)) {
+    return value;
+  }
+  
+  // Se for null, undefined ou string vazia, retorna 0
+  if (value === null || value === undefined || value === '') {
+    return 0;
+  }
+  
+  // Se for string, faz a conversão
+  if (typeof value === 'string') {
+    // Remove espaços em branco
+    let cleaned = value.trim();
+    
+    // Se ficou vazio após trim, retorna 0
+    if (cleaned === '' || cleaned === '-') {
+      return 0;
+    }
+    
+    // Remove pontos (separador de milhar brasileiro)
+    cleaned = cleaned.replace(/\./g, '');
+    
+    // Substitui vírgula por ponto (decimal brasileiro)
+    cleaned = cleaned.replace(/,/g, '.');
+    
+    // Tenta converter
+    const num = parseFloat(cleaned);
+    
+    // Se não conseguiu converter ou resultado é NaN, retorna 0
+    return isNaN(num) ? 0 : num;
+  }
+  
+  // Qualquer outro tipo, retorna 0
+  return 0;
+};
+
 export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
   const [data, setData] = useState<ProcessedMedicData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   
-  // Usar ref para comparar arrays corretamente
   const prevTableNamesRef = useRef<string>('');
 
   const simplifyMedicName = (fullName: string): string => {
@@ -43,7 +81,6 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
   ];
 
   useEffect(() => {
-    // IMPORTANTE: Criar cópia antes de sort() para não mutar o array original!
     const currentTableNames = [...tableNames].sort().join(',');
     
     if (currentTableNames === prevTableNamesRef.current) {
@@ -109,14 +146,9 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           
           monthOrder.forEach(month => {
             const value = row[month];
-            let numValue = 0;
             
-            if (typeof value === 'string') {
-              const cleanValue = value.replace(/\./g, '').replace(/,/g, '.');
-              numValue = parseFloat(cleanValue) || 0;
-            } else if (typeof value === 'number') {
-              numValue = value;
-            }
+            // Usar a função melhorada de conversão
+            const numValue = parseValue(value);
             
             if (numValue > 0) {
               const currentValue = medic.monthlyData.get(month) || 0;
@@ -168,7 +200,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
     };
 
     fetchData();
-  }, [tableNames]); // Dependência simplificada - React compara corretamente
+  }, [tableNames]);
 
   return { data, loading, error };
 };
