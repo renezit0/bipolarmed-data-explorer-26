@@ -19,7 +19,6 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Função para simplificar nomes dos medicamentos
   const simplifyMedicName = (fullName: string): string => {
     const nameWithoutCode = fullName.replace(/^\d+\s+/, '');
     const match = nameWithoutCode.match(/^([A-Z]+(?:\s+[A-Z]+)*)\s+(\d+(?:,\d+)?\s*MG)/i);
@@ -29,7 +28,6 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
     return nameWithoutCode.split(' ').slice(0, 3).join(' ');
   };
 
-  // Meses ordenados cronologicamente
   const monthOrder = [
     '2018/Jun', '2018/Jul', '2018/Ago', '2018/Set', '2018/Out', '2018/Nov', '2018/Dez',
     '2019/Jan', '2019/Fev', '2019/Mar', '2019/Abr', '2019/Mai', '2019/Jun', '2019/Jul', '2019/Ago', '2019/Set', '2019/Out', '2019/Nov', '2019/Dez',
@@ -47,27 +45,79 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         setLoading(true);
         setError(null);
 
-        console.log('🔍 Carregando dados de', tableNames.length, 'tabela(s)...');
+        console.log('🔍 =================================');
+        console.log('🔍 INICIANDO BUSCA DE DADOS');
+        console.log('🔍 Tabelas solicitadas:', tableNames);
+        console.log('🔍 Quantidade:', tableNames.length);
+        console.log('🔍 =================================');
+
+        // Testar conexão com Supabase primeiro
+        console.log('🔌 Testando conexão com Supabase...');
+        const { data: testData, error: testError } = await supabase
+          .from('medicbipo')
+          .select('PROCEDIMENTO')
+          .limit(1);
+        
+        if (testError) {
+          console.error('❌ Erro ao conectar no Supabase:', testError);
+          throw new Error(`Erro de conexão: ${testError.message}`);
+        }
+        
+        console.log('✅ Conexão com Supabase OK!');
+        console.log('📋 Teste de dados:', testData);
 
         // Buscar dados de todas as tabelas
-        const allDataPromises = tableNames.map(async (tableName) => {
-          const { data: rawData, error } = await supabase
-            .from(tableName as any)
-            .select('*');
-
-          if (error) {
-            console.error(`❌ Erro ao buscar ${tableName}:`, error);
-            throw error;
-          }
+        const allDataPromises = tableNames.map(async (tableName, index) => {
+          console.log(`\n📥 [${index + 1}/${tableNames.length}] Buscando tabela: ${tableName}`);
           
-          return rawData || [];
+          try {
+            const { data: rawData, error } = await supabase
+              .from(tableName as any)
+              .select('*');
+
+            if (error) {
+              console.error(`❌ Erro na tabela ${tableName}:`, error);
+              console.error('❌ Código:', error.code);
+              console.error('❌ Mensagem:', error.message);
+              console.error('❌ Detalhes:', error.details);
+              return [];
+            }
+            
+            console.log(`✅ Tabela ${tableName}: ${rawData?.length || 0} linhas`);
+            if (rawData && rawData.length > 0) {
+              console.log(`📊 Primeira linha da ${tableName}:`, rawData[0]);
+            }
+            
+            return rawData || [];
+          } catch (err) {
+            console.error(`💥 Exceção ao buscar ${tableName}:`, err);
+            return [];
+          }
         });
 
         const allRawData = await Promise.all(allDataPromises);
         const totalRows = allRawData.reduce((sum, arr) => sum + arr.length, 0);
-        console.log(`✅ ${totalRows} linhas carregadas de ${tableNames.length} tabela(s)`);
         
-        // Agregar dados por medicamento (PROCEDIMENTO completo, não apenas o código)
+        console.log('\n📊 =================================');
+        console.log(`📊 RESUMO DA BUSCA`);
+        console.log(`📊 Total de linhas: ${totalRows}`);
+        console.log(`📊 Tabelas com dados: ${allRawData.filter(arr => arr.length > 0).length}`);
+        console.log(`📊 Tabelas vazias: ${allRawData.filter(arr => arr.length === 0).length}`);
+        console.log('📊 =================================\n');
+
+        if (totalRows === 0) {
+          console.warn('⚠️ NENHUMA LINHA ENCONTRADA!');
+          console.warn('⚠️ Possíveis causas:');
+          console.warn('⚠️ 1. Tabelas não existem no Supabase');
+          console.warn('⚠️ 2. Tabelas estão vazias');
+          console.warn('⚠️ 3. Problema de permissão (RLS)');
+          console.warn('⚠️ 4. Nomes das tabelas estão errados');
+          setData([]);
+          return;
+        }
+        
+        // Agregar dados
+        console.log('🔄 Iniciando agregação de dados...');
         const medicMap = new Map<string, {
           procedimento: string;
           simplifiedName: string;
@@ -76,11 +126,18 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           totalConsumption: number;
         }>();
 
+        let rowsProcessed = 0;
         allRawData.flat().forEach((row: any) => {
+          rowsProcessed++;
           const fullName = row.PROCEDIMENTO || '';
-          if (!fullName) return;
           
-          // Usar o nome completo como chave para evitar misturar medicamentos diferentes
+          if (!fullName) {
+            if (rowsProcessed === 1) {
+              console.warn('⚠️ Primeira linha sem PROCEDIMENTO:', row);
+            }
+            return;
+          }
+          
           const medicKey = fullName.trim();
           
           if (!medicMap.has(medicKey)) {
@@ -96,13 +153,11 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
 
           const medic = medicMap.get(medicKey)!;
           
-          // Agregar valores mensais
           monthOrder.forEach(month => {
             const value = row[month];
             let numValue = 0;
             
             if (typeof value === 'string') {
-              // Remover pontos e converter vírgulas para pontos
               const cleanValue = value.replace(/\./g, '').replace(/,/g, '.');
               numValue = parseFloat(cleanValue) || 0;
             } else if (typeof value === 'number') {
@@ -116,8 +171,15 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           });
         });
 
-        const medicCount = medicMap.size;
-        console.log(`💊 ${medicCount} medicamento(s) único(s) encontrado(s)`);
+        console.log(`✅ Linhas processadas: ${rowsProcessed}`);
+        console.log(`💊 Medicamentos únicos: ${medicMap.size}`);
+        
+        if (medicMap.size > 0) {
+          console.log('📋 Lista de medicamentos encontrados:');
+          Array.from(medicMap.values()).forEach((m, i) => {
+            console.log(`  ${i + 1}. ${m.simplifiedName} (${m.fullName})`);
+          });
+        }
 
         // Converter para formato final
         const processedData = Array.from(medicMap.values()).map(medic => {
@@ -128,7 +190,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
               
               return {
                 month,
-                value: Math.round(value), // Arredondar para inteiro
+                value: Math.round(value),
                 year
               };
             })
@@ -145,13 +207,19 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           };
         })
         .filter(item => item.totalConsumption > 0)
-        .sort((a, b) => b.totalConsumption - a.totalConsumption); // Ordenar por consumo total
+        .sort((a, b) => b.totalConsumption - a.totalConsumption);
 
-        console.log('✨ Processamento concluído:', processedData.length, 'medicamento(s)');
+        console.log('\n✨ =================================');
+        console.log('✨ PROCESSAMENTO CONCLUÍDO');
+        console.log(`✨ Medicamentos finais: ${processedData.length}`);
+        console.log('✨ =================================\n');
         
         setData(processedData);
       } catch (err) {
-        console.error('💥 Erro no processamento:', err);
+        console.error('\n💥 =================================');
+        console.error('💥 ERRO FATAL NO PROCESSAMENTO');
+        console.error('💥', err);
+        console.error('💥 =================================\n');
         setError(err instanceof Error ? err.message : 'Erro desconhecido');
       } finally {
         setLoading(false);
@@ -159,7 +227,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
     };
 
     fetchData();
-  }, [JSON.stringify(tableNames)]); // Usar JSON.stringify para comparação correta de arrays
+  }, [JSON.stringify(tableNames)]);
 
   return { data, loading, error };
 };
