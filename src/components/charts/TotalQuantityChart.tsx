@@ -1,13 +1,36 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
+import { AlertCircle } from 'lucide-react';
 
 interface TotalQuantityChartProps {
   data: ProcessedMedicData[];
 }
 
 export const TotalQuantityChart = ({ data }: TotalQuantityChartProps) => {
+  if (!data || data.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Quantidade Total de Cada Medicamento</CardTitle>
+          <CardDescription>
+            Ranking do consumo total por medicamento durante todo o período estudado
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[600px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Nenhum dado disponível para esta seleção</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const chartData = data
+    .filter(medic => medic.totalConsumption > 0)
     .map(medic => ({
       name: medic.simplifiedName,
       total: medic.totalConsumption,
@@ -15,6 +38,27 @@ export const TotalQuantityChart = ({ data }: TotalQuantityChartProps) => {
       procedimento: medic.procedimento
     }))
     .sort((a, b) => b.total - a.total);
+
+  if (chartData.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Quantidade Total de Cada Medicamento</CardTitle>
+          <CardDescription>
+            Ranking do consumo total por medicamento durante todo o período estudado
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[600px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Dados insuficientes para gerar o gráfico</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const CustomTooltip = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
