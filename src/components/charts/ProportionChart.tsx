@@ -1,18 +1,63 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
+import { AlertCircle } from 'lucide-react';
 
 interface ProportionChartProps {
   data: ProcessedMedicData[];
 }
 
 export const ProportionChart = ({ data }: ProportionChartProps) => {
-  const chartData = data.map(medic => ({
-    name: medic.simplifiedName,
-    value: medic.totalConsumption,
-    fullName: medic.fullName,
-    procedimento: medic.procedimento
-  }));
+  if (!data || data.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Proporção do Consumo de Cada Medicamento</CardTitle>
+          <CardDescription>
+            Distribuição percentual do consumo total por medicamento (período completo)
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Nenhum dado disponível para esta seleção</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const chartData = data
+    .filter(medic => medic.totalConsumption > 0)
+    .map(medic => ({
+      name: medic.simplifiedName,
+      value: medic.totalConsumption,
+      fullName: medic.fullName,
+      procedimento: medic.procedimento
+    }));
+
+  if (chartData.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Proporção do Consumo de Cada Medicamento</CardTitle>
+          <CardDescription>
+            Distribuição percentual do consumo total por medicamento (período completo)
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Dados insuficientes para gerar o gráfico</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const colors = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))', 'hsl(var(--chart-6))'];
 
