@@ -17,10 +17,10 @@ interface DataSelectorProps {
 }
 
 export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
-  const [viewMode, setViewMode] = useState<ViewMode>('single-state');
+  const [viewMode, setViewMode] = useState<ViewMode>('single-region');
   const [selectedState1, setSelectedState1] = useState<StateCode>('pr');
   const [selectedState2, setSelectedState2] = useState<StateCode>('sp');
-  const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Sul');
+  const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
 
   const handleModeChange = (mode: ViewMode) => {
@@ -68,6 +68,15 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
         {/* Seleção do Modo de Visualização */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
           <Button
+            variant={viewMode === 'single-region' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => handleModeChange('single-region')}
+            className="flex items-center gap-2"
+          >
+            <Globe className="h-4 w-4" />
+            Brasil/Região
+          </Button>
+          <Button
             variant={viewMode === 'single-state' ? 'default' : 'outline'}
             size="sm"
             onClick={() => handleModeChange('single-state')}
@@ -86,21 +95,12 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             Comparar Estados
           </Button>
           <Button
-            variant={viewMode === 'single-region' ? 'default' : 'outline'}
-            size="sm"
-            onClick={() => handleModeChange('single-region')}
-            className="flex items-center gap-2"
-          >
-            <Users className="h-4 w-4" />
-            Região
-          </Button>
-          <Button
             variant={viewMode === 'compare-regions' ? 'default' : 'outline'}
             size="sm"
             onClick={() => handleModeChange('compare-regions')}
             className="flex items-center gap-2"
           >
-            <GitCompare className="h-4 w-4" />
+            <Users className="h-4 w-4" />
             Comparar Regiões
           </Button>
         </div>
@@ -171,7 +171,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
 
           {viewMode === 'single-region' && (
             <div>
-              <label className="text-sm font-medium mb-2 block">Selecione a Região:</label>
+              <label className="text-sm font-medium mb-2 block">Selecione Brasil ou Região:</label>
               <Select value={selectedRegion1} onValueChange={(value) => {
                 setSelectedRegion1(value as RegionName);
                 setTimeout(() => applySelection(), 0);
@@ -182,13 +182,15 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
                 <SelectContent>
                   {Object.keys(REGIONS).map((region) => (
                     <SelectItem key={region} value={region}>
-                      {region}
+                      {region === 'Brasil' ? '🇧🇷 Brasil (Todos os Estados)' : region}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
               <Badge variant="secondary" className="mt-2 text-xs">
-                Dados agregados de todos os estados da região
+                {selectedRegion1 === 'Brasil' 
+                  ? 'Dados agregados de todos os 27 estados brasileiros'
+                  : 'Dados agregados de todos os estados da região'}
               </Badge>
             </div>
           )}

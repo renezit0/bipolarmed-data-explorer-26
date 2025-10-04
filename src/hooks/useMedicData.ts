@@ -14,7 +14,7 @@ export interface ProcessedMedicData {
   totalConsumption: number;
 }
 
-export const useMedicData = (tableName: string = 'medicbipopr') => {
+export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
   const [data, setData] = useState<ProcessedMedicData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,44 +50,82 @@ export const useMedicData = (tableName: string = 'medicbipopr') => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const { data: rawData, error } = await supabase
-          .from(tableName as any)
-          .select('*');
+        setError(null);
 
-        if (error) throw error;
-        if (!rawData) {
-          setData([]);
-          return;
-        }
+        // Buscar dados de todas as tabelas
+        const allDataPromises = tableNames.map(async (tableName) => {
+          const { data: rawData, error } = await supabase
+            .from(tableName as any)
+            .select('*');
 
-        const processedData = rawData.map((row: any) => {
+          if (error) throw error;
+          return rawData || [];
+        });
+
+        const allRawData = await Promise.all(allDataPromises);
+        
+        // Agregar dados por medicamento (PROCEDIMENTO)
+        const medicMap = new Map<string, {
+          procedimento: string;
+          simplifiedName: string;
+          fullName: string;
+          monthlyData: Map<string, number>;
+          totalConsumption: number;
+        }>();
+
+        allRawData.flat().forEach((row: any) => {
+          const fullName = row.PROCEDIMENTO || '';
+          const procedimento = fullName.split(' ')[0] || '';
+          
+          if (!medicMap.has(procedimento)) {
+            medicMap.set(procedimento, {
+              procedimento,
+              simplifiedName: simplifyMedicName(fullName),
+              fullName,
+              monthlyData: new Map(),
+              totalConsumption: 0
+            });
+          }
+
+          const medic = medicMap.get(procedimento)!;
+          
+          // Agregar valores mensais
+          monthOrder.forEach(month => {
+            const value = row[month];
+            const numValue = typeof value === 'string' ? parseInt(value) || 0 : (value || 0);
+            
+            if (numValue > 0) {
+              const currentValue = medic.monthlyData.get(month) || 0;
+              medic.monthlyData.set(month, currentValue + numValue);
+            }
+          });
+        });
+
+        // Converter para formato final
+        const processedData = Array.from(medicMap.values()).map(medic => {
           const timeSeriesData = monthOrder
             .map(month => {
-              const value = row[month];
-              const numValue = typeof value === 'string' ? parseInt(value) || 0 : (value || 0);
+              const value = medic.monthlyData.get(month) || 0;
               const year = parseInt(month.split('/')[0]);
               
               return {
                 month,
-                value: numValue,
+                value,
                 year
               };
             })
             .filter(item => item.value > 0);
 
           const totalConsumption = timeSeriesData.reduce((sum, item) => sum + item.value, 0);
-          
-          const fullName = row.PROCEDIMENTO || '';
-          const simplifiedName = simplifyMedicName(fullName);
 
           return {
-            procedimento: fullName.split(' ')[0] || '', // Código do procedimento
-            simplifiedName,
-            fullName,
+            procedimento: medic.procedimento,
+            simplifiedName: medic.simplifiedName,
+            fullName: medic.fullName,
             timeSeriesData,
             totalConsumption
           };
-        }).filter(item => item.totalConsumption > 0); // Remove medicamentos sem dados
+        }).filter(item => item.totalConsumption > 0);
 
         setData(processedData);
       } catch (err) {
@@ -98,7 +136,7 @@ export const useMedicData = (tableName: string = 'medicbipopr') => {
     };
 
     fetchData();
-  }, [tableName]);
+  }, [JSON.stringify(tableNames)]);
 
   return { data, loading, error };
 };

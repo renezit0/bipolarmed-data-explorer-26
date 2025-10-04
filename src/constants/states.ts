@@ -31,6 +31,7 @@ export const STATES = {
 export type StateCode = keyof typeof STATES;
 
 export const REGIONS = {
+  'Brasil': ['ac', 'ap', 'am', 'pa', 'ro', 'rr', 'to', 'al', 'ba', 'ce', 'ma', 'pb', 'pe', 'pi', 'rn', 'se', 'df', 'go', 'mt', 'ms', 'es', 'mg', 'rj', 'sp', 'pr', 'rs', 'sc'],
   'Norte': ['ac', 'ap', 'am', 'pa', 'ro', 'rr', 'to'],
   'Nordeste': ['al', 'ba', 'ce', 'ma', 'pb', 'pe', 'pi', 'rn', 'se'],
   'Centro-Oeste': ['df', 'go', 'mt', 'ms'],

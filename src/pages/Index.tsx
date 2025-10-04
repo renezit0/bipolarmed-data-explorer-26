@@ -22,15 +22,16 @@ import kauanPhoto from '@/assets/kauan.png';
 import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
 const Index = () => {
-  // Estado para gerenciar seleção de dados
-  const [selectedState, setSelectedState] = useState<StateCode>('pr');
-  const [selectedLabel, setSelectedLabel] = useState('Paraná');
+  // Estado para gerenciar seleção de dados - Inicia com TODOS os estados do Brasil
+  const allStateTables = Object.values(STATES).map(s => s.table);
+  const [selectedTables, setSelectedTables] = useState<string[]>(allStateTables);
+  const [selectedLabel, setSelectedLabel] = useState('Brasil (Todos os Estados)');
 
   const {
     data,
     loading,
     error
-  } = useMedicData(STATES[selectedState].table);
+  } = useMedicData(selectedTables);
   
   const {
     groupingMode,
@@ -159,14 +160,8 @@ const Index = () => {
 
         {/* Seletor de Dados */}
         <DataSelector onSelectionChange={(config) => {
-          // Por enquanto, suporta apenas single-state
-          if (config.mode === 'single-state' && config.tables[0]) {
-            const stateCode = Object.entries(STATES).find(([_, s]) => s.table === config.tables[0])?.[0] as StateCode;
-            if (stateCode) {
-              setSelectedState(stateCode);
-              setSelectedLabel(config.labels[0]);
-            }
-          }
+          setSelectedTables(config.tables);
+          setSelectedLabel(config.labels.join(' vs '));
         }} />
 
         {/* Controles de Agrupamento */}
