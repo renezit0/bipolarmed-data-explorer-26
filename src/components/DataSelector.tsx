@@ -24,28 +24,22 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
 
   const handleModeChange = (mode: ViewMode) => {
-    console.log('🔄 Mudando modo de visualização:', mode);
     setViewMode(mode);
-    // O useEffect vai aplicar a seleção automaticamente
   };
 
   const handleState1Change = (value: StateCode) => {
-    console.log('📍 Estado 1 alterado:', value);
     setSelectedState1(value);
   };
 
   const handleState2Change = (value: StateCode) => {
-    console.log('📍 Estado 2 alterado:', value);
     setSelectedState2(value);
   };
 
   const handleRegion1Change = (value: RegionName) => {
-    console.log('🌎 Região 1 alterada:', value);
     setSelectedRegion1(value);
   };
 
   const handleRegion2Change = (value: RegionName) => {
-    console.log('🌎 Região 2 alterada:', value);
     setSelectedRegion2(value);
   };
 
@@ -78,9 +72,9 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
         break;
     }
 
-    console.log('📊 Aplicando seleção:', { mode: viewMode, tables, labels });
     onSelectionChange({ mode: viewMode, tables, labels });
-  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2, onSelectionChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
 
   return (
     <Card>
