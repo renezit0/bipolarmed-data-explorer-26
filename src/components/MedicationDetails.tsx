@@ -1,12 +1,36 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
+import { AlertCircle } from 'lucide-react';
 
 interface MedicationDetailsProps {
   data: ProcessedMedicData[];
 }
 
 export const MedicationDetails = ({ data }: MedicationDetailsProps) => {
+  if (!data || data.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Detalhes dos Medicamentos</CardTitle>
+          <CardDescription>
+            Informações completas sobre os medicamentos analisados no estudo
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center py-12 text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Nenhum medicamento encontrado para esta seleção</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  const totalConsumption = data.reduce((sum, d) => sum + d.totalConsumption, 0);
+
   return (
     <Card className="chart-container">
       <CardHeader>
@@ -38,16 +62,16 @@ export const MedicationDetails = ({ data }: MedicationDetailsProps) => {
                       Consumo Total: {medic.totalConsumption.toLocaleString('pt-BR')}
                     </Badge>
                     <Badge variant="outline" className="text-xs">
-                      Registros: {medic.timeSeriesData.length} meses
+                      Registros: {medic.timeSeriesData?.length || 0} meses
                     </Badge>
                     <Badge variant="outline" className="text-xs">
-                      Média Mensal: {Math.round(medic.totalConsumption / medic.timeSeriesData.length).toLocaleString('pt-BR')}
+                      Média Mensal: {Math.round(medic.totalConsumption / (medic.timeSeriesData?.length || 1)).toLocaleString('pt-BR')}
                     </Badge>
                   </div>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-primary">
-                    {((medic.totalConsumption / data.reduce((sum, d) => sum + d.totalConsumption, 0)) * 100).toFixed(1)}%
+                    {totalConsumption > 0 ? ((medic.totalConsumption / totalConsumption) * 100).toFixed(1) : '0.0'}%
                   </div>
                   <div className="text-sm text-muted-foreground">do total</div>
                 </div>
