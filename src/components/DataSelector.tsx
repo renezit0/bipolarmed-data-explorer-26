@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,67 +9,47 @@ import { STATES, REGIONS, StateCode, RegionName, getStatesByRegion } from '@/con
 export type ViewMode = 'single-state' | 'compare-states' | 'single-region' | 'compare-regions';
 
 interface DataSelectorProps {
-  onSelectionChange: (config: {
-    mode: ViewMode;
-    tables: string[];
-    labels: string[];
-  }) => void;
+  // Props controladas pelo pai
+  viewMode: ViewMode;
+  onViewModeChange: (mode: ViewMode) => void;
+  selectedState1: StateCode;
+  onSelectedState1Change: (state: StateCode) => void;
+  selectedState2: StateCode;
+  onSelectedState2Change: (state: StateCode) => void;
+  selectedRegion1: RegionName;
+  onSelectedRegion1Change: (region: RegionName) => void;
+  selectedRegion2: RegionName;
+  onSelectedRegion2Change: (region: RegionName) => void;
 }
 
-export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
-  const [viewMode, setViewMode] = useState<ViewMode>('single-region');
-  const [selectedState1, setSelectedState1] = useState<StateCode>('pr');
-  const [selectedState2, setSelectedState2] = useState<StateCode>('sp');
-  const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
-  const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
-
-  // Usar ref para a função callback para evitar dependência circular
-  const onSelectionChangeRef = useRef(onSelectionChange);
+export const DataSelector = ({
+  viewMode,
+  onViewModeChange,
+  selectedState1,
+  onSelectedState1Change,
+  selectedState2,
+  onSelectedState2Change,
+  selectedRegion1,
+  onSelectedRegion1Change,
+  selectedRegion2,
+  onSelectedRegion2Change,
+}: DataSelectorProps) => {
   
-  useEffect(() => {
-    onSelectionChangeRef.current = onSelectionChange;
-  }, [onSelectionChange]);
-
   const handleState1Change = (value: string) => {
-    setSelectedState1(value as StateCode);
+    onSelectedState1Change(value as StateCode);
   };
 
   const handleState2Change = (value: string) => {
-    setSelectedState2(value as StateCode);
+    onSelectedState2Change(value as StateCode);
   };
 
   const handleRegion1Change = (value: string) => {
-    setSelectedRegion1(value as RegionName);
+    onSelectedRegion1Change(value as RegionName);
   };
 
   const handleRegion2Change = (value: string) => {
-    setSelectedRegion2(value as RegionName);
+    onSelectedRegion2Change(value as RegionName);
   };
-
-  // CRÍTICO: NÃO incluir onSelectionChange nas dependências para evitar loop
-  useEffect(() => {
-    let tables: string[] = [];
-    let labels: string[] = [];
-
-    if (viewMode === 'single-state') {
-      tables = [STATES[selectedState1].table];
-      labels = [STATES[selectedState1].name];
-    } else if (viewMode === 'compare-states') {
-      tables = [STATES[selectedState1].table, STATES[selectedState2].table];
-      labels = [`${STATES[selectedState1].name} vs ${STATES[selectedState2].name}`];
-    } else if (viewMode === 'single-region') {
-      tables = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
-      labels = [selectedRegion1 === 'Brasil' ? 'Brasil (Todos os Estados)' : selectedRegion1];
-    } else if (viewMode === 'compare-regions') {
-      const region1States = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
-      const region2States = getStatesByRegion(selectedRegion2).map(code => STATES[code].table);
-      tables = [...region1States, ...region2States];
-      labels = [`${selectedRegion1} vs ${selectedRegion2}`];
-    }
-
-    console.log('📤 DataSelector:', viewMode, '→', tables.length, 'tabela(s)', labels[0]);
-    onSelectionChangeRef.current({ mode: viewMode, tables, labels });
-  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]); // SEM onSelectionChange!
 
   return (
     <Card>
@@ -83,7 +63,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           <Button
             variant={viewMode === 'single-region' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('single-region')}
+            onClick={() => onViewModeChange('single-region')}
             className="flex items-center gap-2"
           >
             <Globe className="h-4 w-4" />
@@ -93,7 +73,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           <Button
             variant={viewMode === 'single-state' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('single-state')}
+            onClick={() => onViewModeChange('single-state')}
             className="flex items-center gap-2"
           >
             <MapPin className="h-4 w-4" />
@@ -102,7 +82,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           <Button
             variant={viewMode === 'compare-states' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('compare-states')}
+            onClick={() => onViewModeChange('compare-states')}
             className="flex items-center gap-2"
           >
             <GitCompare className="h-4 w-4" />
@@ -112,7 +92,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           <Button
             variant={viewMode === 'compare-regions' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => setViewMode('compare-regions')}
+            onClick={() => onViewModeChange('compare-regions')}
             className="flex items-center gap-2"
           >
             <Users className="h-4 w-4" />
