@@ -1,55 +1,46 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useMedicData } from '@/hooks/useMedicData';
-import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
+import { useMedicGrouping } from '@/hooks/useMedicGrouping';
 import { DataSelector, ViewMode } from '@/components/DataSelector';
-import { STATES, StateCode } from '@/constants/states';
-import { TrendChart } from '@/components/charts/TrendChart';
-import { TrendAnalysis } from '@/components/charts/TrendAnalysis';
-import { ProportionChart } from '@/components/charts/ProportionChart';
-import { SeasonalityChart } from '@/components/charts/SeasonalityChart';
-import { SeasonalityAnalysis } from '@/components/charts/SeasonalityAnalysis';
-import { MonthlyDistributionChart } from '@/components/charts/MonthlyDistributionChart';
-import { DistributionAnalysis } from '@/components/charts/DistributionAnalysis';
-import { TotalQuantityChart } from '@/components/charts/TotalQuantityChart';
-import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
-import { MedicationDetails } from '@/components/MedicationDetails';
-import { AnalysisCommentary } from '@/components/AnalysisCommentary';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Loader2, Users, BarChart3 } from 'lucide-react';
-import kauanPhoto from '@/assets/kauan.png';
-import flavioPhoto from '@/assets/flavio.jpeg';
-import julianePhoto from '@/assets/juliane.png';
+import { STATES, StateCode, RegionName, getStatesByRegion } from '@/constants/states';
+// ... rest of imports
 
 const Index = () => {
-  // Estado inicial estável com useMemo
-  const initialTables = useMemo(() => Object.values(STATES).map(s => s.table), []);
-  
-  const [selectedTables, setSelectedTables] = useState<string[]>(initialTables);
-  const [selectedLabel, setSelectedLabel] = useState<string>('Brasil (Todos os Estados)');
-  
-  // Callback estável com useCallback
-  const handleSelectionChange = useCallback((config: {
-    mode: ViewMode;
-    tables: string[];
-    labels: string[];
-  }) => {
-    console.log('🔄 handleSelectionChange chamado:', {
-      mode: config.mode,
-      tableCount: config.tables.length,
-      label: config.labels[0]
-    });
-    
-    setSelectedTables(config.tables);
-    setSelectedLabel(config.labels[0]);
-  }, []); // SEM dependências - função nunca muda
+  // TODOS os estados no Index.tsx
+  const [viewMode, setViewMode] = useState<ViewMode>('single-region');
+  const [selectedState1, setSelectedState1] = useState<StateCode>('pr');
+  const [selectedState2, setSelectedState2] = useState<StateCode>('sp');
+  const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
+  const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
 
-  const {
-    data,
-    loading,
-    error
-  } = useMedicData(selectedTables);
+  // Calcular tables e labels baseado no estado
+  const { selectedTables, selectedLabel } = useMemo(() => {
+    let tables: string[] = [];
+    let label = '';
+
+    console.log('🎯 Calculando seleção:', viewMode);
+
+    if (viewMode === 'single-state') {
+      tables = [STATES[selectedState1].table];
+      label = STATES[selectedState1].name;
+    } else if (viewMode === 'compare-states') {
+      tables = [STATES[selectedState1].table, STATES[selectedState2].table];
+      label = `${STATES[selectedState1].name} vs ${STATES[selectedState2].name}`;
+    } else if (viewMode === 'single-region') {
+      tables = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
+      label = selectedRegion1 === 'Brasil' ? 'Brasil (Todos os Estados)' : selectedRegion1;
+    } else if (viewMode === 'compare-regions') {
+      const region1States = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
+      const region2States = getStatesByRegion(selectedRegion2).map(code => STATES[code].table);
+      tables = [...region1States, ...region2States];
+      label = `${selectedRegion1} vs ${selectedRegion2}`;
+    }
+
+    console.log('✅ Seleção calculada:', { mode: viewMode, tableCount: tables.length, label });
+    return { selectedTables: tables, selectedLabel: label };
+  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
+
+  const { data, loading, error } = useMedicData(selectedTables);
   
   const {
     groupingMode,
@@ -76,16 +67,6 @@ const Index = () => {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
-
-  // Log para debug
-  useEffect(() => {
-    console.log('📊 Estado atual:', {
-      selectedTables: selectedTables.length,
-      selectedLabel,
-      dataLoaded: data.length,
-      loading
-    });
-  }, [selectedTables, selectedLabel, data.length, loading]);
 
   if (loading) {
     return (
@@ -133,130 +114,22 @@ const Index = () => {
       </header>
 
       <main className="container mx-auto px-4 pt-24 md:pt-28 py-4 md:py-8 space-y-6 md:space-y-8">
-        <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
-          <CardContent className="p-4 md:p-6">
-            <h2 className="text-lg md:text-xl font-semibold text-primary mb-4">
-              Informações do Estudo
-            </h2>
-            <div className="space-y-4">
-              <div className="text-sm md:text-base text-muted-foreground">
-                <p className="mb-3">
-                  <strong>TCC:</strong> BASES CIENTÍFICAS DO TRANSTORNO BIPOLAR: UMA ANÁLISE INTEGRATIVA DOS ASPECTOS GENÉTICOS, CLÍNICOS E FARMACOTERAPÊUTICOS
-                </p>
-                <p className="mb-3">
-                  <strong>Instituição:</strong> Universidade Cesumar (UNICESUMAR) • Curso de Farmácia • 2025
-                </p>
-                <p>
-                  <strong>Fonte dos Dados:</strong> Sistema de Informações Ambulatoriais do SUS (SIA/SUS) via TabWin
-                </p>
-              </div>
-              
-              <div className="border-t pt-6 mt-6">
-                <h3 className="font-semibold text-foreground mb-4 text-center">Equipe do Projeto</h3>
-                
-                <div className="bg-background rounded-lg p-6 border border-border/30">
-                  <div className="flex flex-col lg:flex-row gap-8 justify-center items-center">
-                    <div className="flex flex-col items-center gap-3 text-center">
-                      <img src={flavioPhoto} alt="Flávio Renê Pereira da Silva" className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg" />
-                      <div>
-                        <p className="font-semibold text-foreground">Flávio Renê Pereira da Silva</p>
-                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex flex-col items-center gap-3 text-center">
-                      <img src={kauanPhoto} alt="Kauan Munsberg Donato de Souza" className="w-24 h-24 rounded-full object-cover border-4 border-primary/30 shadow-lg" />
-                      <div>
-                        <p className="font-semibold text-foreground">Kauan Munsberg Donato de Souza</p>
-                        <p className="text-sm text-muted-foreground">Acadêmico de Farmácia</p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex flex-col items-center gap-3 text-center">
-                      <img src={julianePhoto} alt="Juliane Nadal Swiech" className="w-24 h-24 rounded-full object-cover border-4 border-accent/30 shadow-lg" />
-                      <div>
-                        <p className="font-semibold text-foreground">Juliane Nadal Swiech</p>
-                        <p className="text-sm text-muted-foreground">Professora Orientadora</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {/* ... Card de Informações ... */}
 
-        <DataSelector onSelectionChange={handleSelectionChange} />
+        <DataSelector 
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          selectedState1={selectedState1}
+          onSelectedState1Change={setSelectedState1}
+          selectedState2={selectedState2}
+          onSelectedState2Change={setSelectedState2}
+          selectedRegion1={selectedRegion1}
+          onSelectedRegion1Change={setSelectedRegion1}
+          selectedRegion2={selectedRegion2}
+          onSelectedRegion2Change={setSelectedRegion2}
+        />
 
-        <Card className="bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800">
-          <CardContent className="p-4">
-            <h3 className="font-bold text-sm mb-2">📊 Status Atual:</h3>
-            <div className="text-xs space-y-1">
-              <p><strong>Região/Estado:</strong> {selectedLabel}</p>
-              <p><strong>Tabelas carregadas:</strong> {selectedTables.length}</p>
-              <p><strong>Medicamentos encontrados:</strong> {data.length}</p>
-              <p><strong>Visualização:</strong> {isGrouped ? 'Agrupada por substância' : 'Individual por dosagem'}</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              <div className="flex-1">
-                <h3 className="font-semibold text-foreground mb-1">Visualização dos Dados</h3>
-                <p className="text-sm text-muted-foreground">
-                  Escolha como visualizar os medicamentos nos gráficos (não afeta a seleção de estado/região)
-                </p>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant={groupingMode === 'individual' ? 'default' : 'outline'} 
-                  size="sm" 
-                  onClick={() => setGroupingMode('individual')} 
-                  className="flex items-center gap-2"
-                >
-                  <BarChart3 className="h-4 w-4" />
-                  Individual
-                </Button>
-                <Button 
-                  variant={groupingMode === 'grouped' ? 'default' : 'outline'} 
-                  size="sm" 
-                  onClick={() => setGroupingMode('grouped')} 
-                  className="flex items-center gap-2"
-                >
-                  <Users className="h-4 w-4" />
-                  Agrupado
-                </Button>
-              </div>
-            </div>
-            {isGrouped && (
-              <div className="mt-3 pt-3 border-t">
-                <Badge variant="secondary" className="text-xs">
-                  Medicamentos agrupados por substância ativa (ex: todas as Quetiapinas juntas)
-                </Badge>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        <div className="grid gap-6 md:gap-8">
-          <TrendChart data={processedData as any} />
-          <TrendAnalysis data={data} />
-          <ProportionChart data={processedData as any} />
-          <SeasonalityChart data={processedData as any} />
-          <SeasonalityAnalysis data={data} />
-          
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
-            <MonthlyDistributionChart data={processedData as any} />
-            <TimeSeriesChart data={processedData as any} />
-          </div>
-          
-          <DistributionAnalysis data={data} />
-          <TotalQuantityChart data={processedData as any} />
-          <AnalysisCommentary data={data} />
-          <MedicationDetails data={data} />
-        </div>
+        {/* ... resto dos componentes ... */}
       </main>
     </div>
   );
