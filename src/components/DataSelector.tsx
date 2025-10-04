@@ -23,7 +23,6 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
 
-  // Handlers com type casting correto
   const handleState1Change = (value: string) => {
     setSelectedState1(value as StateCode);
   };
@@ -40,43 +39,38 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
     setSelectedRegion2(value as RegionName);
   };
 
+  // useEffect ÚNICO que só dispara com as variáveis relevantes para cada modo
   useEffect(() => {
-  // Criar uma flag para evitar disparo durante mudança de modo
-  const timeoutId = setTimeout(() => {
     let tables: string[] = [];
     let labels: string[] = [];
 
-    switch (viewMode) {
-      case 'single-state':
-        tables = [STATES[selectedState1].table];
-        labels = [STATES[selectedState1].name];
-        break;
-        
-      case 'compare-states':
-        tables = [STATES[selectedState1].table, STATES[selectedState2].table];
-        labels = [`${STATES[selectedState1].name} vs ${STATES[selectedState2].name}`];
-        break;
-        
-      case 'single-region':
-        tables = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
-        labels = [selectedRegion1 === 'Brasil' ? 'Brasil (Todos os Estados)' : selectedRegion1];
-        break;
-        
-      case 'compare-regions':
-        const region1States = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
-        const region2States = getStatesByRegion(selectedRegion2).map(code => STATES[code].table);
-        tables = [...region1States, ...region2States];
-        labels = [`${selectedRegion1} vs ${selectedRegion2}`];
-        break;
+    if (viewMode === 'single-state') {
+      tables = [STATES[selectedState1].table];
+      labels = [STATES[selectedState1].name];
+    } else if (viewMode === 'compare-states') {
+      tables = [STATES[selectedState1].table, STATES[selectedState2].table];
+      labels = [`${STATES[selectedState1].name} vs ${STATES[selectedState2].name}`];
+    } else if (viewMode === 'single-region') {
+      tables = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
+      labels = [selectedRegion1 === 'Brasil' ? 'Brasil (Todos os Estados)' : selectedRegion1];
+    } else if (viewMode === 'compare-regions') {
+      const region1States = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
+      const region2States = getStatesByRegion(selectedRegion2).map(code => STATES[code].table);
+      tables = [...region1States, ...region2States];
+      labels = [`${selectedRegion1} vs ${selectedRegion2}`];
     }
 
-    console.log('📤 DataSelector enviando:', { mode: viewMode, tables: tables.length, labels });
+    console.log('📤 DataSelector:', viewMode, '→', tables.length, 'tabela(s)', labels[0]);
     onSelectionChange({ mode: viewMode, tables, labels });
-  }, 50); // Pequeno delay para evitar múltiplos disparos
-
-  return () => clearTimeout(timeoutId);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-}, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    viewMode,
+    // Só inclui dependências relevantes para cada modo
+    ...(viewMode === 'single-state' ? [selectedState1] : []),
+    ...(viewMode === 'compare-states' ? [selectedState1, selectedState2] : []),
+    ...(viewMode === 'single-region' ? [selectedRegion1] : []),
+    ...(viewMode === 'compare-regions' ? [selectedRegion1, selectedRegion2] : []),
+  ]);
 
   return (
     <Card>
