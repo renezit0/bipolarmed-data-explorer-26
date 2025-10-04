@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useMedicData } from '@/hooks/useMedicData';
 import { useMedicGrouping, GroupingMode } from '@/hooks/useMedicGrouping';
 import { DataSelector, ViewMode } from '@/components/DataSelector';
@@ -23,30 +23,27 @@ import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
 
 const Index = () => {
-  const allStateTables = Object.values(STATES).map(s => s.table);
-  const [selectedTables, setSelectedTables] = useState<string[]>(allStateTables);
+  // Estado inicial estável com useMemo
+  const initialTables = useMemo(() => Object.values(STATES).map(s => s.table), []);
+  
+  const [selectedTables, setSelectedTables] = useState<string[]>(initialTables);
   const [selectedLabel, setSelectedLabel] = useState<string>('Brasil (Todos os Estados)');
   
-  // useRef para evitar loop de dependências
-  const previousTablesRef = useRef<string>('');
-  
+  // Callback estável com useCallback
   const handleSelectionChange = useCallback((config: {
     mode: ViewMode;
     tables: string[];
     labels: string[];
   }) => {
-    // IMPORTANTE: Criar cópia antes de sort() para não mutar o array original!
-    const newTablesKey = [...config.tables].sort().join(',');
+    console.log('🔄 handleSelectionChange chamado:', {
+      mode: config.mode,
+      tableCount: config.tables.length,
+      label: config.labels[0]
+    });
     
-    if (newTablesKey !== previousTablesRef.current) {
-      console.log('✅ Aplicando mudança:', config.tables.length, 'tabela(s) -', config.labels[0]);
-      previousTablesRef.current = newTablesKey;
-      setSelectedTables(config.tables);
-      setSelectedLabel(config.labels[0]);
-    } else {
-      console.log('⏭️ Mesmas tabelas, ignorando');
-    }
-  }, []);
+    setSelectedTables(config.tables);
+    setSelectedLabel(config.labels[0]);
+  }, []); // SEM dependências - função nunca muda
 
   const {
     data,
@@ -80,6 +77,16 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
+  // Log para debug
+  useEffect(() => {
+    console.log('📊 Estado atual:', {
+      selectedTables: selectedTables.length,
+      selectedLabel,
+      dataLoaded: data.length,
+      loading
+    });
+  }, [selectedTables, selectedLabel, data.length, loading]);
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -87,6 +94,9 @@ const Index = () => {
           <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-4" />
           <h2 className="text-xl font-semibold mb-2">Carregando dados...</h2>
           <p className="text-muted-foreground">Processando informações do TabWin/SUS</p>
+          <p className="text-xs text-muted-foreground mt-2">
+            {selectedLabel} - {selectedTables.length} tabela(s)
+          </p>
         </div>
       </div>
     );
@@ -178,31 +188,17 @@ const Index = () => {
 
         <DataSelector onSelectionChange={handleSelectionChange} />
 
-        {process.env.NODE_ENV === 'development' && (
-          <Card className="bg-yellow-50 border-yellow-200 dark:bg-yellow-950 dark:border-yellow-800">
-            <CardContent className="p-4">
-              <h3 className="font-bold text-sm mb-2">🔍 Debug Info:</h3>
-              <div className="text-xs space-y-1 font-mono">
-                <p><strong>Tabelas selecionadas:</strong> {selectedTables.length}</p>
-                <p><strong>Label:</strong> {selectedLabel}</p>
-                <p><strong>Medicamentos carregados:</strong> {data.length}</p>
-                <p><strong>Loading:</strong> {loading ? 'Sim' : 'Não'}</p>
-                {data.length > 0 && (
-                  <details className="mt-2">
-                    <summary className="cursor-pointer font-bold">Ver medicamentos</summary>
-                    <ul className="ml-4 mt-1">
-                      {data.map((m, i) => (
-                        <li key={i}>
-                          {m.simplifiedName} - {m.totalConsumption.toLocaleString()} unidades
-                        </li>
-                      ))}
-                    </ul>
-                  </details>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-        )}
+        <Card className="bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800">
+          <CardContent className="p-4">
+            <h3 className="font-bold text-sm mb-2">📊 Status Atual:</h3>
+            <div className="text-xs space-y-1">
+              <p><strong>Região/Estado:</strong> {selectedLabel}</p>
+              <p><strong>Tabelas carregadas:</strong> {selectedTables.length}</p>
+              <p><strong>Medicamentos encontrados:</strong> {data.length}</p>
+              <p><strong>Visualização:</strong> {isGrouped ? 'Agrupada por substância' : 'Individual por dosagem'}</p>
+            </div>
+          </CardContent>
+        </Card>
 
         <Card>
           <CardContent className="p-4">
@@ -210,7 +206,7 @@ const Index = () => {
               <div className="flex-1">
                 <h3 className="font-semibold text-foreground mb-1">Visualização dos Dados</h3>
                 <p className="text-sm text-muted-foreground">
-                  Escolha como visualizar os medicamentos nos gráficos
+                  Escolha como visualizar os medicamentos nos gráficos (não afeta a seleção de estado/região)
                 </p>
               </div>
               <div className="flex gap-2">
