@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -24,38 +24,63 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
 
   const handleModeChange = (mode: ViewMode) => {
+    console.log('🔄 Mudando modo de visualização:', mode);
     setViewMode(mode);
-    applySelection(mode);
+    // O useEffect vai aplicar a seleção automaticamente
   };
 
-  const applySelection = (mode?: ViewMode) => {
-    const currentMode = mode || viewMode;
+  const handleState1Change = (value: StateCode) => {
+    console.log('📍 Estado 1 alterado:', value);
+    setSelectedState1(value);
+  };
+
+  const handleState2Change = (value: StateCode) => {
+    console.log('📍 Estado 2 alterado:', value);
+    setSelectedState2(value);
+  };
+
+  const handleRegion1Change = (value: RegionName) => {
+    console.log('🌎 Região 1 alterada:', value);
+    setSelectedRegion1(value);
+  };
+
+  const handleRegion2Change = (value: RegionName) => {
+    console.log('🌎 Região 2 alterada:', value);
+    setSelectedRegion2(value);
+  };
+
+  // UseEffect para aplicar a seleção sempre que qualquer valor mudar
+  useEffect(() => {
     let tables: string[] = [];
     let labels: string[] = [];
 
-    switch (currentMode) {
+    switch (viewMode) {
       case 'single-state':
         tables = [STATES[selectedState1].table];
         labels = [STATES[selectedState1].name];
         break;
+        
       case 'compare-states':
         tables = [STATES[selectedState1].table, STATES[selectedState2].table];
-        labels = [STATES[selectedState1].name, STATES[selectedState2].name];
+        labels = [`${STATES[selectedState1].name} vs ${STATES[selectedState2].name}`];
         break;
+        
       case 'single-region':
         tables = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
-        labels = [selectedRegion1];
+        labels = [selectedRegion1 === 'Brasil' ? 'Brasil (Todos os Estados)' : selectedRegion1];
         break;
+        
       case 'compare-regions':
         const region1States = getStatesByRegion(selectedRegion1).map(code => STATES[code].table);
         const region2States = getStatesByRegion(selectedRegion2).map(code => STATES[code].table);
         tables = [...region1States, ...region2States];
-        labels = [selectedRegion1, selectedRegion2];
+        labels = [`${selectedRegion1} vs ${selectedRegion2}`];
         break;
     }
 
-    onSelectionChange({ mode: currentMode, tables, labels });
-  };
+    console.log('📊 Aplicando seleção:', { mode: viewMode, tables, labels });
+    onSelectionChange({ mode: viewMode, tables, labels });
+  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2, onSelectionChange]);
 
   return (
     <Card>
@@ -74,7 +99,8 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             className="flex items-center gap-2"
           >
             <Globe className="h-4 w-4" />
-            Brasil/Região
+            <span className="hidden sm:inline">Brasil/Região</span>
+            <span className="sm:hidden">Região</span>
           </Button>
           <Button
             variant={viewMode === 'single-state' ? 'default' : 'outline'}
@@ -92,7 +118,8 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             className="flex items-center gap-2"
           >
             <GitCompare className="h-4 w-4" />
-            Comparar Estados
+            <span className="hidden sm:inline">Comparar Estados</span>
+            <span className="sm:hidden">Comp. Est.</span>
           </Button>
           <Button
             variant={viewMode === 'compare-regions' ? 'default' : 'outline'}
@@ -101,7 +128,8 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             className="flex items-center gap-2"
           >
             <Users className="h-4 w-4" />
-            Comparar Regiões
+            <span className="hidden sm:inline">Comparar Regiões</span>
+            <span className="sm:hidden">Comp. Reg.</span>
           </Button>
         </div>
 
@@ -110,10 +138,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           {viewMode === 'single-state' && (
             <div>
               <label className="text-sm font-medium mb-2 block">Selecione o Estado:</label>
-              <Select value={selectedState1} onValueChange={(value) => {
-                setSelectedState1(value as StateCode);
-                setTimeout(() => applySelection(), 0);
-              }}>
+              <Select value={selectedState1} onValueChange={handleState1Change}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -132,37 +157,35 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Estado 1:</label>
-                <Select value={selectedState1} onValueChange={(value) => {
-                  setSelectedState1(value as StateCode);
-                  setTimeout(() => applySelection(), 0);
-                }}>
+                <Select value={selectedState1} onValueChange={handleState1Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(STATES).map(([code, state]) => (
-                      <SelectItem key={code} value={code}>
-                        {state.name}
-                      </SelectItem>
-                    ))}
+                    {Object.entries(STATES)
+                      .filter(([code]) => code !== selectedState2)
+                      .map(([code, state]) => (
+                        <SelectItem key={code} value={code}>
+                          {state.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Estado 2:</label>
-                <Select value={selectedState2} onValueChange={(value) => {
-                  setSelectedState2(value as StateCode);
-                  setTimeout(() => applySelection(), 0);
-                }}>
+                <Select value={selectedState2} onValueChange={handleState2Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.entries(STATES).map(([code, state]) => (
-                      <SelectItem key={code} value={code}>
-                        {state.name}
-                      </SelectItem>
-                    ))}
+                    {Object.entries(STATES)
+                      .filter(([code]) => code !== selectedState1)
+                      .map(([code, state]) => (
+                        <SelectItem key={code} value={code}>
+                          {state.name}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -172,10 +195,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           {viewMode === 'single-region' && (
             <div>
               <label className="text-sm font-medium mb-2 block">Selecione Brasil ou Região:</label>
-              <Select value={selectedRegion1} onValueChange={(value) => {
-                setSelectedRegion1(value as RegionName);
-                setTimeout(() => applySelection(), 0);
-              }}>
+              <Select value={selectedRegion1} onValueChange={handleRegion1Change}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -190,7 +210,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
               <Badge variant="secondary" className="mt-2 text-xs">
                 {selectedRegion1 === 'Brasil' 
                   ? 'Dados agregados de todos os 27 estados brasileiros'
-                  : 'Dados agregados de todos os estados da região'}
+                  : `Dados agregados de ${getStatesByRegion(selectedRegion1).length} estados da região`}
               </Badge>
             </div>
           )}
@@ -199,37 +219,35 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Região 1:</label>
-                <Select value={selectedRegion1} onValueChange={(value) => {
-                  setSelectedRegion1(value as RegionName);
-                  setTimeout(() => applySelection(), 0);
-                }}>
+                <Select value={selectedRegion1} onValueChange={handleRegion1Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.keys(REGIONS).map((region) => (
-                      <SelectItem key={region} value={region}>
-                        {region}
-                      </SelectItem>
-                    ))}
+                    {Object.keys(REGIONS)
+                      .filter(region => region !== selectedRegion2)
+                      .map((region) => (
+                        <SelectItem key={region} value={region}>
+                          {region}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Região 2:</label>
-                <Select value={selectedRegion2} onValueChange={(value) => {
-                  setSelectedRegion2(value as RegionName);
-                  setTimeout(() => applySelection(), 0);
-                }}>
+                <Select value={selectedRegion2} onValueChange={handleRegion2Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {Object.keys(REGIONS).map((region) => (
-                      <SelectItem key={region} value={region}>
-                        {region}
-                      </SelectItem>
-                    ))}
+                    {Object.keys(REGIONS)
+                      .filter(region => region !== selectedRegion1)
+                      .map((region) => (
+                        <SelectItem key={region} value={region}>
+                          {region}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
