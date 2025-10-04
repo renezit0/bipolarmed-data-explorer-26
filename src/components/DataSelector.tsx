@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,6 +22,9 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   const [selectedState2, setSelectedState2] = useState<StateCode>('sp');
   const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
+  
+  // Controle para evitar disparo inicial duplo
+  const isInitialMount = useRef(true);
 
   const handleModeChange = (mode: ViewMode) => {
     setViewMode(mode);
@@ -43,8 +46,24 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
     setSelectedRegion2(value);
   };
 
-  // UseEffect para aplicar a seleção sempre que qualquer valor mudar
+  // UseEffect para aplicar a seleção
   useEffect(() => {
+    // Pular o primeiro disparo (montagem inicial)
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      
+      // Mas aplicar a seleção inicial apenas UMA vez
+      let tables: string[] = [];
+      let labels: string[] = [];
+
+      tables = getStatesByRegion('Brasil').map(code => STATES[code].table);
+      labels = ['Brasil (Todos os Estados)'];
+      
+      console.log('🎬 Seleção INICIAL:', { tables: tables.length, labels });
+      onSelectionChange({ mode: 'single-region', tables, labels });
+      return;
+    }
+
     let tables: string[] = [];
     let labels: string[] = [];
 
@@ -72,6 +91,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
         break;
     }
 
+    console.log('🔄 Mudança de seleção:', { mode: viewMode, tables: tables.length, labels });
     onSelectionChange({ mode: viewMode, tables, labels });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
