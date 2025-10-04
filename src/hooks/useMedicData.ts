@@ -45,79 +45,25 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         setLoading(true);
         setError(null);
 
-        console.log('🔍 =================================');
-        console.log('🔍 INICIANDO BUSCA DE DADOS');
-        console.log('🔍 Tabelas solicitadas:', tableNames);
-        console.log('🔍 Quantidade:', tableNames.length);
-        console.log('🔍 =================================');
+        console.log('🔍 Carregando dados de', tableNames.length, 'tabela(s)...');
 
-        // Testar conexão com Supabase primeiro
-        console.log('🔌 Testando conexão com Supabase...');
-        const { data: testData, error: testError } = await supabase
-          .from('medicbipo')
-          .select('PROCEDIMENTO')
-          .limit(1);
-        
-        if (testError) {
-          console.error('❌ Erro ao conectar no Supabase:', testError);
-          throw new Error(`Erro de conexão: ${testError.message}`);
-        }
-        
-        console.log('✅ Conexão com Supabase OK!');
-        console.log('📋 Teste de dados:', testData);
+        const allDataPromises = tableNames.map(async (tableName) => {
+          const { data: rawData, error } = await supabase
+            .from(tableName as any)
+            .select('*');
 
-        // Buscar dados de todas as tabelas
-        const allDataPromises = tableNames.map(async (tableName, index) => {
-          console.log(`\n📥 [${index + 1}/${tableNames.length}] Buscando tabela: ${tableName}`);
-          
-          try {
-            const { data: rawData, error } = await supabase
-              .from(tableName as any)
-              .select('*');
-
-            if (error) {
-              console.error(`❌ Erro na tabela ${tableName}:`, error);
-              console.error('❌ Código:', error.code);
-              console.error('❌ Mensagem:', error.message);
-              console.error('❌ Detalhes:', error.details);
-              return [];
-            }
-            
-            console.log(`✅ Tabela ${tableName}: ${rawData?.length || 0} linhas`);
-            if (rawData && rawData.length > 0) {
-              console.log(`📊 Primeira linha da ${tableName}:`, rawData[0]);
-            }
-            
-            return rawData || [];
-          } catch (err) {
-            console.error(`💥 Exceção ao buscar ${tableName}:`, err);
-            return [];
+          if (error) {
+            console.error(`❌ Erro ao buscar ${tableName}:`, error);
+            throw error;
           }
+          
+          return rawData || [];
         });
 
         const allRawData = await Promise.all(allDataPromises);
         const totalRows = allRawData.reduce((sum, arr) => sum + arr.length, 0);
+        console.log(`✅ ${totalRows} linhas carregadas de ${tableNames.length} tabela(s)`);
         
-        console.log('\n📊 =================================');
-        console.log(`📊 RESUMO DA BUSCA`);
-        console.log(`📊 Total de linhas: ${totalRows}`);
-        console.log(`📊 Tabelas com dados: ${allRawData.filter(arr => arr.length > 0).length}`);
-        console.log(`📊 Tabelas vazias: ${allRawData.filter(arr => arr.length === 0).length}`);
-        console.log('📊 =================================\n');
-
-        if (totalRows === 0) {
-          console.warn('⚠️ NENHUMA LINHA ENCONTRADA!');
-          console.warn('⚠️ Possíveis causas:');
-          console.warn('⚠️ 1. Tabelas não existem no Supabase');
-          console.warn('⚠️ 2. Tabelas estão vazias');
-          console.warn('⚠️ 3. Problema de permissão (RLS)');
-          console.warn('⚠️ 4. Nomes das tabelas estão errados');
-          setData([]);
-          return;
-        }
-        
-        // Agregar dados
-        console.log('🔄 Iniciando agregação de dados...');
         const medicMap = new Map<string, {
           procedimento: string;
           simplifiedName: string;
@@ -126,17 +72,10 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           totalConsumption: number;
         }>();
 
-        let rowsProcessed = 0;
         allRawData.flat().forEach((row: any) => {
-          rowsProcessed++;
-          const fullName = row.PROCEDIMENTO || '';
-          
-          if (!fullName) {
-            if (rowsProcessed === 1) {
-              console.warn('⚠️ Primeira linha sem PROCEDIMENTO:', row);
-            }
-            return;
-          }
+          // CORREÇÃO: Procedimento com P maiúsculo
+          const fullName = row.Procedimento || '';
+          if (!fullName) return;
           
           const medicKey = fullName.trim();
           
@@ -171,17 +110,9 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           });
         });
 
-        console.log(`✅ Linhas processadas: ${rowsProcessed}`);
-        console.log(`💊 Medicamentos únicos: ${medicMap.size}`);
-        
-        if (medicMap.size > 0) {
-          console.log('📋 Lista de medicamentos encontrados:');
-          Array.from(medicMap.values()).forEach((m, i) => {
-            console.log(`  ${i + 1}. ${m.simplifiedName} (${m.fullName})`);
-          });
-        }
+        const medicCount = medicMap.size;
+        console.log(`💊 ${medicCount} medicamento(s) único(s) encontrado(s)`);
 
-        // Converter para formato final
         const processedData = Array.from(medicMap.values()).map(medic => {
           const timeSeriesData = monthOrder
             .map(month => {
@@ -209,17 +140,11 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         .filter(item => item.totalConsumption > 0)
         .sort((a, b) => b.totalConsumption - a.totalConsumption);
 
-        console.log('\n✨ =================================');
-        console.log('✨ PROCESSAMENTO CONCLUÍDO');
-        console.log(`✨ Medicamentos finais: ${processedData.length}`);
-        console.log('✨ =================================\n');
+        console.log('✨ Processamento concluído:', processedData.length, 'medicamento(s)');
         
         setData(processedData);
       } catch (err) {
-        console.error('\n💥 =================================');
-        console.error('💥 ERRO FATAL NO PROCESSAMENTO');
-        console.error('💥', err);
-        console.error('💥 =================================\n');
+        console.error('💥 Erro no processamento:', err);
         setError(err instanceof Error ? err.message : 'Erro desconhecido');
       } finally {
         setLoading(false);
