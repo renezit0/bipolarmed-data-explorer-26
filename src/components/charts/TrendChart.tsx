@@ -1,23 +1,67 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
+import { AlertCircle } from 'lucide-react';
 
 interface TrendChartProps {
   data: ProcessedMedicData[];
 }
 
 export const TrendChart = ({ data }: TrendChartProps) => {
+  // Validação: se não há dados, mostrar mensagem
+  if (!data || data.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Tendências de Consumo ao Longo do Tempo</CardTitle>
+          <CardDescription>
+            Evolução temporal do consumo de medicamentos para transtorno bipolar
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Nenhum dado disponível para esta seleção</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   // Agregar dados por mês para todas as medicações
-  const aggregatedData = data[0]?.timeSeriesData.map(item => {
+  const aggregatedData = data[0]?.timeSeriesData?.map(item => {
     const monthData = { month: item.month };
     
-    data.forEach((medic, index) => {
-      const medicData = medic.timeSeriesData.find(d => d.month === item.month);
+    data.forEach((medic) => {
+      const medicData = medic.timeSeriesData?.find(d => d.month === item.month);
       (monthData as any)[medic.simplifiedName] = medicData?.value || 0;
     });
     
     return monthData;
   }) || [];
+
+  if (aggregatedData.length === 0) {
+    return (
+      <Card className="chart-container">
+        <CardHeader>
+          <CardTitle className="academic-title">Tendências de Consumo ao Longo do Tempo</CardTitle>
+          <CardDescription>
+            Evolução temporal do consumo de medicamentos para transtorno bipolar
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center justify-center h-[400px] text-muted-foreground">
+            <div className="text-center">
+              <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
+              <p>Dados insuficientes para gerar o gráfico</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const colors = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))', 'hsl(var(--chart-4))', 'hsl(var(--chart-5))', 'hsl(var(--chart-6))'];
 
@@ -26,7 +70,7 @@ export const TrendChart = ({ data }: TrendChartProps) => {
       <CardHeader>
         <CardTitle className="academic-title">Tendências de Consumo ao Longo do Tempo</CardTitle>
         <CardDescription>
-          Evolução temporal do consumo de medicamentos para transtorno bipolar no Paraná (Jun/2018 - Jun/2025)
+          Evolução temporal do consumo de medicamentos para transtorno bipolar (Jun/2018 - Jun/2025)
         </CardDescription>
       </CardHeader>
       <CardContent>
