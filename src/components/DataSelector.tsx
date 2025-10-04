@@ -23,7 +23,23 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
 
-  // UseEffect que só dispara quando os valores mudam
+  // Handlers com type casting correto
+  const handleState1Change = (value: string) => {
+    setSelectedState1(value as StateCode);
+  };
+
+  const handleState2Change = (value: string) => {
+    setSelectedState2(value as StateCode);
+  };
+
+  const handleRegion1Change = (value: string) => {
+    setSelectedRegion1(value as RegionName);
+  };
+
+  const handleRegion2Change = (value: string) => {
+    setSelectedRegion2(value as RegionName);
+  };
+
   useEffect(() => {
     let tables: string[] = [];
     let labels: string[] = [];
@@ -110,7 +126,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           {viewMode === 'single-state' && (
             <div>
               <label className="text-sm font-medium mb-2 block">Selecione o Estado:</label>
-              <Select value={selectedState1} onValueChange={setSelectedState1}>
+              <Select value={selectedState1} onValueChange={handleState1Change}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -129,7 +145,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Estado 1:</label>
-                <Select value={selectedState1} onValueChange={setSelectedState1}>
+                <Select value={selectedState1} onValueChange={handleState1Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -146,7 +162,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Estado 2:</label>
-                <Select value={selectedState2} onValueChange={setSelectedState2}>
+                <Select value={selectedState2} onValueChange={handleState2Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -167,7 +183,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           {viewMode === 'single-region' && (
             <div>
               <label className="text-sm font-medium mb-2 block">Selecione Brasil ou Região:</label>
-              <Select value={selectedRegion1} onValueChange={setSelectedRegion1}>
+              <Select value={selectedRegion1} onValueChange={handleRegion1Change}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -191,7 +207,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Região 1:</label>
-                <Select value={selectedRegion1} onValueChange={setSelectedRegion1}>
+                <Select value={selectedRegion1} onValueChange={handleRegion1Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -208,7 +224,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Região 2:</label>
-                <Select value={selectedRegion2} onValueChange={setSelectedRegion2}>
+                <Select value={selectedRegion2} onValueChange={handleRegion2Change}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
