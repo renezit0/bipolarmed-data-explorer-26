@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -22,48 +22,9 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
   const [selectedState2, setSelectedState2] = useState<StateCode>('sp');
   const [selectedRegion1, setSelectedRegion1] = useState<RegionName>('Brasil');
   const [selectedRegion2, setSelectedRegion2] = useState<RegionName>('Sudeste');
-  
-  // Controle para evitar disparo inicial duplo
-  const isInitialMount = useRef(true);
 
-  const handleModeChange = (mode: ViewMode) => {
-    setViewMode(mode);
-  };
-
-  const handleState1Change = (value: StateCode) => {
-    setSelectedState1(value);
-  };
-
-  const handleState2Change = (value: StateCode) => {
-    setSelectedState2(value);
-  };
-
-  const handleRegion1Change = (value: RegionName) => {
-    setSelectedRegion1(value);
-  };
-
-  const handleRegion2Change = (value: RegionName) => {
-    setSelectedRegion2(value);
-  };
-
-  // UseEffect para aplicar a seleção
+  // UseEffect que só dispara quando os valores mudam
   useEffect(() => {
-    // Pular o primeiro disparo (montagem inicial)
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      
-      // Mas aplicar a seleção inicial apenas UMA vez
-      let tables: string[] = [];
-      let labels: string[] = [];
-
-      tables = getStatesByRegion('Brasil').map(code => STATES[code].table);
-      labels = ['Brasil (Todos os Estados)'];
-      
-      console.log('🎬 Seleção INICIAL:', { tables: tables.length, labels });
-      onSelectionChange({ mode: 'single-region', tables, labels });
-      return;
-    }
-
     let tables: string[] = [];
     let labels: string[] = [];
 
@@ -91,7 +52,6 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
         break;
     }
 
-    console.log('🔄 Mudança de seleção:', { mode: viewMode, tables: tables.length, labels });
     onSelectionChange({ mode: viewMode, tables, labels });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
@@ -104,12 +64,11 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           Seleção de Dados para Análise
         </h3>
 
-        {/* Seleção do Modo de Visualização */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
           <Button
             variant={viewMode === 'single-region' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => handleModeChange('single-region')}
+            onClick={() => setViewMode('single-region')}
             className="flex items-center gap-2"
           >
             <Globe className="h-4 w-4" />
@@ -119,7 +78,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           <Button
             variant={viewMode === 'single-state' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => handleModeChange('single-state')}
+            onClick={() => setViewMode('single-state')}
             className="flex items-center gap-2"
           >
             <MapPin className="h-4 w-4" />
@@ -128,7 +87,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           <Button
             variant={viewMode === 'compare-states' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => handleModeChange('compare-states')}
+            onClick={() => setViewMode('compare-states')}
             className="flex items-center gap-2"
           >
             <GitCompare className="h-4 w-4" />
@@ -138,7 +97,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           <Button
             variant={viewMode === 'compare-regions' ? 'default' : 'outline'}
             size="sm"
-            onClick={() => handleModeChange('compare-regions')}
+            onClick={() => setViewMode('compare-regions')}
             className="flex items-center gap-2"
           >
             <Users className="h-4 w-4" />
@@ -147,12 +106,11 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           </Button>
         </div>
 
-        {/* Controles Específicos por Modo */}
         <div className="space-y-4">
           {viewMode === 'single-state' && (
             <div>
               <label className="text-sm font-medium mb-2 block">Selecione o Estado:</label>
-              <Select value={selectedState1} onValueChange={handleState1Change}>
+              <Select value={selectedState1} onValueChange={setSelectedState1}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -171,7 +129,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Estado 1:</label>
-                <Select value={selectedState1} onValueChange={handleState1Change}>
+                <Select value={selectedState1} onValueChange={setSelectedState1}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -188,7 +146,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Estado 2:</label>
-                <Select value={selectedState2} onValueChange={handleState2Change}>
+                <Select value={selectedState2} onValueChange={setSelectedState2}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -209,7 +167,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
           {viewMode === 'single-region' && (
             <div>
               <label className="text-sm font-medium mb-2 block">Selecione Brasil ou Região:</label>
-              <Select value={selectedRegion1} onValueChange={handleRegion1Change}>
+              <Select value={selectedRegion1} onValueChange={setSelectedRegion1}>
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -233,7 +191,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="text-sm font-medium mb-2 block">Região 1:</label>
-                <Select value={selectedRegion1} onValueChange={handleRegion1Change}>
+                <Select value={selectedRegion1} onValueChange={setSelectedRegion1}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -250,7 +208,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
               </div>
               <div>
                 <label className="text-sm font-medium mb-2 block">Região 2:</label>
-                <Select value={selectedRegion2} onValueChange={handleRegion2Change}>
+                <Select value={selectedRegion2} onValueChange={setSelectedRegion2}>
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
