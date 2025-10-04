@@ -39,7 +39,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
     setSelectedRegion2(value as RegionName);
   };
 
-  // useEffect ÚNICO que só dispara com as variáveis relevantes para cada modo
+  // useEffect simplificado - incluir todas as dependências sempre
   useEffect(() => {
     let tables: string[] = [];
     let labels: string[] = [];
@@ -62,15 +62,7 @@ export const DataSelector = ({ onSelectionChange }: DataSelectorProps) => {
 
     console.log('📤 DataSelector:', viewMode, '→', tables.length, 'tabela(s)', labels[0]);
     onSelectionChange({ mode: viewMode, tables, labels });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    viewMode,
-    // Só inclui dependências relevantes para cada modo
-    ...(viewMode === 'single-state' ? [selectedState1] : []),
-    ...(viewMode === 'compare-states' ? [selectedState1, selectedState2] : []),
-    ...(viewMode === 'single-region' ? [selectedRegion1] : []),
-    ...(viewMode === 'compare-regions' ? [selectedRegion1, selectedRegion2] : []),
-  ]);
+  }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2, onSelectionChange]);
 
   return (
     <Card>
