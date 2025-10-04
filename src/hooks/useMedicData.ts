@@ -47,7 +47,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         setLoading(true);
         setError(null);
 
-        console.log('🔍 Buscando dados das tabelas:', tableNames);
+        console.log('🔍 Carregando dados de', tableNames.length, 'tabela(s)...');
 
         // Buscar dados de todas as tabelas
         const allDataPromises = tableNames.map(async (tableName) => {
@@ -56,17 +56,16 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
             .select('*');
 
           if (error) {
-            console.error(`❌ Erro ao buscar tabela ${tableName}:`, error);
+            console.error(`❌ Erro ao buscar ${tableName}:`, error);
             throw error;
           }
           
-          console.log(`✅ Dados carregados de ${tableName}:`, rawData?.length || 0, 'linhas');
           return rawData || [];
         });
 
         const allRawData = await Promise.all(allDataPromises);
         const totalRows = allRawData.reduce((sum, arr) => sum + arr.length, 0);
-        console.log(`📊 Total de linhas carregadas: ${totalRows}`);
+        console.log(`✅ ${totalRows} linhas carregadas de ${tableNames.length} tabela(s)`);
         
         // Agregar dados por medicamento (PROCEDIMENTO completo, não apenas o código)
         const medicMap = new Map<string, {
@@ -117,7 +116,8 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
           });
         });
 
-        console.log(`💊 Total de medicamentos únicos encontrados: ${medicMap.size}`);
+        const medicCount = medicMap.size;
+        console.log(`💊 ${medicCount} medicamento(s) único(s) encontrado(s)`);
 
         // Converter para formato final
         const processedData = Array.from(medicMap.values()).map(medic => {
@@ -147,8 +147,7 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         .filter(item => item.totalConsumption > 0)
         .sort((a, b) => b.totalConsumption - a.totalConsumption); // Ordenar por consumo total
 
-        console.log('✨ Dados processados:', processedData.length, 'medicamentos');
-        console.log('📋 Medicamentos:', processedData.map(m => m.simplifiedName));
+        console.log('✨ Processamento concluído:', processedData.length, 'medicamento(s)');
         
         setData(processedData);
       } catch (err) {
