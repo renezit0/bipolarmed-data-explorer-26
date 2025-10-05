@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { STATES, StateCode } from '@/constants/states';
-import { Trophy, Users, TrendingUp } from 'lucide-react';
+import { Trophy, Users, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface StateConsumption {
   stateCode: StateCode;
@@ -18,6 +19,9 @@ interface StateConsumptionRankingProps {
 }
 
 export const StateConsumptionRanking = ({ consumptionByState }: StateConsumptionRankingProps) => {
+  const [expandedTotal, setExpandedTotal] = useState(false);
+  const [expandedPerCapita, setExpandedPerCapita] = useState(false);
+
   const stateRankings = useMemo(() => {
     const rankings: StateConsumption[] = [];
 
@@ -42,16 +46,14 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
   }, [consumptionByState]);
 
   const topByTotal = useMemo(() => {
-    return [...stateRankings]
-      .sort((a, b) => b.totalConsumption - a.totalConsumption)
-      .slice(0, 10);
-  }, [stateRankings]);
+    const sorted = [...stateRankings].sort((a, b) => b.totalConsumption - a.totalConsumption);
+    return expandedTotal ? sorted : sorted.slice(0, 10);
+  }, [stateRankings, expandedTotal]);
 
   const topByPerCapita = useMemo(() => {
-    return [...stateRankings]
-      .sort((a, b) => b.perCapita - a.perCapita)
-      .slice(0, 10);
-  }, [stateRankings]);
+    const sorted = [...stateRankings].sort((a, b) => b.perCapita - a.perCapita);
+    return expandedPerCapita ? sorted : sorted.slice(0, 10);
+  }, [stateRankings, expandedPerCapita]);
 
   const getColorByRank = (index: number) => {
     if (index === 0) return 'hsl(var(--chart-1))';
@@ -64,21 +66,76 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
     return new Intl.NumberFormat('pt-BR').format(Math.round(num));
   };
 
+  const CustomTooltip = ({ active, payload, type }: any) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+          <p className="font-semibold text-sm mb-2">{data.stateName}</p>
+          <div className="space-y-1 text-xs">
+            <p className="flex items-center gap-2">
+              <Users className="h-3 w-3" />
+              <span className="text-muted-foreground">População:</span>
+              <span className="font-medium">{formatNumber(data.population)}</span>
+            </p>
+            {type === 'total' && (
+              <p className="flex items-center gap-2">
+                <TrendingUp className="h-3 w-3" />
+                <span className="text-muted-foreground">Total:</span>
+                <span className="font-medium">{formatNumber(data.totalConsumption)}</span>
+              </p>
+            )}
+            {type === 'perCapita' && (
+              <p className="flex items-center gap-2">
+                <TrendingUp className="h-3 w-3" />
+                <span className="text-muted-foreground">Por 100mil hab:</span>
+                <span className="font-medium">{formatNumber(data.perCapita)}</span>
+              </p>
+            )}
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       {/* Ranking por Consumo Total */}
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <TrendingUp className="h-5 w-5 text-primary" />
-            <CardTitle>Top 10 Estados - Consumo Total</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <TrendingUp className="h-5 w-5 text-primary" />
+              <div>
+                <CardTitle>{expandedTotal ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Total</CardTitle>
+                <CardDescription>
+                  Estados com maior consumo absoluto de medicamentos
+                </CardDescription>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setExpandedTotal(!expandedTotal)}
+              className="flex items-center gap-2"
+            >
+              {expandedTotal ? (
+                <>
+                  <ChevronUp className="h-4 w-4" />
+                  Ver Top 10
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-4 w-4" />
+                  Ver Todos
+                </>
+              )}
+            </Button>
           </div>
-          <CardDescription>
-            Estados com maior consumo absoluto de medicamentos
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height={expandedTotal ? topByTotal.length * 35 + 50 : 400}>
             <BarChart data={topByTotal} layout="vertical" margin={{ left: 20, right: 20 }}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis type="number" tickFormatter={formatNumber} />
@@ -88,14 +145,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
                 width={100}
                 style={{ fontSize: '12px' }}
               />
-              <Tooltip 
-                formatter={(value: number) => [formatNumber(value), 'Total']}
-                contentStyle={{
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px',
-                }}
-              />
+              <Tooltip content={<CustomTooltip type="total" />} />
               <Bar dataKey="totalConsumption" radius={[0, 8, 8, 0]}>
                 {topByTotal.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={getColorByRank(index)} />
@@ -128,16 +178,38 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
       {/* Ranking por Consumo Per Capita */}
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-primary" />
-            <CardTitle>Top 10 Estados - Consumo Per Capita</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Users className="h-5 w-5 text-primary" />
+              <div>
+                <CardTitle>{expandedPerCapita ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Per Capita</CardTitle>
+                <CardDescription>
+                  Consumo por 100 mil habitantes (ajustado pela população)
+                </CardDescription>
+              </div>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setExpandedPerCapita(!expandedPerCapita)}
+              className="flex items-center gap-2"
+            >
+              {expandedPerCapita ? (
+                <>
+                  <ChevronUp className="h-4 w-4" />
+                  Ver Top 10
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-4 w-4" />
+                  Ver Todos
+                </>
+              )}
+            </Button>
           </div>
-          <CardDescription>
-            Consumo por 100 mil habitantes (ajustado pela população)
-          </CardDescription>
         </CardHeader>
         <CardContent>
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width="100%" height={expandedPerCapita ? topByPerCapita.length * 35 + 50 : 400}>
             <BarChart data={topByPerCapita} layout="vertical" margin={{ left: 20, right: 20 }}>
               <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
               <XAxis type="number" tickFormatter={formatNumber} />
@@ -147,14 +219,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
                 width={100}
                 style={{ fontSize: '12px' }}
               />
-              <Tooltip 
-                formatter={(value: number) => [formatNumber(value), 'Por 100mil hab']}
-                contentStyle={{
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
-                  borderRadius: '8px',
-                }}
-              />
+              <Tooltip content={<CustomTooltip type="perCapita" />} />
               <Bar dataKey="perCapita" radius={[0, 8, 8, 0]}>
                 {topByPerCapita.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={getColorByRank(index)} />
