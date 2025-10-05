@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useMedicData } from '@/hooks/useMedicData';
 import { useMedicGrouping } from '@/hooks/useMedicGrouping';
+import { useStateConsumption } from '@/hooks/useStateConsumption';
 import { DataSelector, ViewMode } from '@/components/DataSelector';
 import { STATES, StateCode, RegionName, getStatesByRegion } from '@/constants/states';
 import { TrendChart } from '@/components/charts/TrendChart';
@@ -12,6 +13,7 @@ import { MonthlyDistributionChart } from '@/components/charts/MonthlyDistributio
 import { DistributionAnalysis } from '@/components/charts/DistributionAnalysis';
 import { TotalQuantityChart } from '@/components/charts/TotalQuantityChart';
 import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
+import { StateConsumptionRanking } from '@/components/charts/StateConsumptionRanking';
 import { MedicationDetails } from '@/components/MedicationDetails';
 import { AnalysisCommentary } from '@/components/AnalysisCommentary';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -58,6 +60,7 @@ const Index = () => {
   }, [viewMode, selectedState1, selectedState2, selectedRegion1, selectedRegion2]);
 
   const { data, loading, error } = useMedicData(selectedTables);
+  const { consumptionByState, loading: loadingStates, error: errorStates } = useStateConsumption();
   
   const {
     groupingMode,
@@ -250,6 +253,10 @@ const Index = () => {
         </Card>
 
         <div className="grid gap-6 md:gap-8">
+          {!loadingStates && !errorStates && Object.keys(consumptionByState).length > 0 && (
+            <StateConsumptionRanking consumptionByState={consumptionByState} />
+          )}
+          
           <TrendChart data={processedData as any} />
           <TrendAnalysis data={data} />
           <ProportionChart data={processedData as any} />
