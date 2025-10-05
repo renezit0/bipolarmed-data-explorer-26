@@ -110,7 +110,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
               <div>
                 <CardTitle>{expandedTotal ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Total</CardTitle>
                 <CardDescription>
-                  Estados com maior consumo absoluto de medicamentos
+                  Estados com maior consumo absoluto de medicamentos. Dados populacionais: IBGE.
                 </CardDescription>
               </div>
             </div>
@@ -184,7 +184,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
               <div>
                 <CardTitle>{expandedPerCapita ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Per Capita</CardTitle>
                 <CardDescription>
-                  Consumo por 100 mil habitantes (ajustado pela população)
+                  Consumo por 100 mil habitantes (ajustado pela população). Dados populacionais: IBGE.
                 </CardDescription>
               </div>
             </div>
