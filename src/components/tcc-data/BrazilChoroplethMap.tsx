@@ -33,12 +33,29 @@ export const BrazilChoroplethMap = ({ consumptionByState }: BrazilChoroplethMapP
     if (perCapita === 0) return '#e5e7eb';
     const normalized = (perCapita - minPerCapita) / (maxPerCapita - minPerCapita);
     
-    // Color scale from light to dark blue
-    const r = Math.round(59 + (147 - 59) * (1 - normalized));
-    const g = Math.round(130 + (197 - 130) * (1 - normalized));
-    const b = Math.round(246 + (255 - 246) * (1 - normalized));
-    
-    return `rgb(${r}, ${g}, ${b})`;
+    // Color scale from yellow-green to orange to red (heat map style)
+    if (normalized < 0.33) {
+      // Yellow to light orange
+      const t = normalized / 0.33;
+      const r = Math.round(254 + (251 - 254) * t);
+      const g = Math.round(240 - (191 - 140) * t);
+      const b = Math.round(138 - (111 - 64) * t);
+      return `rgb(${r}, ${g}, ${b})`;
+    } else if (normalized < 0.66) {
+      // Light orange to orange
+      const t = (normalized - 0.33) / 0.33;
+      const r = Math.round(251 - (251 - 241) * t);
+      const g = Math.round(140 - (140 - 90) * t);
+      const b = Math.round(64 - (64 - 41) * t);
+      return `rgb(${r}, ${g}, ${b})`;
+    } else {
+      // Orange to dark red
+      const t = (normalized - 0.66) / 0.34;
+      const r = Math.round(241 - (241 - 220) * t);
+      const g = Math.round(90 - (90 - 38) * t);
+      const b = Math.round(41 - (41 - 38) * t);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
   };
 
   const getStateCodeFromName = (geoName: string): string | null => {
@@ -88,7 +105,7 @@ export const BrazilChoroplethMap = ({ consumptionByState }: BrazilChoroplethMapP
                       style={{
                         default: { outline: 'none' },
                         hover: { 
-                          fill: '#3b82f6',
+                          fill: '#fb923c',
                           outline: 'none',
                           cursor: 'pointer'
                         },
