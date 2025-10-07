@@ -16,6 +16,7 @@ import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
 import { StateConsumptionRanking } from '@/components/charts/StateConsumptionRanking';
 import { MedicationDetails } from '@/components/MedicationDetails';
 import { AnalysisCommentary } from '@/components/AnalysisCommentary';
+import { TccDataSection } from '@/components/tcc-data/TccDataSection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -256,6 +257,11 @@ const Index = () => {
           {!loadingStates && !errorStates && Object.keys(consumptionByState).length > 0 && (
             <StateConsumptionRanking consumptionByState={consumptionByState} />
           )}
+
+          <TccDataSection 
+            data={processedData as any} 
+            consumptionByState={consumptionByState} 
+          />
           
           <TrendChart data={processedData as any} />
           <TrendAnalysis data={data} />
