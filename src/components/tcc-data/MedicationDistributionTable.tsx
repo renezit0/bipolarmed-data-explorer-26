@@ -5,13 +5,15 @@ import { Badge } from '@/components/ui/badge';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
-
 interface MedicationDistributionTableProps {
   data: ProcessedMedicData[];
 }
 
 // Mapeamento de medicamentos para classes e indicações
-const MEDICATION_INFO: Record<string, { class: string; indication: string }> = {
+const MEDICATION_INFO: Record<string, {
+  class: string;
+  indication: string;
+}> = {
   'quetiapina': {
     class: 'Antipsicótico',
     indication: 'Mania, depressão bipolar'
@@ -61,27 +63,28 @@ const MEDICATION_INFO: Record<string, { class: string; indication: string }> = {
     indication: 'Mania aguda'
   }
 };
-
-export const MedicationDistributionTable = ({ data }: MedicationDistributionTableProps) => {
+export const MedicationDistributionTable = ({
+  data
+}: MedicationDistributionTableProps) => {
   const medicationData = useMemo(() => {
     if (!data || data.length === 0) return null;
-
     const totalConsumption = data.reduce((sum, medic) => sum + medic.totalConsumption, 0);
 
     // Agrupar por substância ativa
-    const grouped = new Map<string, { 
-      name: string; 
-      total: number; 
-      class: string; 
+    const grouped = new Map<string, {
+      name: string;
+      total: number;
+      class: string;
       indication: string;
     }>();
-
     data.forEach(medic => {
       // Extrair substância ativa do nome
       const nameLower = medic.simplifiedName.toLowerCase();
-      
       let substanceName = '';
-      let info = { class: 'Outros', indication: 'Variadas' };
+      let info = {
+        class: 'Outros',
+        indication: 'Variadas'
+      };
 
       // Buscar correspondência no mapeamento
       for (const [key, value] of Object.entries(MEDICATION_INFO)) {
@@ -96,7 +99,6 @@ export const MedicationDistributionTable = ({ data }: MedicationDistributionTabl
       if (!substanceName) {
         substanceName = medic.simplifiedName.split(' ').slice(0, 2).join(' ');
       }
-
       if (grouped.has(substanceName)) {
         const existing = grouped.get(substanceName)!;
         existing.total += medic.totalConsumption;
@@ -111,20 +113,15 @@ export const MedicationDistributionTable = ({ data }: MedicationDistributionTabl
     });
 
     // Converter para array e calcular porcentagens
-    const result = Array.from(grouped.values())
-      .map(item => ({
-        ...item,
-        percentage: (item.total / totalConsumption) * 100
-      }))
-      .sort((a, b) => b.total - a.total)
-      .slice(0, 10); // Top 10
+    const result = Array.from(grouped.values()).map(item => ({
+      ...item,
+      percentage: item.total / totalConsumption * 100
+    })).sort((a, b) => b.total - a.total).slice(0, 10); // Top 10
 
     return result;
   }, [data]);
-
   if (!data || data.length === 0) {
-    return (
-      <Card>
+    return <Card>
         <CardHeader>
           <CardTitle>Tabela 2 – Distribuição do Consumo por Medicamento</CardTitle>
           <CardDescription>Principais medicamentos utilizados no tratamento do TAB</CardDescription>
@@ -135,13 +132,10 @@ export const MedicationDistributionTable = ({ data }: MedicationDistributionTabl
             <AlertDescription>Nenhum dado disponível para análise</AlertDescription>
           </Alert>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
   if (!medicationData) {
-    return (
-      <Card>
+    return <Card>
         <CardHeader>
           <CardTitle>Tabela 2 – Distribuição do Consumo por Medicamento</CardTitle>
           <CardDescription>Principais medicamentos utilizados no tratamento do TAB</CardDescription>
@@ -152,30 +146,27 @@ export const MedicationDistributionTable = ({ data }: MedicationDistributionTabl
             <AlertDescription>Dados insuficientes para análise</AlertDescription>
           </Alert>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat('pt-BR').format(Math.round(num));
   };
-
   const getClassColor = (className: string) => {
     switch (className) {
-      case 'Antipsicótico': return 'default';
-      case 'Anticonvulsivante': return 'secondary';
-      case 'Estabilizador do humor': return 'outline';
-      default: return 'outline';
+      case 'Antipsicótico':
+        return 'default';
+      case 'Anticonvulsivante':
+        return 'secondary';
+      case 'Estabilizador do humor':
+        return 'outline';
+      default:
+        return 'outline';
     }
   };
-
-  return (
-    <Card>
+  return <Card>
       <CardHeader>
-        <CardTitle>Tabela 2 – Distribuição do Consumo por Medicamento</CardTitle>
-        <CardDescription>
-          Top 10 medicamentos mais consumidos no tratamento do Transtorno Bipolar. Fonte: SIA/SUS (BRASIL, 2025), processado em tcc.seellbr.com.
-        </CardDescription>
+        <CardTitle>Distribuição do Consumo por Medicamento</CardTitle>
+        <CardDescription>Medicamentos mais consumidos no tratamento do Transtorno Bipolar.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -190,8 +181,7 @@ export const MedicationDistributionTable = ({ data }: MedicationDistributionTabl
               </TableRow>
             </TableHeader>
             <TableBody>
-              {medicationData.map((med, idx) => (
-                <TableRow key={idx}>
+              {medicationData.map((med, idx) => <TableRow key={idx}>
                   <TableCell className="font-medium">{med.name}</TableCell>
                   <TableCell>
                     <Badge variant={getClassColor(med.class)}>{med.class}</Badge>
@@ -201,8 +191,7 @@ export const MedicationDistributionTable = ({ data }: MedicationDistributionTabl
                     {med.percentage.toFixed(2)}%
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">{med.indication}</TableCell>
-                </TableRow>
-              ))}
+                </TableRow>)}
             </TableBody>
           </Table>
         </div>
@@ -214,6 +203,5 @@ export const MedicationDistributionTable = ({ data }: MedicationDistributionTabl
           </p>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
