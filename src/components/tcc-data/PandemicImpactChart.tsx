@@ -4,12 +4,12 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { ProcessedMedicData } from '@/hooks/useMedicData';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-
 interface PandemicImpactChartProps {
   data: ProcessedMedicData[];
 }
-
-export const PandemicImpactChart = ({ data }: PandemicImpactChartProps) => {
+export const PandemicImpactChart = ({
+  data
+}: PandemicImpactChartProps) => {
   const pandemicData = useMemo(() => {
     if (!data || data.length === 0) return null;
 
@@ -21,12 +21,13 @@ export const PandemicImpactChart = ({ data }: PandemicImpactChartProps) => {
     let prePandemic = 0;
     let duringPandemic = 0;
     let postPandemic = 0;
-
     data.forEach(medic => {
-      medic.timeSeriesData.forEach(({ month, value }) => {
+      medic.timeSeriesData.forEach(({
+        month,
+        value
+      }) => {
         const [year, monthName] = month.split('/');
         const yearNum = parseInt(year);
-
         if (yearNum < 2020) {
           prePandemic += value;
         } else if (yearNum >= 2020 && yearNum <= 2021) {
@@ -42,34 +43,28 @@ export const PandemicImpactChart = ({ data }: PandemicImpactChartProps) => {
     const duringMonths = 24; // Jan/2020 a Dez/2021
     const postMonths = 42; // Jan/2022 a Jun/2025
 
-    return [
-      {
-        period: 'Pré-Pandemia\n(Jun/2018-Dez/2019)',
-        total: prePandemic,
-        monthly: Math.round(prePandemic / preMonths),
-        months: preMonths,
-        color: 'hsl(var(--chart-1))'
-      },
-      {
-        period: 'Durante Pandemia\n(Jan/2020-Dez/2021)',
-        total: duringPandemic,
-        monthly: Math.round(duringPandemic / duringMonths),
-        months: duringMonths,
-        color: 'hsl(var(--chart-2))'
-      },
-      {
-        period: 'Pós-Pandemia\n(Jan/2022-Jun/2025)',
-        total: postPandemic,
-        monthly: Math.round(postPandemic / postMonths),
-        months: postMonths,
-        color: 'hsl(var(--chart-3))'
-      }
-    ];
+    return [{
+      period: 'Pré-Pandemia\n(Jun/2018-Dez/2019)',
+      total: prePandemic,
+      monthly: Math.round(prePandemic / preMonths),
+      months: preMonths,
+      color: 'hsl(var(--chart-1))'
+    }, {
+      period: 'Durante Pandemia\n(Jan/2020-Dez/2021)',
+      total: duringPandemic,
+      monthly: Math.round(duringPandemic / duringMonths),
+      months: duringMonths,
+      color: 'hsl(var(--chart-2))'
+    }, {
+      period: 'Pós-Pandemia\n(Jan/2022-Jun/2025)',
+      total: postPandemic,
+      monthly: Math.round(postPandemic / postMonths),
+      months: postMonths,
+      color: 'hsl(var(--chart-3))'
+    }];
   }, [data]);
-
   if (!data || data.length === 0) {
-    return (
-      <Card>
+    return <Card>
         <CardHeader>
           <CardTitle>Figura 2 – Impacto da Pandemia no Consumo</CardTitle>
           <CardDescription>Comparativo pré/durante/pós pandemia COVID-19</CardDescription>
@@ -80,13 +75,10 @@ export const PandemicImpactChart = ({ data }: PandemicImpactChartProps) => {
             <AlertDescription>Nenhum dado disponível para análise</AlertDescription>
           </Alert>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
   if (!pandemicData) {
-    return (
-      <Card>
+    return <Card>
         <CardHeader>
           <CardTitle>Figura 2 – Impacto da Pandemia no Consumo</CardTitle>
           <CardDescription>Comparativo pré/durante/pós pandemia COVID-19</CardDescription>
@@ -97,15 +89,15 @@ export const PandemicImpactChart = ({ data }: PandemicImpactChartProps) => {
             <AlertDescription>Dados insuficientes para análise</AlertDescription>
           </Alert>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({
+    active,
+    payload
+  }: any) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
-      return (
-        <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
+      return <div className="bg-card border border-border rounded-lg p-3 shadow-lg">
           <p className="font-semibold text-sm mb-2">{data.period.replace('\n', ' ')}</p>
           <div className="space-y-1 text-xs">
             <p>
@@ -121,61 +113,56 @@ export const PandemicImpactChart = ({ data }: PandemicImpactChartProps) => {
               <span className="font-medium">{data.months} meses</span>
             </p>
           </div>
-        </div>
-      );
+        </div>;
     }
     return null;
   };
-
   const formatNumber = (num: number) => {
-    return new Intl.NumberFormat('pt-BR', { notation: 'compact', compactDisplay: 'short' }).format(num);
+    return new Intl.NumberFormat('pt-BR', {
+      notation: 'compact',
+      compactDisplay: 'short'
+    }).format(num);
   };
-
-  return (
-    <Card>
+  return <Card>
       <CardHeader>
-        <CardTitle>Figura 2 – Impacto da Pandemia no Consumo de Medicamentos para TAB</CardTitle>
-        <CardDescription>
-          Comparação do consumo médio mensal nos períodos pré-pandemia, durante e pós-pandemia. Fonte: SIA/SUS (BRASIL, 2025), processado em tcc.seellbr.com.
-        </CardDescription>
+        <CardTitle>Impacto da Pandemia no Consumo de Medicamentos para TAB
+      </CardTitle>
+        <CardDescription>Comparação do consumo médio mensal nos períodos pré-pandemia, durante e pós-pandemia.</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={pandemicData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
+          <BarChart data={pandemicData} margin={{
+          top: 20,
+          right: 30,
+          left: 20,
+          bottom: 60
+        }}>
             <CartesianGrid strokeDasharray="3 3" opacity={0.3} />
-            <XAxis 
-              dataKey="period" 
-              angle={-15}
-              textAnchor="end"
-              height={80}
-              style={{ fontSize: '12px' }}
-            />
+            <XAxis dataKey="period" angle={-15} textAnchor="end" height={80} style={{
+            fontSize: '12px'
+          }} />
             <YAxis tickFormatter={formatNumber} />
             <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              wrapperStyle={{ paddingTop: '20px' }}
-              payload={[
-                { value: 'Média Mensal de Consumo', type: 'square', color: 'hsl(var(--primary))' }
-              ]}
-            />
+            <Legend wrapperStyle={{
+            paddingTop: '20px'
+          }} payload={[{
+            value: 'Média Mensal de Consumo',
+            type: 'square',
+            color: 'hsl(var(--primary))'
+          }]} />
             <Bar dataKey="monthly" radius={[8, 8, 0, 0]}>
-              {pandemicData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={entry.color} />
-              ))}
+              {pandemicData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
             </Bar>
           </BarChart>
         </ResponsiveContainer>
 
         <div className="mt-6 grid grid-cols-3 gap-4">
-          {pandemicData.map((period, idx) => (
-            <div key={idx} className="bg-accent/30 rounded-lg p-4">
+          {pandemicData.map((period, idx) => <div key={idx} className="bg-accent/30 rounded-lg p-4">
               <p className="text-xs text-muted-foreground mb-1">{period.period.replace('\n', ' ')}</p>
               <p className="text-lg font-bold">{period.monthly.toLocaleString('pt-BR')}</p>
               <p className="text-xs text-muted-foreground">unidades/mês</p>
-            </div>
-          ))}
+            </div>)}
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
