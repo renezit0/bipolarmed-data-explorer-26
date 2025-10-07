@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { STATES, StateCode } from '@/constants/states';
 import { useMemo } from 'react';
@@ -72,8 +72,11 @@ export const BrazilChoroplethMap = ({ consumptionByState }: BrazilChoroplethMapP
   };
 
   return (
-    <Card>
-      <CardContent className="pt-6">
+    <Card className="max-w-3xl mx-auto">
+      <CardHeader>
+        <CardTitle>Figura 3 – Distribuição geográfica do consumo per capita por estado</CardTitle>
+      </CardHeader>
+      <CardContent>
         <CardDescription className="mb-4">
           Fonte: SIA/SUS (BRASIL, 2025), processado em tcc.seellbr.com.
         </CardDescription>
