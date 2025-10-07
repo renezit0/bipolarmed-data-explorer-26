@@ -5,6 +5,7 @@ import { PandemicImpactChart } from './PandemicImpactChart';
 import { RegionalPerCapitaTable } from './RegionalPerCapitaTable';
 import { SeasonalityChart } from '@/components/charts/SeasonalityChart';
 import { MedicationDistributionTable } from './MedicationDistributionTable';
+import { BrazilChoroplethMap } from './BrazilChoroplethMap';
 import { FileText } from 'lucide-react';
 
 interface TccDataSectionProps {
@@ -43,6 +44,13 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
             Figura 2 – Impacto da Pandemia no Consumo de Medicamentos para TAB
           </h3>
           <PandemicImpactChart data={data} />
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-3 text-primary">
+            Figura 3 – Distribuição Geográfica do Consumo Per Capita por Estado
+          </h3>
+          <BrazilChoroplethMap consumptionByState={consumptionByState} />
         </div>
 
         <div>
