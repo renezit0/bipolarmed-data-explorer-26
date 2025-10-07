@@ -3,7 +3,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-
 interface RegionalPerCapitaTableProps {
   consumptionByState: Record<string, number>;
 }
@@ -45,13 +44,13 @@ const TABLE_TO_REGION: Record<string, string> = {
   'medicbipope': 'Nordeste',
   'medicbipopi': 'Nordeste',
   'medicbiporn': 'Nordeste',
-  'medicbipose': 'Nordeste',
+  'medicbipose': 'Nordeste'
 };
-
-export const RegionalPerCapitaTable = ({ consumptionByState }: RegionalPerCapitaTableProps) => {
+export const RegionalPerCapitaTable = ({
+  consumptionByState
+}: RegionalPerCapitaTableProps) => {
   const regionalData = useMemo(() => {
     if (!consumptionByState || Object.keys(consumptionByState).length === 0) return null;
-
     const regionTotals: Record<string, number> = {
       'Sul': 0,
       'Sudeste': 0,
@@ -73,16 +72,14 @@ export const RegionalPerCapitaTable = ({ consumptionByState }: RegionalPerCapita
       region,
       population,
       total: regionTotals[region],
-      perCapita: (regionTotals[region] / population) * 100000
+      perCapita: regionTotals[region] / population * 100000
     }));
 
     // Ordenar por per capita decrescente
     return data.sort((a, b) => b.perCapita - a.perCapita);
   }, [consumptionByState]);
-
   if (!consumptionByState || Object.keys(consumptionByState).length === 0) {
-    return (
-      <Card>
+    return <Card>
         <CardHeader>
           <CardTitle>Tabela 1 – Consumo per capita de medicamentos para TAB por região (2024)</CardTitle>
           <CardDescription>Consumo ajustado pela população regional</CardDescription>
@@ -93,13 +90,10 @@ export const RegionalPerCapitaTable = ({ consumptionByState }: RegionalPerCapita
             <AlertDescription>Aguardando dados de consumo por estado</AlertDescription>
           </Alert>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
   if (!regionalData) {
-    return (
-      <Card>
+    return <Card>
         <CardHeader>
           <CardTitle>Tabela 1 – Consumo per capita de medicamentos para TAB por região (2024)</CardTitle>
           <CardDescription>Consumo ajustado pela população regional</CardDescription>
@@ -110,21 +104,15 @@ export const RegionalPerCapitaTable = ({ consumptionByState }: RegionalPerCapita
             <AlertDescription>Dados insuficientes para análise</AlertDescription>
           </Alert>
         </CardContent>
-      </Card>
-    );
+      </Card>;
   }
-
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat('pt-BR').format(Math.round(num));
   };
-
-  return (
-    <Card>
+  return <Card>
       <CardHeader>
-        <CardTitle>Tabela 1 – Consumo per capita de medicamentos para TAB por região (2024)</CardTitle>
-        <CardDescription>
-          Análise do consumo ajustado pela população de cada região. Fonte: SIA/SUS (BRASIL, 2025) e IBGE (estimativa populacional 2024), processado em tcc.seellbr.com.
-        </CardDescription>
+        <CardTitle>Consumo per capita de medicamentos para TAB por região (2024)</CardTitle>
+        <CardDescription>Análise do consumo ajustado pela população de cada região.</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -138,16 +126,14 @@ export const RegionalPerCapitaTable = ({ consumptionByState }: RegionalPerCapita
               </TableRow>
             </TableHeader>
             <TableBody>
-              {regionalData.map((row) => (
-                <TableRow key={row.region}>
+              {regionalData.map(row => <TableRow key={row.region}>
                   <TableCell className="font-medium">{row.region}</TableCell>
                   <TableCell className="text-right">{formatNumber(row.population)}</TableCell>
                   <TableCell className="text-right">{formatNumber(row.total)}</TableCell>
                   <TableCell className="text-right font-semibold">
                     {formatNumber(row.perCapita)}
                   </TableCell>
-                </TableRow>
-              ))}
+                </TableRow>)}
             </TableBody>
           </Table>
         </div>
@@ -159,6 +145,5 @@ export const RegionalPerCapitaTable = ({ consumptionByState }: RegionalPerCapita
           </p>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
