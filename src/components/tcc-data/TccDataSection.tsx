@@ -6,6 +6,7 @@ import { RegionalPerCapitaTable } from './RegionalPerCapitaTable';
 import { SeasonalityChart } from '@/components/charts/SeasonalityChart';
 import { MedicationDistributionTable } from './MedicationDistributionTable';
 import { BrazilChoroplethMap } from './BrazilChoroplethMap';
+import { RiskAlleleTable } from './RiskAlleleTable';
 import { FileText } from 'lucide-react';
 
 interface TccDataSectionProps {
@@ -54,8 +55,12 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
         </div>
 
         <div>
+          <RiskAlleleTable />
+        </div>
+
+        <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">
-            Tabela 1 – Consumo Per Capita de Medicamentos para TAB por Região (2024)
+            Tabela 2 – Consumo Per Capita de Medicamentos para TAB por Região (2024)
           </h3>
           <RegionalPerCapitaTable consumptionByState={consumptionByState} />
         </div>
@@ -69,7 +74,7 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
 
         <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">
-            Tabela 2 – Distribuição do Consumo por Medicamento
+            Tabela 3 – Distribuição do Consumo por Medicamento
           </h3>
           <MedicationDistributionTable data={data} />
         </div>
