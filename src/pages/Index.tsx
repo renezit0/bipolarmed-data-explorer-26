@@ -5,17 +5,13 @@ import { useStateConsumption } from '@/hooks/useStateConsumption';
 import { DataSelector, ViewMode } from '@/components/DataSelector';
 import { STATES, StateCode, RegionName, getStatesByRegion } from '@/constants/states';
 import { TrendChart } from '@/components/charts/TrendChart';
-import { TrendAnalysis } from '@/components/charts/TrendAnalysis';
 import { ProportionChart } from '@/components/charts/ProportionChart';
 import { SeasonalityChart } from '@/components/charts/SeasonalityChart';
-import { SeasonalityAnalysis } from '@/components/charts/SeasonalityAnalysis';
 import { MonthlyDistributionChart } from '@/components/charts/MonthlyDistributionChart';
-import { DistributionAnalysis } from '@/components/charts/DistributionAnalysis';
 import { TotalQuantityChart } from '@/components/charts/TotalQuantityChart';
 import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
 import { StateConsumptionRanking } from '@/components/charts/StateConsumptionRanking';
 import { MedicationDetails } from '@/components/MedicationDetails';
-import { AnalysisCommentary } from '@/components/AnalysisCommentary';
 import { TccDataSection } from '@/components/tcc-data/TccDataSection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -277,19 +273,15 @@ const Index = () => {
           />
           
           <TrendChart data={processedData as any} />
-          <TrendAnalysis data={data} />
           <ProportionChart data={processedData as any} />
           <SeasonalityChart data={processedData as any} />
-          <SeasonalityAnalysis data={data} />
           
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
             <MonthlyDistributionChart data={processedData as any} />
             <TimeSeriesChart data={processedData as any} />
           </div>
           
-          <DistributionAnalysis data={data} />
           <TotalQuantityChart data={processedData as any} />
-          <AnalysisCommentary data={data} />
           <MedicationDetails data={data} />
         </div>
       </main>
