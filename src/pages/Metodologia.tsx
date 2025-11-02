@@ -167,7 +167,6 @@ const Metodologia = () => {
                   <FileText className="h-4 w-4 mr-2" />
                   Acessar TabNet DATASUS
                 </Button>
-                <img src={metodologia1} alt="Portal DATASUS" className="rounded-lg border w-full" />
               </div>
             </div>
 
@@ -185,10 +184,7 @@ const Metodologia = () => {
                   <li><strong>Grupo procedimento:</strong> Medicamentos</li>
                   <li><strong>Procedimento:</strong> Selecionar medicamentos específicos para Transtorno Bipolar</li>
                 </ul>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <img src={metodologia2} alt="Configuração 1" className="rounded-lg border w-full" />
-                  <img src={metodologia3} alt="Configuração 2" className="rounded-lg border w-full" />
-                </div>
+                <img src={metodologia8} alt="Configuração dos parâmetros" className="rounded-lg border w-full" />
               </div>
             </div>
 
@@ -202,8 +198,8 @@ const Metodologia = () => {
                   Salve a página HTML completa (Ctrl+S) para cada estado brasileiro.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <img src={metodologia4} alt="Tabela gerada" className="rounded-lg border w-full" />
-                  <img src={metodologia5} alt="Download HTML" className="rounded-lg border w-full" />
+                  <img src={metodologia1} alt="Portal DATASUS" className="rounded-lg border w-full" />
+                  <img src={metodologia2} alt="Tabela gerada" className="rounded-lg border w-full" />
                 </div>
               </div>
             </div>
@@ -231,7 +227,10 @@ const Metodologia = () => {
                     {showTool ? 'Ocultar' : 'Usar Online'}
                   </Button>
                 </div>
-                <img src={metodologia6} alt="Ferramenta de conversão" className="rounded-lg border w-full" />
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <img src={metodologia3} alt="Ferramenta de conversão 1" className="rounded-lg border w-full" />
+                  <img src={metodologia4} alt="Ferramenta de conversão 2" className="rounded-lg border w-full" />
+                </div>
               </div>
             </div>
 
@@ -246,8 +245,8 @@ const Metodologia = () => {
                   e UPDATE (Jun/2015-Mai/2018).
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <img src={metodologia7} alt="Upload SQL 1" className="rounded-lg border w-full" />
-                  <img src={metodologia8} alt="Upload SQL 2" className="rounded-lg border w-full" />
+                  <img src={metodologia5} alt="Upload SQL 1" className="rounded-lg border w-full" />
+                  <img src={metodologia6} alt="Upload SQL 2" className="rounded-lg border w-full" />
                 </div>
               </div>
             </div>
