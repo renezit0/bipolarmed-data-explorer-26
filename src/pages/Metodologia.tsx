@@ -145,6 +145,30 @@ const Metodologia = () => {
           </CardContent>
         </Card>
 
+        {/* Notas Importantes */}
+        <Card className="mb-6 bg-blue-50 dark:bg-blue-950 border-blue-200 dark:border-blue-800">
+          <CardHeader>
+            <CardTitle className="text-base">Sobre Esta Plataforma</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              <strong>Propósito:</strong> Este site foi criado exclusivamente para facilitar o processamento, 
+              organização e visualização dos dados obtidos do DATASUS. A mesma replicação e análise podem 
+              ser realizadas utilizando ferramentas mais simples como Microsoft Excel, Google Sheets, 
+              ou qualquer software de análise de dados. O objetivo desta plataforma é otimizar o processo 
+              e fornecer visualizações interativas dos resultados.
+            </p>
+            <p className="text-sm text-muted-foreground">
+              <strong>Desenvolvimento e Manutenção:</strong> Esta aplicação foi desenvolvida em parceria com a empresa 
+              <strong> seeLL</strong>, de propriedade de um dos autores do trabalho. Toda adição, alteração ou 
+              remoção de funcionalidades são de total responsabilidade dos desenvolvedores Flávio Renê Pereira 
+              da Silva e Kauan Munsberg Donato de Souza. Futuras melhorias serão implementadas conforme 
+              possíveis necessidades de aprimoramento da pesquisa. A URL desta plataforma pode ser migrada 
+              para outro local futuramente.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Passo a Passo */}
         <Card className="mb-6">
           <CardHeader>
@@ -300,23 +324,6 @@ const Metodologia = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
-              <p className="text-sm text-muted-foreground mb-3">
-                <strong>Nota importante:</strong> Este site foi criado exclusivamente para facilitar o processamento, 
-                organização e visualização dos dados obtidos do DATASUS. A mesma replicação e análise podem 
-                ser realizadas utilizando ferramentas mais simples como Microsoft Excel, Google Sheets, 
-                ou qualquer software de análise de dados. O objetivo desta plataforma é otimizar o processo 
-                e fornecer visualizações interativas dos resultados.
-              </p>
-              <p className="text-sm text-muted-foreground mt-3 pt-3 border-t border-blue-200 dark:border-blue-800">
-                <strong>Sobre a Plataforma:</strong> Esta aplicação foi desenvolvida em parceria com a empresa 
-                <strong> seeLL</strong>, de propriedade de um dos autores do trabalho. Toda adição, alteração ou 
-                remoção de funcionalidades são de total responsabilidade dos desenvolvedores Flávio Renê Pereira 
-                da Silva e Kauan Munsberg Donato de Souza. Futuras melhorias serão implementadas conforme 
-                possíveis necessidades de aprimoramento da pesquisa. A URL desta plataforma pode ser migrada 
-                para outro local futuramente.
-              </p>
-            </div>
             <div>
               <h4 className="font-semibold mb-2">Frontend</h4>
               <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
