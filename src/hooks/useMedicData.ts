@@ -156,6 +156,17 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         if (allRawData.length > 0 && allRawData[0].length > 0) {
           const sampleRow = allRawData[0][0];
           console.log('🔬 AMOSTRA DE TIPOS DE DADOS:');
+          
+          // Mostrar TODAS as colunas disponíveis
+          const allColumns = Object.keys(sampleRow).filter(key => key !== 'Procedimento' && key !== 'id');
+          console.log('📋 TODAS AS COLUNAS DISPONÍVEIS:', allColumns.length, 'colunas');
+          console.log('📋 Primeiras colunas:', allColumns.slice(0, 10));
+          console.log('📋 Últimas colunas:', allColumns.slice(-5));
+          
+          // Verificar se tem dados de 2015
+          const has2015 = allColumns.some(col => col.includes('2015'));
+          console.log('📅 Tem colunas de 2015?', has2015);
+          
           monthOrder.slice(0, 5).forEach(month => {
             const value = sampleRow[month];
             console.log(`  ${month}: tipo=${typeof value}, valor="${value}"`);
