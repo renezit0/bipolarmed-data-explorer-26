@@ -121,23 +121,23 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="container px-4 md:py-4 py-[10px]">
+        <div className="container px-4 py-2 md:py-3">
           <div className="flex items-center justify-between gap-4">
-            <img src={unicesumarLogo} alt="Unicesumar" className="h-12 md:h-16 object-contain" />
+            <img src={unicesumarLogo} alt="Unicesumar" className="h-8 md:h-10 object-contain" />
             <div className="text-center flex-1">
-              <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
+              <h1 className="text-base md:text-xl font-bold text-primary mb-1">
                 Análise de Dados: Medicamentos para Transtorno Bipolar
               </h1>
-              <p className="text-sm md:text-lg text-muted-foreground mb-1">
+              <p className="text-xs md:text-sm text-muted-foreground">
                 {selectedLabel} • Jun/2015 - Jun/2025 • Dados TabWin/SUS
               </p>
             </div>
-            <div className="w-12 md:w-16" />
+            <div className="w-8 md:w-10" />
           </div>
         </div>
       </header>
 
-      <main className="container mx-auto px-4 pt-24 md:pt-28 py-4 md:py-8 space-y-6 md:space-y-8">
+      <main className="container mx-auto px-4 pt-28 md:pt-32 py-4 md:py-8 space-y-6 md:space-y-8">
         <Card className="bg-gradient-to-r from-primary/5 to-primary/10 border-primary/20">
           <CardContent className="p-4 md:p-6">
             <h2 className="text-lg md:text-xl font-semibold text-primary mb-4">
