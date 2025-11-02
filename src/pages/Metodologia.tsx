@@ -295,8 +295,20 @@ const Metodologia = () => {
               <Code className="h-5 w-5 text-primary" />
               Tecnologias de Desenvolvimento
             </CardTitle>
+            <CardDescription>
+              Esta plataforma web foi desenvolvida para facilitar o processamento e visualização dos dados
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-4">
+              <p className="text-sm text-muted-foreground">
+                <strong>Nota importante:</strong> Este site foi criado exclusivamente para facilitar o processamento, 
+                organização e visualização dos dados obtidos do DATASUS. A mesma replicação e análise podem 
+                ser realizadas utilizando ferramentas mais simples como Microsoft Excel, Google Sheets, 
+                ou qualquer software de análise de dados. O objetivo desta plataforma é otimizar o processo 
+                e fornecer visualizações interativas dos resultados.
+              </p>
+            </div>
             <div>
               <h4 className="font-semibold mb-2">Frontend</h4>
               <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
