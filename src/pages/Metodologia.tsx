@@ -117,7 +117,7 @@ const Metodologia = () => {
             <img 
               src="https://seellbr.com/assets/images/logoblack.png" 
               alt="seeLL" 
-              className="h-6 opacity-60"
+              className="h-6"
             />
           </div>
         </div>
