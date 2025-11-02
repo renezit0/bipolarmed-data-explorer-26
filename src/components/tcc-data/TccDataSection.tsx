@@ -35,7 +35,7 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
       <div className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">
-            Figura 1 – Evolução do Consumo Total de Medicamentos para TAB no Brasil (2018-2025)
+            Figura 1 – Evolução do Consumo Total de Medicamentos para TAB no Brasil (2015-2025)
           </h3>
           <TimeSeriesChart data={data} />
         </div>

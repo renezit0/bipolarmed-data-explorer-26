@@ -14,7 +14,7 @@ export const PandemicImpactChart = ({
     if (!data || data.length === 0) return null;
 
     // Períodos:
-    // Pré-pandemia: 2018/Jun - 2019/Dez
+    // Pré-pandemia: 2015/Jun - 2019/Dez
     // Durante pandemia: 2020/Jan - 2021/Dez
     // Pós-pandemia: 2022/Jan - 2025/Jun
 
@@ -26,8 +26,7 @@ export const PandemicImpactChart = ({
         month,
         value
       }) => {
-        const [year, monthName] = month.split('/');
-        const yearNum = parseInt(year);
+        const yearNum = parseInt(month.split('/')[0]);
         if (yearNum < 2020) {
           prePandemic += value;
         } else if (yearNum >= 2020 && yearNum <= 2021) {
@@ -39,12 +38,12 @@ export const PandemicImpactChart = ({
     });
 
     // Calcular médias mensais para comparação justa
-    const preMonths = 19; // Jun/2018 a Dez/2019
+    const preMonths = 55; // Jun/2015 a Dez/2019
     const duringMonths = 24; // Jan/2020 a Dez/2021
     const postMonths = 42; // Jan/2022 a Jun/2025
 
     return [{
-      period: 'Pré-Pandemia\n(Jun/2018-Dez/2019)',
+      period: 'Pré-Pandemia\n(Jun/2015-Dez/2019)',
       total: prePandemic,
       monthly: Math.round(prePandemic / preMonths),
       months: preMonths,

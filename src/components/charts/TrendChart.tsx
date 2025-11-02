@@ -70,7 +70,7 @@ export const TrendChart = ({ data }: TrendChartProps) => {
       <CardHeader>
         <CardTitle className="academic-title">Tendências de Consumo ao Longo do Tempo</CardTitle>
         <CardDescription>
-          Evolução temporal do consumo de medicamentos para transtorno bipolar (Jun/2018 - Jun/2025)
+          Evolução temporal do consumo de medicamentos para transtorno bipolar (Jun/2015 - Jun/2025)
         </CardDescription>
       </CardHeader>
       <CardContent>

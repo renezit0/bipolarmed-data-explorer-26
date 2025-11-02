@@ -199,7 +199,7 @@ export const MedicationDistributionTable = ({
         <div className="mt-4 p-4 bg-accent/30 rounded-lg">
           <p className="text-sm text-muted-foreground">
             <strong>Nota:</strong> Os dados representam o consumo total de medicamentos para Transtorno Bipolar 
-            no período de junho/2018 a junho/2025, conforme registros do Sistema de Informações Ambulatoriais do SUS (SIA/SUS).
+            no período de junho/2015 a junho/2025, conforme registros do Sistema de Informações Ambulatoriais do SUS (SIA/SUS).
           </p>
         </div>
       </CardContent>

@@ -128,7 +128,7 @@ const Index = () => {
               Análise de Dados: Medicamentos para Transtorno Bipolar
             </h1>
             <p className="text-sm md:text-lg text-muted-foreground mb-1">
-              {selectedLabel} • Jun/2018 - Jun/2025 • Dados TabWin/SUS
+              {selectedLabel} • Jun/2015 - Jun/2025 • Dados TabWin/SUS
             </p>
           </div>
         </div>
