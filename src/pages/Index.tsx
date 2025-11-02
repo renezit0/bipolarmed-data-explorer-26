@@ -21,6 +21,7 @@ import { useNavigate } from 'react-router-dom';
 import kauanPhoto from '@/assets/kauan.png';
 import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
+import unicesumarLogo from '@/assets/unicesumar-logo.png';
 
 const Index = () => {
   const navigate = useNavigate();
@@ -121,13 +122,17 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container px-4 md:py-4 py-[10px]">
-          <div className="text-center">
-            <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
-              Análise de Dados: Medicamentos para Transtorno Bipolar
-            </h1>
-            <p className="text-sm md:text-lg text-muted-foreground mb-1">
-              {selectedLabel} • Jun/2015 - Jun/2025 • Dados TabWin/SUS
-            </p>
+          <div className="flex items-center justify-between gap-4">
+            <img src={unicesumarLogo} alt="Unicesumar" className="h-12 md:h-16 object-contain" />
+            <div className="text-center flex-1">
+              <h1 className="text-xl md:text-3xl font-bold text-primary mb-2">
+                Análise de Dados: Medicamentos para Transtorno Bipolar
+              </h1>
+              <p className="text-sm md:text-lg text-muted-foreground mb-1">
+                {selectedLabel} • Jun/2015 - Jun/2025 • Dados TabWin/SUS
+              </p>
+            </div>
+            <div className="w-12 md:w-16" />
           </div>
         </div>
       </header>
@@ -284,6 +289,15 @@ const Index = () => {
           <TotalQuantityChart data={processedData as any} />
           <MedicationDetails data={data} />
         </div>
+
+        <footer className="flex items-center justify-center gap-2 mt-8 pb-6 text-xs text-muted-foreground/60">
+          <span>Desenvolvido por</span>
+          <img 
+            src="https://seellbr.com/assets/images/logoblack.png" 
+            alt="seeLL" 
+            className="h-4 opacity-60 hover:opacity-100 transition-opacity"
+          />
+        </footer>
       </main>
     </div>
   );
