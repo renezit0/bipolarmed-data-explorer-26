@@ -298,6 +298,11 @@ const Index = () => {
             className="h-4 opacity-60 hover:opacity-100 transition-opacity"
           />
         </footer>
+
+        <div className="text-center pb-4 text-xs text-muted-foreground/50">
+          <p>© 2025 - Todos os direitos reservados</p>
+          <p className="mt-1">Dados utilizados para fins de estudo e realização de Trabalho de Conclusão de Curso (TCC)</p>
+        </div>
       </main>
     </div>
   );
