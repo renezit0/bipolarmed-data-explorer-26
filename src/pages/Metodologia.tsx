@@ -439,19 +439,20 @@ const Metodologia = () => {
       </div>
 
       {/* Footer */}
-      <footer className="flex items-center justify-center gap-2 mt-8 pb-6 text-xs text-muted-foreground/60">
-        <span>Desenvolvido por</span>
-        <img 
-          src="https://seellbr.com/assets/images/logoblack.png" 
-          alt="seeLL" 
-          className="h-4 opacity-60 hover:opacity-100 transition-opacity"
-        />
+      <footer className="mt-8 pb-6">
+        <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground/60">
+          <span>Desenvolvido por</span>
+          <img 
+            src="https://seellbr.com/assets/images/logoblack.png" 
+            alt="seeLL" 
+            className="h-4 opacity-60 hover:opacity-100 transition-opacity"
+          />
+        </div>
+        <div className="text-center mt-2 text-xs text-muted-foreground/50">
+          <p>© 2025 - Todos os direitos reservados</p>
+          <p className="mt-1">Dados utilizados para fins de estudo e realização de Trabalho de Conclusão de Curso (TCC)</p>
+        </div>
       </footer>
-
-      <div className="text-center pb-4 text-xs text-muted-foreground/50">
-        <p>© 2025 - Todos os direitos reservados</p>
-        <p className="mt-1">Dados utilizados para fins de estudo e realização de Trabalho de Conclusão de Curso (TCC)</p>
-      </div>
 
       {/* Modal de Imagem Ampliada */}
       {selectedImage && (
