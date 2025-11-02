@@ -194,7 +194,7 @@ const Index = () => {
                   className="gap-2"
                 >
                   <FileText className="h-5 w-5" />
-                  Ver Metodologia de Coleta de Dados
+                  Metodologia de Coleta e Processamento de Dados
                 </Button>
               </div>
             </div>
