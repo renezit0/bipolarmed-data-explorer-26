@@ -109,10 +109,17 @@ const Metodologia = () => {
       {/* Header */}
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
         <div className="container mx-auto px-4 py-4">
-          <Button variant="ghost" onClick={() => navigate('/')} className="gap-2">
-            <ArrowLeft className="h-4 w-4" />
-            Voltar para Dashboard
-          </Button>
+          <div className="flex items-center justify-between">
+            <Button variant="ghost" onClick={() => navigate('/')} className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Voltar para Dashboard
+            </Button>
+            <img 
+              src="https://seellbr.com/assets/images/logoblack.png" 
+              alt="seeLL" 
+              className="h-6 opacity-60"
+            />
+          </div>
         </div>
       </header>
 
@@ -430,6 +437,16 @@ const Metodologia = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Footer */}
+      <footer className="flex items-center justify-center gap-2 mt-8 pb-6 text-xs text-muted-foreground/60">
+        <span>Desenvolvido por</span>
+        <img 
+          src="https://seellbr.com/assets/images/logoblack.png" 
+          alt="seeLL" 
+          className="h-4 opacity-60 hover:opacity-100 transition-opacity"
+        />
+      </footer>
 
       {/* Modal de Imagem Ampliada */}
       {selectedImage && (
