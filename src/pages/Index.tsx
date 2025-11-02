@@ -123,7 +123,7 @@ const Index = () => {
       <header className={`fixed top-0 left-0 right-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
         <div className="container px-4 py-2 md:py-3">
           <div className="flex items-center justify-between gap-4">
-            <img src={unicesumarLogo} alt="Unicesumar" className="h-8 md:h-10 object-contain" />
+            <img src={unicesumarLogo} alt="Unicesumar" className="h-10 md:h-12 object-contain" />
             <div className="text-center flex-1">
               <h1 className="text-base md:text-xl font-bold text-primary mb-1">
                 Análise de Dados: Medicamentos para Transtorno Bipolar
