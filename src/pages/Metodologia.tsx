@@ -271,36 +271,19 @@ const Metodologia = () => {
         {/* Medicamentos */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Medicamentos Incluídos</CardTitle>
-            <CardDescription>Medicamentos selecionados baseados nas diretrizes clínicas para Transtorno Bipolar</CardDescription>
+            <CardTitle>Medicamentos Analisados</CardTitle>
+            <CardDescription>Medicamentos do SUS incluídos na análise deste estudo</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <h5 className="font-semibold mb-3">Estabilizadores de Humor</h5>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Carbonato de Lítio</li>
-                  <li>• Ácido Valproico / Valproato de Sódio</li>
-                  <li>• Carbamazepina</li>
-                </ul>
-              </div>
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <h5 className="font-semibold mb-3">Antipsicóticos Atípicos</h5>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Olanzapina</li>
-                  <li>• Quetiapina</li>
-                  <li>• Risperidona</li>
-                  <li>• Clozapina</li>
-                  <li>• Ziprasidona</li>
-                </ul>
-              </div>
-              <div className="bg-muted/50 p-4 rounded-lg">
-                <h5 className="font-semibold mb-3">Anticonvulsivantes</h5>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  <li>• Lamotrigina</li>
-                  <li>• Topiramato</li>
-                </ul>
-              </div>
+            <div className="bg-muted/50 p-4 rounded-lg">
+              <h5 className="font-semibold mb-3">Antipsicóticos Atípicos e Anticonvulsivantes</h5>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Olanzapina</li>
+                <li>• Quetiapina</li>
+                <li>• Risperidona</li>
+                <li>• Clozapina</li>
+                <li>• Lamotrigina</li>
+              </ul>
             </div>
           </CardContent>
         </Card>
