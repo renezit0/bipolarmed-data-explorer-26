@@ -144,11 +144,23 @@ export const PandemicImpactChart = ({
             <Tooltip content={<CustomTooltip />} />
             <Legend wrapperStyle={{
             paddingTop: '20px'
-          }} payload={[{
-            value: 'Média Mensal de Consumo',
-            type: 'square',
-            color: 'hsl(var(--primary))'
-          }]} />
+          }} payload={[
+            {
+              value: 'Pré-Pandemia',
+              type: 'square',
+              color: 'hsl(var(--chart-1))'
+            },
+            {
+              value: 'Durante Pandemia',
+              type: 'square',
+              color: 'hsl(var(--chart-2))'
+            },
+            {
+              value: 'Pós-Pandemia',
+              type: 'square',
+              color: 'hsl(var(--chart-3))'
+            }
+          ]} />
             <Bar dataKey="monthly" radius={[8, 8, 0, 0]}>
               {pandemicData.map((entry, index) => <Cell key={`cell-${index}`} fill={entry.color} />)}
             </Bar>
