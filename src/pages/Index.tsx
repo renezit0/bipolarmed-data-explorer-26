@@ -16,17 +16,18 @@ import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
 import { StateConsumptionRanking } from '@/components/charts/StateConsumptionRanking';
 import { MedicationDetails } from '@/components/MedicationDetails';
 import { AnalysisCommentary } from '@/components/AnalysisCommentary';
-import { DataCollectionMethodology } from '@/components/DataCollectionMethodology';
 import { TccDataSection } from '@/components/tcc-data/TccDataSection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, Users, BarChart3 } from 'lucide-react';
+import { Loader2, Users, BarChart3, FileText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import kauanPhoto from '@/assets/kauan.png';
 import flavioPhoto from '@/assets/flavio.jpeg';
 import julianePhoto from '@/assets/juliane.png';
 
 const Index = () => {
+  const navigate = useNavigate();
   // TODOS os estados no Index.tsx
   const [viewMode, setViewMode] = useState<ViewMode>('single-region');
   const [selectedState1, setSelectedState1] = useState<StateCode>('pr');
@@ -185,11 +186,20 @@ const Index = () => {
                   </div>
                 </div>
               </div>
+              
+              <div className="border-t pt-6 mt-6 flex justify-center">
+                <Button 
+                  size="lg" 
+                  onClick={() => navigate('/metodologia')}
+                  className="gap-2"
+                >
+                  <FileText className="h-5 w-5" />
+                  Ver Metodologia de Coleta de Dados
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
-
-        <DataCollectionMethodology />
 
         <DataSelector
           viewMode={viewMode}
