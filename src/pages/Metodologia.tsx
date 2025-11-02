@@ -16,6 +16,7 @@ import metodologia8 from "@/assets/metodologia-8.jpeg";
 const Metodologia = () => {
   const navigate = useNavigate();
   const [showTool, setShowTool] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const downloadTool = () => {
     const toolHTML = `<!DOCTYPE html>
@@ -199,16 +200,28 @@ const Metodologia = () => {
               <div className="flex-shrink-0 w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold">2</div>
               <div className="flex-1 space-y-3">
                 <h4 className="font-semibold">Configuração dos Parâmetros</h4>
+                <div className="bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 rounded-lg p-3 mb-3">
+                  <p className="text-sm text-amber-900 dark:text-amber-100">
+                    <strong>⚠️ Importante:</strong> Este processo deve ser realizado <strong>estado por estado</strong>. 
+                    Não utilize seleção múltipla de estados, pois o TabNet apenas agrupa os valores totais sem 
+                    dividi-los por estado, tornando inviável a análise regional.
+                  </p>
+                </div>
                 <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                   <li><strong>Linha:</strong> Procedimento</li>
                   <li><strong>Coluna:</strong> Ano/mês atendimento</li>
                   <li><strong>Conteúdo:</strong> Qtd.aprovada</li>
                   <li><strong>Períodos:</strong> Jun/2015 a Jun/2025</li>
-                  <li><strong>Unidade da Federação:</strong> Selecionar estado desejado</li>
+                  <li><strong>Unidade da Federação:</strong> Selecionar estado desejado (um por vez)</li>
                   <li><strong>Grupo procedimento:</strong> Medicamentos</li>
                   <li><strong>Procedimento:</strong> Selecionar medicamentos específicos para Transtorno Bipolar</li>
                 </ul>
-                <img src={metodologia8} alt="Configuração dos parâmetros" className="rounded-lg border w-full" />
+                <img 
+                  src={metodologia8} 
+                  alt="Configuração dos parâmetros" 
+                  className="rounded-lg border w-full cursor-pointer hover:opacity-90 transition-opacity" 
+                  onClick={() => setSelectedImage(metodologia8)}
+                />
               </div>
             </div>
 
@@ -222,8 +235,18 @@ const Metodologia = () => {
                   Salve a página HTML completa (Ctrl+S) para cada estado brasileiro.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <img src={metodologia1} alt="Portal DATASUS" className="rounded-lg border w-full" />
-                  <img src={metodologia2} alt="Tabela gerada" className="rounded-lg border w-full" />
+                  <img 
+                    src={metodologia1} 
+                    alt="Portal DATASUS" 
+                    className="rounded-lg border w-full cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setSelectedImage(metodologia1)}
+                  />
+                  <img 
+                    src={metodologia2} 
+                    alt="Tabela gerada" 
+                    className="rounded-lg border w-full cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setSelectedImage(metodologia2)}
+                  />
                 </div>
               </div>
             </div>
@@ -252,8 +275,18 @@ const Metodologia = () => {
                   </Button>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <img src={metodologia3} alt="Ferramenta de conversão 1" className="rounded-lg border w-full" />
-                  <img src={metodologia4} alt="Ferramenta de conversão 2" className="rounded-lg border w-full" />
+                  <img 
+                    src={metodologia3} 
+                    alt="Ferramenta de conversão 1" 
+                    className="rounded-lg border w-full cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setSelectedImage(metodologia3)}
+                  />
+                  <img 
+                    src={metodologia4} 
+                    alt="Ferramenta de conversão 2" 
+                    className="rounded-lg border w-full cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setSelectedImage(metodologia4)}
+                  />
                 </div>
               </div>
             </div>
@@ -269,8 +302,18 @@ const Metodologia = () => {
                   e UPDATE (Jun/2015-Mai/2018).
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <img src={metodologia5} alt="Upload SQL 1" className="rounded-lg border w-full" />
-                  <img src={metodologia6} alt="Upload SQL 2" className="rounded-lg border w-full" />
+                  <img 
+                    src={metodologia5} 
+                    alt="Upload SQL 1" 
+                    className="rounded-lg border w-full cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setSelectedImage(metodologia5)}
+                  />
+                  <img 
+                    src={metodologia6} 
+                    alt="Upload SQL 2" 
+                    className="rounded-lg border w-full cursor-pointer hover:opacity-90 transition-opacity" 
+                    onClick={() => setSelectedImage(metodologia6)}
+                  />
                 </div>
               </div>
             </div>
@@ -387,6 +430,29 @@ const Metodologia = () => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Modal de Imagem Ampliada */}
+      {selectedImage && (
+        <div 
+          className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-[90vh] w-full">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute -top-12 right-0 text-white hover:text-gray-300 text-lg font-semibold"
+            >
+              ✕ Fechar
+            </button>
+            <img 
+              src={selectedImage} 
+              alt="Imagem ampliada" 
+              className="w-full h-full object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
