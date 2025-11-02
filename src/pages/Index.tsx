@@ -16,6 +16,7 @@ import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
 import { StateConsumptionRanking } from '@/components/charts/StateConsumptionRanking';
 import { MedicationDetails } from '@/components/MedicationDetails';
 import { AnalysisCommentary } from '@/components/AnalysisCommentary';
+import { DataCollectionMethodology } from '@/components/DataCollectionMethodology';
 import { TccDataSection } from '@/components/tcc-data/TccDataSection';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -188,7 +189,9 @@ const Index = () => {
           </CardContent>
         </Card>
 
-        <DataSelector 
+        <DataCollectionMethodology />
+
+        <DataSelector
           viewMode={viewMode}
           onViewModeChange={setViewMode}
           selectedState1={selectedState1}
