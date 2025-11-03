@@ -27,7 +27,7 @@ export const PopulationDataModal = ({ open, onOpenChange }: PopulationDataModalP
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl max-h-[90vh]">
+      <DialogContent className="max-w-6xl max-h-[90vh] bg-background border shadow-lg z-50">
         <DialogHeader>
           <DialogTitle>Dados Populacionais Históricos (2015-2024)</DialogTitle>
           <DialogDescription>
