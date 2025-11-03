@@ -13,7 +13,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 906876,
     2022: 830018,
     2023: 830018,
-    2024: 830018,
+    2024: 880631,
   },
   // Alagoas
   al: {
@@ -26,7 +26,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 3351543,
     2022: 3127683,
     2023: 3127683,
-    2024: 3127683,
+    2024: 3220104,
   },
   // Amazonas
   am: {
@@ -37,9 +37,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 4207714,
     2020: 4269995,
     2021: 4207714,
-    2022: 4063614,
-    2023: 4063614,
-    2024: 4063614,
+    2022: 3941613,
+    2023: 3941613,
+    2024: 4281209,
   },
   // Amapá
   ap: {
@@ -52,7 +52,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 877613,
     2022: 733759,
     2023: 733759,
-    2024: 733759,
+    2024: 802837,
   },
   // Bahia
   ba: {
@@ -63,9 +63,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 14930417,
     2020: 14985284,
     2021: 15037097,
-    2022: 14659023,
-    2023: 14659023,
-    2024: 14659023,
+    2022: 14141626,
+    2023: 14141626,
+    2024: 14850513,
   },
   // Ceará
   ce: {
@@ -78,7 +78,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 9240580,
     2022: 8794957,
     2023: 8794957,
-    2024: 8794957,
+    2024: 9233656,
   },
   // Distrito Federal
   df: {
@@ -104,7 +104,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 4152521,
     2022: 3833712,
     2023: 3833712,
-    2024: 3833712,
+    2024: 4102129,
   },
   // Goiás
   go: {
@@ -115,9 +115,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 7113540,
     2020: 7206589,
     2021: 7298518,
-    2022: 6950976,
-    2023: 6950976,
-    2024: 6950976,
+    2022: 7056495,
+    2023: 7056495,
+    2024: 7206589,
   },
   // Maranhão
   ma: {
@@ -128,9 +128,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 7114598,
     2020: 7153262,
     2021: 7190942,
-    2022: 6775805,
-    2023: 6775805,
-    2024: 6775805,
+    2022: 6776699,
+    2023: 6776699,
+    2024: 7010960,
   },
   // Minas Gerais
   mg: {
@@ -141,9 +141,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 21168791,
     2020: 21292666,
     2021: 21411923,
-    2022: 20538718,
-    2023: 20538718,
-    2024: 20538718,
+    2022: 20539989,
+    2023: 20539989,
+    2024: 21322691,
   },
   // Mato Grosso do Sul
   ms: {
@@ -167,9 +167,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 3526220,
     2020: 3567234,
     2021: 3607617,
-    2022: 3441998,
-    2023: 3441998,
-    2024: 3441998,
+    2022: 3658649,
+    2023: 3658649,
+    2024: 3658649,
   },
   // Pará
   pa: {
@@ -180,9 +180,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 8602865,
     2020: 8690745,
     2021: 8777124,
-    2022: 8121025,
-    2023: 8121025,
-    2024: 8121025,
+    2022: 8120131,
+    2023: 8120131,
+    2024: 8664306,
   },
   // Paraíba
   pb: {
@@ -193,9 +193,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 4039277,
     2020: 4059905,
     2021: 4080198,
-    2022: 3766528,
-    2023: 3766528,
-    2024: 3766528,
+    2022: 3974687,
+    2023: 3974687,
+    2024: 4145040,
   },
   // Pernambuco
   pe: {
@@ -208,7 +208,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 9674793,
     2022: 9058931,
     2023: 9058931,
-    2024: 9058931,
+    2024: 9539029,
   },
   // Piauí
   pi: {
@@ -219,9 +219,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 3273227,
     2020: 3281480,
     2021: 3289290,
-    2022: 3120122,
-    2023: 3120122,
-    2024: 3120122,
+    2022: 3271199,
+    2023: 3271199,
+    2024: 3375646,
   },
   // Paraná
   pr: {
@@ -245,9 +245,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 17366189,
     2020: 17463349,
     2021: 17555497,
-    2022: 16054524,
-    2023: 16054524,
-    2024: 16054524,
+    2022: 16055174,
+    2023: 16055174,
+    2024: 17219679,
   },
   // Rio Grande do Norte
   rn: {
@@ -258,9 +258,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 3534165,
     2020: 3560903,
     2021: 3587073,
-    2022: 3303953,
-    2023: 3303953,
-    2024: 3303953,
+    2022: 3302729,
+    2023: 3302729,
+    2024: 3446071,
   },
   // Rondônia
   ro: {
@@ -271,9 +271,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 1796460,
     2020: 1815278,
     2021: 1833742,
-    2022: 1616379,
-    2023: 1616379,
-    2024: 1616379,
+    2022: 1581196,
+    2023: 1581196,
+    2024: 1746227,
   },
   // Roraima
   rr: {
@@ -286,7 +286,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 652713,
     2022: 636707,
     2023: 636707,
-    2024: 636707,
+    2024: 716793,
   },
   // Rio Grande do Sul
   rs: {
@@ -297,8 +297,8 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 11377239,
     2020: 11422973,
     2021: 11466630,
-    2022: 11088065,
-    2023: 11088065,
+    2022: 10882965,
+    2023: 10882965,
     2024: 11088065,
   },
   // Santa Catarina
@@ -310,9 +310,9 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2019: 7164788,
     2020: 7252502,
     2021: 7338473,
-    2022: 7338473,
-    2023: 7338473,
-    2024: 7338473,
+    2022: 7610361,
+    2023: 7610361,
+    2024: 7610361,
   },
   // Sergipe
   se: {
@@ -325,7 +325,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 2338474,
     2022: 2210004,
     2023: 2210004,
-    2024: 2210004,
+    2024: 2291077,
   },
   // São Paulo
   sp: {
@@ -338,7 +338,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 46649132,
     2022: 44411238,
     2023: 44411238,
-    2024: 44411238,
+    2024: 46081801,
   },
   // Tocantins
   to: {
@@ -351,7 +351,7 @@ export const HISTORICAL_POPULATION_BY_STATE: Record<string, Record<number, numbe
     2021: 1607363,
     2022: 1511460,
     2023: 1511460,
-    2024: 1511460,
+    2024: 1577342,
   },
 };
 
