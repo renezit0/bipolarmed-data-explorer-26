@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { STATES, StateCode } from '@/constants/states';
 import { HISTORICAL_POPULATION_BY_STATE } from '@/constants/historicalPopulation';
-import { Trophy, Users, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { Trophy, Users, TrendingUp, ChevronDown, ChevronUp, Database } from 'lucide-react';
+import { PopulationDataModal } from './PopulationDataModal';
 
 interface StateConsumption {
   stateCode: StateCode;
@@ -22,6 +23,7 @@ interface StateConsumptionRankingProps {
 export const StateConsumptionRanking = ({ consumptionByState }: StateConsumptionRankingProps) => {
   const [expandedTotal, setExpandedTotal] = useState(false);
   const [expandedPerCapita, setExpandedPerCapita] = useState(false);
+  const [showPopulationModal, setShowPopulationModal] = useState(false);
 
   const stateRankings = useMemo(() => {
     const rankings: StateConsumption[] = [];
@@ -108,8 +110,20 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
   };
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
-      {/* Ranking por Consumo Total */}
+    <>
+      <div className="flex justify-center mb-4">
+        <Button
+          variant="outline"
+          onClick={() => setShowPopulationModal(true)}
+          className="flex items-center gap-2"
+        >
+          <Database className="h-4 w-4" />
+          Ver Dados Populacionais
+        </Button>
+      </div>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        {/* Ranking por Consumo Total */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
@@ -256,6 +270,12 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
           </div>
         </CardContent>
       </Card>
-    </div>
+      </div>
+
+      <PopulationDataModal 
+        open={showPopulationModal}
+        onOpenChange={setShowPopulationModal}
+      />
+    </>
   );
 };
