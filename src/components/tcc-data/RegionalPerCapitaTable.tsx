@@ -3,17 +3,28 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { HISTORICAL_POPULATION_BY_REGION } from '@/constants/historicalPopulation';
+
 interface RegionalPerCapitaTableProps {
   consumptionByState: Record<string, number>;
 }
 
-// Populações regionais (IBGE 2024)
-const REGIONAL_POPULATIONS = {
-  'Sul': 30402587,
-  'Sudeste': 89632912,
-  'Centro-Oeste': 17040093,
-  'Norte': 18906962,
-  'Nordeste': 57667842
+// População média ponderada pelo período 2015-2024
+const calculateAverageRegionalPopulation = (regionName: string): number => {
+  const populations = HISTORICAL_POPULATION_BY_REGION[regionName];
+  if (!populations) return 0;
+  
+  const years = Object.keys(populations).map(Number);
+  const sum = years.reduce((acc, year) => acc + populations[year], 0);
+  return Math.round(sum / years.length);
+};
+
+const REGIONAL_POPULATIONS: Record<string, number> = {
+  'Norte': calculateAverageRegionalPopulation('Norte'),
+  'Nordeste': calculateAverageRegionalPopulation('Nordeste'),
+  'Centro-Oeste': calculateAverageRegionalPopulation('Centro-Oeste'),
+  'Sudeste': calculateAverageRegionalPopulation('Sudeste'),
+  'Sul': calculateAverageRegionalPopulation('Sul'),
 };
 
 // Mapeamento de tabelas para regiões
@@ -111,8 +122,8 @@ export const RegionalPerCapitaTable = ({
   };
   return <Card>
       <CardHeader>
-        <CardTitle>Consumo per capita de medicamentos para TAB por região (2024)</CardTitle>
-        <CardDescription>Análise do consumo ajustado pela população de cada região.</CardDescription>
+        <CardTitle>Consumo per capita de medicamentos para TAB por região</CardTitle>
+        <CardDescription>Análise do consumo ajustado pela população média do período 2015-2024 (IBGE)</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">

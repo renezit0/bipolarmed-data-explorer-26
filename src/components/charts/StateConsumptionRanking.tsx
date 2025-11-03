@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { STATES, StateCode } from '@/constants/states';
+import { HISTORICAL_POPULATION_BY_STATE } from '@/constants/historicalPopulation';
 import { Trophy, Users, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface StateConsumption {
@@ -32,12 +33,19 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
 
       if (stateCode) {
         const state = STATES[stateCode];
+        
+        // Calcula população média do período 2015-2024
+        const statePop = HISTORICAL_POPULATION_BY_STATE[stateCode.toLowerCase()];
+        const avgPopulation = statePop 
+          ? Math.round(Object.values(statePop).reduce((sum, pop) => sum + pop, 0) / Object.values(statePop).length)
+          : state.population;
+
         rankings.push({
           stateCode,
           stateName: state.name,
           totalConsumption: consumption,
-          population: state.population,
-          perCapita: (consumption / state.population) * 100000, // Por 100 mil habitantes
+          population: avgPopulation,
+          perCapita: (consumption / avgPopulation) * 100000, // Por 100 mil habitantes
         });
       }
     });
@@ -110,7 +118,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
               <div>
                 <CardTitle>{expandedTotal ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Total</CardTitle>
                 <CardDescription>
-                  Estados com maior consumo absoluto de medicamentos. Fonte: IBGE - Instituto Brasileiro de Geografia e Estatística (estimativa populacional 2024).
+                  Estados com maior consumo absoluto de medicamentos. População média 2015-2024 (IBGE).
                 </CardDescription>
               </div>
             </div>
@@ -184,7 +192,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
               <div>
                 <CardTitle>{expandedPerCapita ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Per Capita</CardTitle>
                 <CardDescription>
-                  Consumo por 100 mil habitantes (ajustado pela população). Fonte: IBGE - Instituto Brasileiro de Geografia e Estatística (estimativa populacional 2024).
+                  Consumo por 100 mil habitantes. População média 2015-2024 (IBGE).
                 </CardDescription>
               </div>
             </div>

@@ -1,6 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { STATES, StateCode } from '@/constants/states';
+import { HISTORICAL_POPULATION_BY_STATE } from '@/constants/historicalPopulation';
 import { useMemo } from 'react';
 interface BrazilChoroplethMapProps {
   consumptionByState: Record<string, number>;
@@ -18,7 +19,14 @@ export const BrazilChoroplethMap = ({
     }> = {};
     Object.entries(STATES).forEach(([code, info]) => {
       const consumption = consumptionByState[info.table] || 0;
-      const perCapita = consumption / info.population * 100000;
+      
+      // Usa população média do período 2015-2024
+      const statePop = HISTORICAL_POPULATION_BY_STATE[code.toLowerCase()];
+      const avgPopulation = statePop 
+        ? Math.round(Object.values(statePop).reduce((sum, pop) => sum + pop, 0) / Object.values(statePop).length)
+        : info.population;
+      
+      const perCapita = consumption / avgPopulation * 100000;
       data[code.toUpperCase()] = {
         perCapita,
         name: info.name
