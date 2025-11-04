@@ -3,29 +3,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { HISTORICAL_POPULATION_BY_REGION } from '@/constants/historicalPopulation';
+import { getRegionPopulation } from '@/constants/historicalPopulation';
+import { StateConsumptionByYear } from '@/hooks/useStateConsumptionByYear';
 
 interface RegionalPerCapitaTableProps {
-  consumptionByState: Record<string, number>;
+  consumptionByStateYear: StateConsumptionByYear;
 }
-
-// População média ponderada pelo período 2015-2024
-const calculateAverageRegionalPopulation = (regionName: string): number => {
-  const populations = HISTORICAL_POPULATION_BY_REGION[regionName];
-  if (!populations) return 0;
-  
-  const years = Object.keys(populations).map(Number);
-  const sum = years.reduce((acc, year) => acc + populations[year], 0);
-  return Math.round(sum / years.length);
-};
-
-const REGIONAL_POPULATIONS: Record<string, number> = {
-  'Norte': calculateAverageRegionalPopulation('Norte'),
-  'Nordeste': calculateAverageRegionalPopulation('Nordeste'),
-  'Centro-Oeste': calculateAverageRegionalPopulation('Centro-Oeste'),
-  'Sudeste': calculateAverageRegionalPopulation('Sudeste'),
-  'Sul': calculateAverageRegionalPopulation('Sul'),
-};
 
 // Mapeamento de tabelas para regiões
 const TABLE_TO_REGION: Record<string, string> = {
@@ -58,38 +41,67 @@ const TABLE_TO_REGION: Record<string, string> = {
   'medicbipose': 'Nordeste'
 };
 export const RegionalPerCapitaTable = ({
-  consumptionByState
+  consumptionByStateYear
 }: RegionalPerCapitaTableProps) => {
   const regionalData = useMemo(() => {
-    if (!consumptionByState || Object.keys(consumptionByState).length === 0) return null;
-    const regionTotals: Record<string, number> = {
-      'Sul': 0,
-      'Sudeste': 0,
-      'Centro-Oeste': 0,
-      'Norte': 0,
-      'Nordeste': 0
+    if (!consumptionByStateYear || Object.keys(consumptionByStateYear).length === 0) return null;
+    
+    // Agregar por região e ano
+    const regionDataByYear: Record<string, Record<number, { consumption: number; population: number }>> = {
+      'Sul': {},
+      'Sudeste': {},
+      'Centro-Oeste': {},
+      'Norte': {},
+      'Nordeste': {}
     };
 
-    // Somar consumo por região
-    Object.entries(consumptionByState).forEach(([tableName, consumption]) => {
+    // Somar consumo por região e ano
+    Object.entries(consumptionByStateYear).forEach(([tableName, consumptionByYear]) => {
       const region = TABLE_TO_REGION[tableName];
-      if (region) {
-        regionTotals[region] += consumption;
-      }
+      if (!region) return;
+
+      Object.entries(consumptionByYear).forEach(([yearStr, consumption]) => {
+        const year = parseInt(yearStr);
+        const population = getRegionPopulation(region, year);
+        
+        if (!regionDataByYear[region][year]) {
+          regionDataByYear[region][year] = { consumption: 0, population };
+        }
+        
+        regionDataByYear[region][year].consumption += consumption;
+      });
     });
 
-    // Calcular per capita (por 100 mil habitantes)
-    const data = Object.entries(REGIONAL_POPULATIONS).map(([region, population]) => ({
-      region,
-      population,
-      total: regionTotals[region],
-      perCapita: regionTotals[region] / population * 100000
-    }));
+    // Calcular per capita agregado corretamente
+    const data = Object.entries(regionDataByYear).map(([region, yearData]) => {
+      let totalConsumption = 0;
+      let weightedPerCapitaSum = 0;
+      let totalPopulation = 0;
+      
+      Object.entries(yearData).forEach(([_, { consumption, population }]) => {
+        if (population > 0) {
+          totalConsumption += consumption;
+          const yearlyPerCapita = (consumption / population) * 100000;
+          weightedPerCapitaSum += yearlyPerCapita * population;
+          totalPopulation += population;
+        }
+      });
+
+      const avgPopulation = totalPopulation / Object.keys(yearData).length;
+      const perCapita = totalPopulation > 0 ? weightedPerCapitaSum / totalPopulation : 0;
+
+      return {
+        region,
+        population: Math.round(avgPopulation),
+        total: totalConsumption,
+        perCapita
+      };
+    });
 
     // Ordenar por per capita decrescente
     return data.sort((a, b) => b.perCapita - a.perCapita);
-  }, [consumptionByState]);
-  if (!consumptionByState || Object.keys(consumptionByState).length === 0) {
+  }, [consumptionByStateYear]);
+  if (!consumptionByStateYear || Object.keys(consumptionByStateYear).length === 0) {
     return <Card>
         <CardHeader>
           <CardTitle>Tabela 1 – Consumo per capita de medicamentos para TAB por região (2024)</CardTitle>
@@ -123,7 +135,7 @@ export const RegionalPerCapitaTable = ({
   return <Card>
       <CardHeader>
         <CardTitle>Consumo per capita de medicamentos para TAB por região</CardTitle>
-        <CardDescription>Análise do consumo ajustado pela população média do período 2015-2024 (IBGE)</CardDescription>
+        <CardDescription>Análise do consumo ajustado pela população de cada ano (2015-2024, IBGE)</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
@@ -151,8 +163,8 @@ export const RegionalPerCapitaTable = ({
 
         <div className="mt-4 p-4 bg-accent/30 rounded-lg">
           <p className="text-sm text-muted-foreground">
-            <strong>Nota:</strong> O consumo per capita é calculado como (Consumo Total ÷ População) × 100.000, 
-            representando o número de unidades consumidas por 100 mil habitantes em cada região.
+            <strong>Nota:</strong> O consumo per capita é calculado ano a ano usando a população específica de cada ano (2015-2024), 
+            depois agregado como média ponderada. Isso garante que as mudanças populacionais sejam corretamente consideradas no cálculo.
           </p>
         </div>
       </CardContent>

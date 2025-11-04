@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useMedicData } from '@/hooks/useMedicData';
 import { useMedicGrouping } from '@/hooks/useMedicGrouping';
 import { useStateConsumption } from '@/hooks/useStateConsumption';
+import { useStateConsumptionByYear } from '@/hooks/useStateConsumptionByYear';
 import { DataSelector, ViewMode } from '@/components/DataSelector';
 import { STATES, StateCode, RegionName, getStatesByRegion } from '@/constants/states';
 import { TrendChart } from '@/components/charts/TrendChart';
@@ -61,6 +62,7 @@ const Index = () => {
 
   const { data, loading, error } = useMedicData(selectedTables);
   const { consumptionByState, loading: loadingStates, error: errorStates } = useStateConsumption();
+  const { consumptionByStateYear, loading: loadingStatesByYear } = useStateConsumptionByYear();
   
   const {
     groupingMode,
@@ -289,8 +291,8 @@ const Index = () => {
         </Card>
 
         <div className="grid gap-6 md:gap-8">
-          {!loadingStates && !errorStates && Object.keys(consumptionByState).length > 0 && (
-            <StateConsumptionRanking consumptionByState={consumptionByState} />
+          {!loadingStatesByYear && Object.keys(consumptionByStateYear).length > 0 && (
+            <StateConsumptionRanking consumptionByStateYear={consumptionByStateYear} />
           )}
 
           <TccDataSection 

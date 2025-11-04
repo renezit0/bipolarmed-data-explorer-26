@@ -1,39 +1,52 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import { STATES, StateCode } from '@/constants/states';
-import { HISTORICAL_POPULATION_BY_STATE } from '@/constants/historicalPopulation';
+import { getStatePopulation } from '@/constants/historicalPopulation';
 import { useMemo } from 'react';
+import { StateConsumptionByYear } from '@/hooks/useStateConsumptionByYear';
+
 interface BrazilChoroplethMapProps {
-  consumptionByState: Record<string, number>;
+  consumptionByStateYear: StateConsumptionByYear;
 }
 
 // Simplified Brazil GeoJSON topology
 const BRAZIL_TOPOLOGY = "https://raw.githubusercontent.com/codeforamerica/click_that_hood/master/public/data/brazil-states.geojson";
 export const BrazilChoroplethMap = ({
-  consumptionByState
+  consumptionByStateYear
 }: BrazilChoroplethMapProps) => {
   const stateData = useMemo(() => {
     const data: Record<string, {
       perCapita: number;
       name: string;
     }> = {};
+    
     Object.entries(STATES).forEach(([code, info]) => {
-      const consumption = consumptionByState[info.table] || 0;
+      const consumptionByYear = consumptionByStateYear[info.table] || {};
       
-      // Usa população média do período 2015-2024
-      const statePop = HISTORICAL_POPULATION_BY_STATE[code.toLowerCase()];
-      const avgPopulation = statePop 
-        ? Math.round(Object.values(statePop).reduce((sum, pop) => sum + pop, 0) / Object.values(statePop).length)
-        : info.population;
+      // Calcula per capita por ano, usando população correta de cada ano
+      let weightedPerCapitaSum = 0;
+      let totalPopulation = 0;
       
-      const perCapita = consumption / avgPopulation * 100000;
+      Object.entries(consumptionByYear).forEach(([yearStr, consumption]) => {
+        const year = parseInt(yearStr);
+        const population = getStatePopulation(code.toLowerCase(), year);
+        
+        if (population > 0) {
+          const yearlyPerCapita = (consumption / population) * 100000;
+          weightedPerCapitaSum += yearlyPerCapita * population;
+          totalPopulation += population;
+        }
+      });
+      
+      const perCapita = totalPopulation > 0 ? weightedPerCapitaSum / totalPopulation : 0;
+      
       data[code.toUpperCase()] = {
         perCapita,
         name: info.name
       };
     });
     return data;
-  }, [consumptionByState]);
+  }, [consumptionByStateYear]);
   const maxPerCapita = Math.max(...Object.values(stateData).map(d => d.perCapita));
   const minPerCapita = Math.min(...Object.values(stateData).map(d => d.perCapita));
   const getColor = (perCapita: number) => {

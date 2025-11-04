@@ -121,26 +121,28 @@ const LogicaCalculo = () => {
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Objetivo:</h4>
                 <p className="text-muted-foreground">
-                  Visualizar o consumo per capita por estado brasileiro em 2024.
+                  Visualizar o consumo per capita por estado brasileiro no período 2015-2024.
                 </p>
               </div>
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Cálculo:</h4>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-2 font-mono text-sm">
-                  <p>Para cada estado:</p>
-                  <p className="ml-4">Consumo Total<sub>estado,2024</sub> = Σ(Consumo mensal de todos os medicamentos em 2024)</p>
+                  <p><strong>IMPORTANTE:</strong> Cálculo per capita é feito ANO A ANO!</p>
                   
-                  <p className="mt-3">População<sub>estado,2024</sub> = População estimada IBGE 2024</p>
+                  <p className="mt-3">Para cada estado e cada ano (2015-2024):</p>
+                  <p className="ml-4">Consumo<sub>estado,ano</sub> = Σ(Consumo mensal de todos os medicamentos no ano)</p>
+                  <p className="ml-4">População<sub>estado,ano</sub> = População IBGE do estado naquele ano específico</p>
+                  <p className="ml-4">Per Capita<sub>estado,ano</sub> = (Consumo<sub>estado,ano</sub> / População<sub>estado,ano</sub>) × 100.000</p>
                   
-                  <p className="mt-3">Consumo Per Capita:</p>
-                  <p className="ml-4">Per Capita<sub>estado</sub> = Consumo Total<sub>estado,2024</sub> / População<sub>estado,2024</sub></p>
-                  <p className="ml-4 text-xs">(unidades por habitante/ano)</p>
+                  <p className="mt-3">Per capita agregado do período:</p>
+                  <p className="ml-4">Per Capita Médio<sub>estado</sub> = Σ(Per Capita<sub>estado,ano</sub> × População<sub>estado,ano</sub>) / Σ(População<sub>estado,ano</sub>)</p>
+                  <p className="ml-4 text-xs">(média ponderada pela população, em unidades por 100 mil habitantes)</p>
                 </div>
               </div>
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Escala de Cores:</h4>
                 <p className="text-muted-foreground">
-                  Gradiente de cor proporcional ao consumo per capita, permitindo identificação visual rápida de disparidades regionais.
+                  Gradiente de cor proporcional ao consumo per capita médio, permitindo identificação visual rápida de disparidades regionais.
                 </p>
               </div>
             </CardContent>
@@ -158,23 +160,33 @@ const LogicaCalculo = () => {
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Objetivo:</h4>
                 <p className="text-muted-foreground">
-                  Comparar o consumo per capita entre as cinco regiões brasileiras.
+                  Comparar o consumo per capita entre as cinco regiões brasileiras no período 2015-2024.
                 </p>
               </div>
               <div>
                 <h4 className="font-semibold text-foreground mb-2">Cálculo:</h4>
                 <div className="bg-muted/50 p-4 rounded-lg space-y-2 font-mono text-sm">
-                  <p>Para cada região (Norte, Nordeste, Centro-Oeste, Sudeste, Sul):</p>
+                  <p><strong>IMPORTANTE:</strong> Cálculo per capita é feito ANO A ANO!</p>
                   
-                  <p className="mt-2">Consumo Total<sub>região</sub> = Σ(Consumo de todos os estados da região)</p>
+                  <p className="mt-3">Para cada região e cada ano (2015-2024):</p>
+                  <p className="ml-4">Consumo<sub>região,ano</sub> = Σ(Consumo de todos os estados da região no ano)</p>
+                  <p className="ml-4">População<sub>região,ano</sub> = Σ(População de todos os estados da região naquele ano)</p>
+                  <p className="ml-4">Per Capita<sub>região,ano</sub> = (Consumo<sub>região,ano</sub> / População<sub>região,ano</sub>) × 100.000</p>
                   
-                  <p className="mt-2">População<sub>região</sub> = Σ(População de todos os estados da região)</p>
-                  
-                  <p className="mt-2">Per Capita<sub>região</sub> = Consumo Total<sub>região</sub> / População<sub>região</sub></p>
+                  <p className="mt-3">Per capita agregado do período:</p>
+                  <p className="ml-4">Per Capita Médio<sub>região</sub> = Σ(Per Capita<sub>região,ano</sub> × População<sub>região,ano</sub>) / Σ(População<sub>região,ano</sub>)</p>
                   
                   <p className="mt-3">Ranking:</p>
-                  <p className="ml-4">Ordenação decrescente por Per Capita<sub>região</sub></p>
+                  <p className="ml-4">Ordenação decrescente por Per Capita Médio<sub>região</sub></p>
+                  <p className="ml-4 text-xs">(média ponderada pela população, em unidades por 100 mil habitantes)</p>
                 </div>
+              </div>
+              <div>
+                <h4 className="font-semibold text-foreground mb-2">Por que essa metodologia?</h4>
+                <p className="text-muted-foreground">
+                  Usar a população específica de cada ano garante que mudanças populacionais ao longo do tempo sejam 
+                  corretamente consideradas. A média ponderada evita distorções causadas por anos com populações muito diferentes.
+                </p>
               </div>
             </CardContent>
           </Card>

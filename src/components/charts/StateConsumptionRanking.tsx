@@ -4,23 +4,24 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import { STATES, StateCode } from '@/constants/states';
-import { HISTORICAL_POPULATION_BY_STATE } from '@/constants/historicalPopulation';
+import { getStatePopulation } from '@/constants/historicalPopulation';
 import { Trophy, Users, TrendingUp, ChevronDown, ChevronUp, Database } from 'lucide-react';
 import { PopulationDataModal } from './PopulationDataModal';
+import { StateConsumptionByYear } from '@/hooks/useStateConsumptionByYear';
 
 interface StateConsumption {
   stateCode: StateCode;
   stateName: string;
   totalConsumption: number;
-  population: number;
+  avgPopulation: number;
   perCapita: number;
 }
 
 interface StateConsumptionRankingProps {
-  consumptionByState: Record<string, number>;
+  consumptionByStateYear: StateConsumptionByYear;
 }
 
-export const StateConsumptionRanking = ({ consumptionByState }: StateConsumptionRankingProps) => {
+export const StateConsumptionRanking = ({ consumptionByStateYear }: StateConsumptionRankingProps) => {
   const [expandedTotal, setExpandedTotal] = useState(false);
   const [expandedPerCapita, setExpandedPerCapita] = useState(false);
   const [showPopulationModal, setShowPopulationModal] = useState(false);
@@ -28,7 +29,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
   const stateRankings = useMemo(() => {
     const rankings: StateConsumption[] = [];
 
-    Object.entries(consumptionByState).forEach(([tableName, consumption]) => {
+    Object.entries(consumptionByStateYear).forEach(([tableName, consumptionByYear]) => {
       const stateCode = Object.keys(STATES).find(
         key => STATES[key as StateCode].table === tableName
       ) as StateCode | undefined;
@@ -36,24 +37,42 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
       if (stateCode) {
         const state = STATES[stateCode];
         
-        // Calcula população média do período 2015-2024
-        const statePop = HISTORICAL_POPULATION_BY_STATE[stateCode.toLowerCase()];
-        const avgPopulation = statePop 
-          ? Math.round(Object.values(statePop).reduce((sum, pop) => sum + pop, 0) / Object.values(statePop).length)
-          : state.population;
+        // Calcula consumo per capita por ANO, usando população de cada ano
+        let totalConsumption = 0;
+        let weightedPerCapitaSum = 0;
+        let totalPopulation = 0;
+        
+        Object.entries(consumptionByYear).forEach(([yearStr, consumption]) => {
+          const year = parseInt(yearStr);
+          const population = getStatePopulation(stateCode.toLowerCase(), year);
+          
+          if (population > 0) {
+            totalConsumption += consumption;
+            // Per capita para este ano específico
+            const yearlyPerCapita = (consumption / population) * 100000;
+            weightedPerCapitaSum += yearlyPerCapita * population;
+            totalPopulation += population;
+          }
+        });
+
+        // Média ponderada do per capita por população
+        const avgPopulation = totalPopulation / Object.keys(consumptionByYear).length;
+        const perCapita = totalPopulation > 0 
+          ? weightedPerCapitaSum / totalPopulation 
+          : 0;
 
         rankings.push({
           stateCode,
           stateName: state.name,
-          totalConsumption: consumption,
-          population: avgPopulation,
-          perCapita: (consumption / avgPopulation) * 100000, // Por 100 mil habitantes
+          totalConsumption,
+          avgPopulation: Math.round(avgPopulation),
+          perCapita,
         });
       }
     });
 
     return rankings;
-  }, [consumptionByState]);
+  }, [consumptionByStateYear]);
 
   const topByTotal = useMemo(() => {
     const sorted = [...stateRankings].sort((a, b) => b.totalConsumption - a.totalConsumption);
@@ -85,8 +104,8 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
           <div className="space-y-1 text-xs">
             <p className="flex items-center gap-2">
               <Users className="h-3 w-3" />
-              <span className="text-muted-foreground">População:</span>
-              <span className="font-medium">{formatNumber(data.population)}</span>
+              <span className="text-muted-foreground">Pop. Média:</span>
+              <span className="font-medium">{formatNumber(data.avgPopulation)}</span>
             </p>
             {type === 'total' && (
               <p className="flex items-center gap-2">
@@ -132,7 +151,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
               <div>
                 <CardTitle>{expandedTotal ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Total</CardTitle>
                 <CardDescription>
-                  Estados com maior consumo absoluto de medicamentos. População média 2015-2024 (IBGE).
+                  Estados com maior consumo absoluto de medicamentos no período 2015-2024 (IBGE).
                 </CardDescription>
               </div>
             </div>
@@ -206,7 +225,7 @@ export const StateConsumptionRanking = ({ consumptionByState }: StateConsumption
               <div>
                 <CardTitle>{expandedPerCapita ? 'Todos os Estados' : 'Top 10 Estados'} - Consumo Per Capita</CardTitle>
                 <CardDescription>
-                  Consumo por 100 mil habitantes. População média 2015-2024 (IBGE).
+                  Consumo por 100 mil hab. ajustado pela população de cada ano (2015-2024, IBGE).
                 </CardDescription>
               </div>
             </div>

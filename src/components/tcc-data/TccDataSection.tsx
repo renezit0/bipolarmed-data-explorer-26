@@ -7,7 +7,8 @@ import { SeasonalityChart } from '@/components/charts/SeasonalityChart';
 import { MedicationDistributionTable } from './MedicationDistributionTable';
 import { BrazilChoroplethMap } from './BrazilChoroplethMap';
 import { RiskAlleleTable } from './RiskAlleleTable';
-import { FileText } from 'lucide-react';
+import { useStateConsumptionByYear } from '@/hooks/useStateConsumptionByYear';
+import { FileText, Loader2 } from 'lucide-react';
 
 interface TccDataSectionProps {
   data: ProcessedMedicData[];
@@ -15,6 +16,7 @@ interface TccDataSectionProps {
 }
 
 export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps) => {
+  const { consumptionByStateYear, loading: loadingByYear } = useStateConsumptionByYear();
   return (
     <div className="space-y-6">
       <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/30">
@@ -51,7 +53,13 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
           <h3 className="text-lg font-semibold mb-3 text-primary">
             Figura 3 – Distribuição Geográfica do Consumo Per Capita por Estado
           </h3>
-          <BrazilChoroplethMap consumptionByState={consumptionByState} />
+          {loadingByYear ? (
+            <div className="flex justify-center p-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <BrazilChoroplethMap consumptionByStateYear={consumptionByStateYear} />
+          )}
         </div>
 
         <div>
@@ -60,9 +68,15 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
 
         <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">
-            Tabela 2 – Consumo Per Capita de Medicamentos para TAB por Região (2024)
+            Tabela 2 – Consumo Per Capita de Medicamentos para TAB por Região (2015-2024)
           </h3>
-          <RegionalPerCapitaTable consumptionByState={consumptionByState} />
+          {loadingByYear ? (
+            <div className="flex justify-center p-8">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+          ) : (
+            <RegionalPerCapitaTable consumptionByStateYear={consumptionByStateYear} />
+          )}
         </div>
 
         <div>
