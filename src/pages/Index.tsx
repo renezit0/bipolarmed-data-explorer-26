@@ -188,15 +188,36 @@ const Index = () => {
                 </div>
               </div>
               
-              <div className="border-t pt-6 mt-6 flex justify-center">
-                <Button 
-                  size="lg" 
-                  onClick={() => navigate('/metodologia')}
-                  className="gap-2"
-                >
-                  <FileText className="h-5 w-5" />
-                  Metodologia de Coleta e Processamento de Dados
-                </Button>
+              <div className="border-t pt-6 mt-6">
+                <h3 className="text-center font-semibold text-foreground mb-4">Recursos Adicionais</h3>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button 
+                    size="lg" 
+                    onClick={() => navigate('/metodologia')}
+                    className="gap-2"
+                  >
+                    <FileText className="h-5 w-5" />
+                    Metodologia de Coleta
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    onClick={() => navigate('/logica-calculo')}
+                    className="gap-2"
+                    variant="outline"
+                  >
+                    <BarChart3 className="h-5 w-5" />
+                    Lógica de Cálculo
+                  </Button>
+                  <Button 
+                    size="lg" 
+                    onClick={() => navigate('/mecanismo-acao')}
+                    className="gap-2"
+                    variant="outline"
+                  >
+                    <Users className="h-5 w-5" />
+                    Mecanismo de Ação
+                  </Button>
+                </div>
               </div>
             </div>
           </CardContent>

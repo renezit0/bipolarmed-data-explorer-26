@@ -94,6 +94,12 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
 
   const simplifyMedicName = (fullName: string): string => {
     const nameWithoutCode = fullName.replace(/^\d+\s+/, '');
+    
+    // Caso específico para Risperidona 1,0
+    if (nameWithoutCode.toUpperCase().includes('RISPERIDONA') && nameWithoutCode.includes('1,0')) {
+      return 'RISPERIDONA 1,0MG/ML (30ML)';
+    }
+    
     const match = nameWithoutCode.match(/^([A-Z]+(?:\s+[A-Z]+)*)\s+(\d+(?:,\d+)?\s*MG)/i);
     if (match) {
       return `${match[1]} ${match[2]}`;
