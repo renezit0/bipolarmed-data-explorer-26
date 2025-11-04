@@ -2,7 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Pill, Brain, Activity, Zap, TrendingUp, AlertCircle } from 'lucide-react';
+import { ArrowLeft, Pill, Brain, Activity, Zap, TrendingUp, AlertCircle, Dna } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import unicesumarLogo from '@/assets/unicesumar-logo.png';
 
@@ -14,7 +14,7 @@ const MecanismoAcao = () => {
       id: 'litio',
       nome: 'Carbonato de Lítio',
       classe: 'Estabilizador de Humor',
-      icon: '⚛️',
+      icon: 'Li⁺',
       color: 'bg-blue-500',
       mecanismo: {
         principal: 'Modula sistemas de neurotransmissores (dopamina, glutamato, GABA) e altera cascatas de sinalização intracelular',
@@ -33,7 +33,7 @@ const MecanismoAcao = () => {
       id: 'risperidona',
       nome: 'Risperidona',
       classe: 'Antipsicótico Atípico',
-      icon: '💊',
+      icon: 'D₂',
       color: 'bg-purple-500',
       mecanismo: {
         principal: 'Antagonista dual de receptores de dopamina D2 e serotonina 5-HT2A',
@@ -52,7 +52,7 @@ const MecanismoAcao = () => {
       id: 'valproato',
       nome: 'Valproato de Sódio',
       classe: 'Anticonvulsivante / Estabilizador de Humor',
-      icon: '⚡',
+      icon: 'Na⁺',
       color: 'bg-orange-500',
       mecanismo: {
         principal: 'Múltiplos mecanismos: bloqueio de canais de sódio voltagem-dependentes e aumento da neurotransmissão GABAérgica',
@@ -71,7 +71,7 @@ const MecanismoAcao = () => {
       id: 'carbamazepina',
       nome: 'Carbamazepina',
       classe: 'Anticonvulsivante / Estabilizador de Humor',
-      icon: '🔋',
+      icon: 'CBZ',
       color: 'bg-green-500',
       mecanismo: {
         principal: 'Bloqueio de canais de sódio voltagem-dependentes, reduzindo hiperexcitabilidade neuronal',
@@ -90,7 +90,7 @@ const MecanismoAcao = () => {
       id: 'quetiapina',
       nome: 'Quetiapina',
       classe: 'Antipsicótico Atípico',
-      icon: '🧠',
+      icon: '5HT',
       color: 'bg-pink-500',
       mecanismo: {
         principal: 'Antagonista de receptores de dopamina D2 e serotonina 5-HT2A, com dissociação rápida dos receptores D2',
@@ -109,7 +109,7 @@ const MecanismoAcao = () => {
       id: 'olanzapina',
       nome: 'Olanzapina',
       classe: 'Antipsicótico Atípico',
-      icon: '🎯',
+      icon: 'OLZ',
       color: 'bg-indigo-500',
       mecanismo: {
         principal: 'Antagonista de múltiplos receptores: D2, 5-HT2A, H1, muscarínicos e adrenérgicos',
@@ -128,7 +128,7 @@ const MecanismoAcao = () => {
       id: 'haloperidol',
       nome: 'Haloperidol',
       classe: 'Antipsicótico Típico',
-      icon: '💉',
+      icon: 'HAL',
       color: 'bg-red-500',
       mecanismo: {
         principal: 'Antagonista potente e seletivo de receptores dopaminérgicos D2',
@@ -147,7 +147,7 @@ const MecanismoAcao = () => {
       id: 'clonazepam',
       nome: 'Clonazepam',
       classe: 'Benzodiazepínico',
-      icon: '😴',
+      icon: 'BZD',
       color: 'bg-teal-500',
       mecanismo: {
         principal: 'Potencializa a neurotransmissão GABAérgica através da ligação alostérica aos receptores GABA-A',
@@ -199,6 +199,155 @@ const MecanismoAcao = () => {
           </CardHeader>
         </Card>
 
+        {/* NOVA SEÇÃO: Genética do Transtorno Bipolar */}
+        <Card className="border-purple-500/30 bg-gradient-to-r from-purple-50/50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/20">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-purple-700 dark:text-purple-300">
+              <Dna className="h-6 w-6" />
+              Genética do Transtorno Bipolar
+            </CardTitle>
+            <CardDescription className="text-base">
+              Como os genes influenciam o desenvolvimento do TAB
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-3">
+              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Hereditariedade e Risco Familiar</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                O TAB apresenta <strong>forte componente genético</strong>, com herdabilidade estimada em <strong>70-80%</strong> 
+                em estudos com gêmeos monozigóticos (idênticos). O risco de desenvolver o transtorno aumenta significativamente 
+                com histórico familiar:
+              </p>
+              <ul className="space-y-2 ml-4">
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
+                  <span><strong>População geral:</strong> 1-2% de risco de desenvolver TAB</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
+                  <span><strong>Um dos pais com TAB:</strong> 10-25% de risco (aumento de 10x)</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
+                  <span><strong>Ambos os pais com TAB:</strong> 50-75% de risco</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
+                  <span><strong>Gêmeo idêntico com TAB:</strong> 70-80% de concordância</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Modelo Poligênico</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                O TAB é uma condição <strong>poligênica complexa</strong> - não há um único gene responsável, mas sim a 
+                interação de <strong>múltiplas variantes genéticas</strong> em combinação com fatores ambientais (estresse, 
+                trauma, uso de substâncias). Cada variante individualmente tem efeito pequeno, mas juntas aumentam 
+                significativamente a vulnerabilidade.
+              </p>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Principais Genes Candidatos</h4>
+              <p className="text-sm text-muted-foreground mb-2">
+                Estudos de associação genômica ampla (GWAS) identificaram diversos genes associados ao TAB:
+              </p>
+              
+              <div className="grid md:grid-cols-2 gap-3">
+                <Card className="bg-white/50 dark:bg-gray-900/30 border-purple-200 dark:border-purple-800">
+                  <CardHeader className="pb-2">
+                    <h5 className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                      Genes Mais Estudados
+                    </h5>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-1.5 text-xs">
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">CACNA1C:</strong> Canais de cálcio, conectividade cerebral
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">ANK3:</strong> Função neuronal e estabilidade axonal
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">DISC1:</strong> Desenvolvimento neuronal e sinapse
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">TPH2:</strong> Síntese de serotonina
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">DAOA (G72):</strong> Modulação glutamatérgica
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white/50 dark:bg-gray-900/30 border-purple-200 dark:border-purple-800">
+                  <CardHeader className="pb-2">
+                    <h5 className="text-sm font-semibold text-purple-700 dark:text-purple-300">
+                      Sistemas de Neurotransmissores
+                    </h5>
+                  </CardHeader>
+                  <CardContent>
+                    <ul className="space-y-1.5 text-xs">
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">DRD2, TH:</strong> Sistema dopaminérgico
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">5HTT, COMT:</strong> Sistema serotoninérgico
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">BDNF:</strong> Neuroproteção e plasticidade
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">ODZ4, NCAN:</strong> Mielinização e orientação axonal
+                      </li>
+                      <li className="text-muted-foreground">
+                        <strong className="text-foreground">IL-6, IL-10, TNF-A:</strong> Resposta inflamatória
+                      </li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+
+            <div className="space-y-3 pt-2">
+              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Como os Genes Influenciam o Tratamento</h4>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                A variação genética ajuda a explicar por que:
+              </p>
+              <ul className="space-y-2 ml-4">
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
+                  <span>Alguns pacientes respondem melhor ao lítio (variantes em <strong>CACNA1C, BDNF</strong>)</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
+                  <span>Outros se beneficiam mais de valproato ou antipsicóticos (polimorfismos em genes dopaminérgicos)</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
+                  <span>Há diferenças na metabolização de medicamentos (variantes em <strong>CYP2D6, CYP3A4</strong>)</span>
+                </li>
+                <li className="flex items-start gap-2 text-sm text-muted-foreground">
+                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
+                  <span>Variabilidade na eficácia antidepressiva (polimorfismos em <strong>5HTT</strong>)</span>
+                </li>
+              </ul>
+            </div>
+
+            <div className="bg-purple-100/50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800 mt-4">
+              <p className="text-xs text-muted-foreground">
+                <strong className="text-purple-800 dark:text-purple-200">Importante:</strong> Ter variantes genéticas 
+                de risco NÃO significa que a pessoa definitivamente desenvolverá TAB. A genética aumenta a vulnerabilidade, 
+                mas o transtorno resulta da interação complexa entre predisposição genética e fatores ambientais. 
+                Atualmente, não existem testes genéticos clínicos que possam diagnosticar ou prever com certeza 
+                o desenvolvimento do TAB.
+              </p>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card className="border-blue-500/30 bg-blue-50/50 dark:bg-blue-950/20">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -227,9 +376,9 @@ const MecanismoAcao = () => {
               <TabsTrigger 
                 key={med.id} 
                 value={med.id}
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-mono"
               >
-                <span className="mr-2">{med.icon}</span>
+                <span className="mr-2 font-bold">{med.icon}</span>
                 {med.nome}
               </TabsTrigger>
             ))}
@@ -242,7 +391,7 @@ const MecanismoAcao = () => {
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className={`${med.color} text-white text-2xl w-12 h-12 rounded-full flex items-center justify-center`}>
+                        <div className={`${med.color} text-white text-xl font-bold w-14 h-14 rounded-lg flex items-center justify-center font-mono shadow-lg`}>
                           {med.icon}
                         </div>
                         <div>
@@ -323,8 +472,9 @@ const MecanismoAcao = () => {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p className="text-muted-foreground">
-              <strong>1. Individualização do Tratamento:</strong> A resposta aos medicamentos varia entre pacientes. 
-              O tratamento deve ser personalizado considerando eficácia, tolerabilidade e perfil de efeitos adversos.
+              <strong>1. Individualização do Tratamento:</strong> A resposta aos medicamentos varia entre pacientes devido 
+              a diferenças genéticas e fatores ambientais. O tratamento deve ser personalizado considerando eficácia, 
+              tolerabilidade e perfil de efeitos adversos.
             </p>
             <p className="text-muted-foreground">
               <strong>2. Terapia Combinada:</strong> Muitos pacientes necessitam de combinação de medicamentos 
@@ -338,14 +488,19 @@ const MecanismoAcao = () => {
               <strong>4. Adesão ao Tratamento:</strong> O uso contínuo e adequado dos medicamentos é fundamental 
               para prevenir recorrências e manter a estabilidade do humor.
             </p>
+            <p className="text-muted-foreground">
+              <strong>5. Influência Genética:</strong> A farmacogenética pode ajudar no futuro a prever a resposta 
+              individual aos medicamentos, permitindo tratamentos mais personalizados e eficazes.
+            </p>
           </CardContent>
         </Card>
 
         <Card className="bg-primary/5 border-primary/20">
           <CardContent className="p-6">
             <p className="text-xs text-muted-foreground text-center">
-              <strong>Fontes:</strong> Psychopharmacology Institute, ANVISA, MSD Manuals, 
-              Lecturio Medical Knowledge, SciELO Brasil, e literatura científica revisada por pares.
+              <strong>Fontes:</strong> SciELO Brasil, Psychopharmacology Institute, ANVISA, MSD Manuals, 
+              Lecturio Medical Knowledge, National Institute of Mental Health (NIMH), estudos GWAS publicados, 
+              e literatura científica revisada por pares sobre genética do transtorno bipolar.
               As informações aqui apresentadas são de caráter educacional e não substituem orientação médica profissional.
             </p>
           </CardContent>
