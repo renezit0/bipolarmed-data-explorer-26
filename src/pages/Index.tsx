@@ -21,7 +21,7 @@ import { Loader2, Users, BarChart3, FileText } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import kauanPhoto from '@/assets/kauan.png';
 import flavioPhoto from '@/assets/flavio.jpeg';
-import julianePhoto from '@/assets/juliane.png';
+import laisPhoto from '@/assets/lais.png';
 import unicesumarLogo from '@/assets/unicesumar-logo.png';
 
 const Index = () => {
@@ -180,7 +180,7 @@ const Index = () => {
                     </div>
                     
                     <div className="flex flex-col items-center gap-3 text-center">
-                      <img src={julianePhoto} alt="Juliane Nadal Swiech" className="w-24 h-24 rounded-full object-cover border-4 border-accent/30 shadow-lg" />
+                      <img src={laisPhoto} alt="Lais Daiene Cosmoski" className="w-24 h-24 rounded-full object-cover border-4 border-accent/30 shadow-lg" />
                       <div>
                         <p className="font-semibold text-foreground">Lais Daiene Cosmoski</p>
                         <p className="text-sm text-muted-foreground">Professora Orientadora</p>
