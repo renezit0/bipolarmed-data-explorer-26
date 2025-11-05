@@ -1,459 +1,585 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ArrowLeft, Pill, Brain, Activity, Zap, TrendingUp, AlertCircle, Dna } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
-import unicesumarLogo from '@/assets/unicesumar-logo.png';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowLeft, Pill, Brain, Activity, Zap, TrendingUp, AlertCircle, Dna, Users, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import unicesumarLogo from "@/assets/unicesumar-logo.png";
 
 const MecanismoAcao = () => {
   const navigate = useNavigate();
 
   const medicamentos = [
     {
-      id: 'litio',
-      nome: 'Carbonato de Lítio',
-      classe: 'Estabilizador de Humor',
-      icon: 'Li⁺',
-      color: 'bg-blue-500',
+      id: "litio",
+      nome: "Carbonato de Lítio",
+      classe: "Estabilizador de Humor",
+      icon: "Li⁺",
+      color: "bg-blue-500",
       mecanismo: {
-        principal: 'Modula sistemas de neurotransmissores (dopamina, glutamato, GABA) e altera cascatas de sinalização intracelular',
+        principal:
+          "Modula sistemas de neurotransmissores (dopamina, glutamato, GABA) e altera cascatas de sinalização intracelular, com resposta influenciada por fatores genéticos",
         detalhes: [
-          'Inibe enzimas intracelulares como GSK-3, PKC, IPPase e IMPase',
-          'Reduz hiperatividade dopaminérgica em episódios maníacos',
-          'Modula a neurotransmissão glutamatérgica e GABAérgica',
-          'Promove neuroproteção e neurogênese no hipocampo',
-          'Afeta o metabolismo de inositol e sinalização de fosfoinositídeos'
+          "Inibe enzimas intracelulares (GSK-3, PKC, IPPase, IMPase) que são codificadas por genes com variantes associadas ao TAB",
+          "Reduz hiperatividade dopaminérgica via modulação de receptores DRD2 e DRD3",
+          "Promove neuroproteção no hipocampo, região afetada geneticamente no TAB",
+          "Afeta o metabolismo de inositol e sinalização de fosfoinositídeos, vias alteradas em portadores de variantes em INPP1",
         ],
-        aplicacao: 'Primeira linha no tratamento de manutenção do TAB. Eficaz em episódios maníacos agudos e prevenção de recorrências.',
-        eficacia: 'Reduz significativamente o risco de suicídio e melhora a função psicossocial a longo prazo.'
-      }
+        genetica: {
+          titulo: "Integração Genético-Farmacológica",
+          aspectos: [
+            {
+              subtitulo: "Genes de Resposta Terapêutica",
+              conteudo:
+                "Variantes nos genes BDNF (Val66Met), GSK3B e INPP1 influenciam a resposta ao lítio. Pacientes com o alelo Met do BDNF podem ter melhor resposta neurotrófica.",
+            },
+            {
+              subtitulo: "Alvos Genéticos do Mecanismo",
+              conteudo:
+                "O lítio atua em proteínas codificadas por genes-alvo do TAB: GSK3B (crucial na sinalização Wnt), CACNA1C (canais de cálcio) e ANK3 (função neuronal).",
+            },
+            {
+              subtitulo: "Predição de Resposta",
+              conteudo:
+                "Polimorfismos em SLC6A4 (transportador de serotonina) e genes de vias de sinalização intracelular podem prever até 25-30% da variabilidade na resposta.",
+            },
+            {
+              subtitulo: "Metabolismo e Excreção",
+              conteudo:
+                "Genes que codificam transportadores renais (SCL22A1) afetam a excreção do lítio, influenciando níveis séricos e risco de toxicidade.",
+            },
+          ],
+        },
+        aplicacao:
+          "Primeira linha no tratamento de manutenção do TAB. A farmacogenética pode identificar respondedores ideais.",
+        eficacia:
+          "Reduz risco de suicídio em 50-60%. Variantes genéticas específicas aumentam a probabilidade de resposta favorável.",
+      },
     },
     {
-      id: 'risperidona',
-      nome: 'Risperidona',
-      classe: 'Antipsicótico Atípico',
-      icon: 'D₂',
-      color: 'bg-purple-500',
+      id: "quetiapina",
+      nome: "Quetiapina",
+      classe: "Antipsicótico Atípico",
+      icon: "5HT",
+      color: "bg-pink-500",
       mecanismo: {
-        principal: 'Antagonista dual de receptores de dopamina D2 e serotonina 5-HT2A',
+        principal:
+          "Antagonista de receptores D2 e 5-HT2A com dissociação rápida, cuja eficácia varia segundo polimorfismos nos genes dos receptores-alvo",
         detalhes: [
-          'Bloqueia receptores dopaminérgicos D2 na via mesolímbica (reduz sintomas psicóticos)',
-          'Antagoniza receptores serotoninérgicos 5-HT2A (melhora sintomas negativos)',
-          'Menor bloqueio D2 na via nigroestriatal comparado aos típicos (menos efeitos extrapiramidais)',
-          'Modula receptores α1-adrenérgicos e histaminérgicos H1',
-          'Perfil farmacológico equilibrado entre eficácia e tolerabilidade'
+          "Antagonismo em DRD2 (gene com variantes associadas à resposta em psicoses do TAB)",
+          "Bloqueio 5-HT2A codificado pelo gene HTR2A, cujas variantes afetam resposta antidepressiva",
+          "Metabólito norquetiapina atua na recaptação de norepinefrina (genes SLC6A2)",
+          "Antagonismo H1 (gene HRH1) relacionado à sedação e ganho de peso",
         ],
-        aplicacao: 'Indicado para episódios maníacos agudos, especialmente com sintomas psicóticos. Uso off-label em terapia de manutenção.',
-        eficacia: 'Alta eficácia no controle rápido de agitação e sintomas psicóticos em mania aguda.'
-      }
+        genetica: {
+          titulo: "Farmacogenética da Quetiapina",
+          aspectos: [
+            {
+              subtitulo: "Metabolismo pelo CYP450",
+              conteudo:
+                "A quetiapina é metabolizada principalmente pelo CYP3A4 e CYP2D6. Polimorfismos no CYP2D6 (metabolizadores lentos vs rápidos) afetam concentrações plasmáticas e resposta terapêutica.",
+            },
+            {
+              subtitulo: "Genes dos Receptores-Alvo",
+              conteudo:
+                "Variantes em DRD2 (Taq1A), HTR2A (T102C) e HTR2C (Cys23Ser) modulam a resposta aos efeitos antipsicóticos e antidepressivos da quetiapina.",
+            },
+            {
+              subtitulo: "Efeitos Metabólicos",
+              conteudo:
+                "Polimorfismos em genes como LEP (leptina), MC4R (receptor de melanocortina-4) e HTR2C predispõem ao ganho de peso induzido pelo medicamento.",
+            },
+            {
+              subtitulo: "Resposta em Depressão Bipolar",
+              conteudo:
+                "Variantes em SLC6A4 (transportador de serotonina) e COMT (catabolismo de catecolaminas) podem prever resposta antidepressiva da quetiapina no TAB.",
+            },
+          ],
+        },
+        aplicacao:
+          "Aprovado para episódios depressivos, maníacos e mistos. Testes farmacogenéticos podem otimizar dosagem.",
+        eficacia:
+          "Eficácia em depressão bipolar varia de 40-60%, com influência genética significativa na resposta individual.",
+      },
     },
     {
-      id: 'valproato',
-      nome: 'Valproato de Sódio',
-      classe: 'Anticonvulsivante / Estabilizador de Humor',
-      icon: 'Na⁺',
-      color: 'bg-orange-500',
+      id: "olanzapina",
+      nome: "Olanzapina",
+      classe: "Antipsicótico Atípico",
+      icon: "OLZ",
+      color: "bg-indigo-500",
       mecanismo: {
-        principal: 'Múltiplos mecanismos: bloqueio de canais de sódio voltagem-dependentes e aumento da neurotransmissão GABAérgica',
+        principal:
+          "Antagonista multirreceptor (D2, 5-HT2A, H1, muscarínicos) com perfil de resposta e efeitos adversos fortemente modulados pela genética",
         detalhes: [
-          'Inibe canais de sódio voltagem-dependentes (estabiliza membranas neuronais)',
-          'Aumenta níveis de GABA por inibição da GABA-transaminase e succinato semialdeído desidrogenase',
-          'Modula vias de sinalização intracelular (PKC, MAPK)',
-          'Efeitos neuroprotetores e neuroplásticos',
-          'Inibe histona desacetilases (HDACi), afetando expressão gênica'
+          "Forte antagonismo D2 e 5-HT2A em receptores codificados por genes com variantes funcionais",
+          "Antagonismo H1 intenso (gene HRH1) relacionado a efeitos metabólicos adversos",
+          "Ação em 5-HT2C (gene HTR2C com variantes ligadas ao ganho de peso)",
+          "Bloqueio muscarínico em receptores codificados por genes da família CHRM",
         ],
-        aplicacao: 'Primeira linha para episódios maníacos/mistos agudos. Também usado em profilaxia e controle de ciclagem rápida.',
-        eficacia: 'Rápido início de ação em mania aguda. Particularmente eficaz em episódios mistos e ciclagem rápida.'
-      }
+        genetica: {
+          titulo: "Perfil Farmacogenético da Olanzapina",
+          aspectos: [
+            {
+              subtitulo: "Metabolismo Hepático",
+              conteudo:
+                "Metabolização principalmente por CYP1A2 (altamente polimórfico) e CYP2D6. Fumantes têm metabolização 40% mais rápida devido à indução do CYP1A2, requerendo doses maiores.",
+            },
+            {
+              subtitulo: "Risco Metabólico Genético",
+              conteudo:
+                "Polimorfismos em HTR2C (-759C/T), MC4R, LEP e INSIG2 aumentam significativamente o risco de ganho de peso (até 10-15kg) e síndrome metabólica com olanzapina.",
+            },
+            {
+              subtitulo: "Eficácia Antipsicótica",
+              conteudo:
+                "Variantes em DRD2, DRD3 e HTR2A modulam a resposta antimaníaca. O polimorfismo Ser9Gly do DRD3 está associado a melhor resposta em episódios agudos.",
+            },
+            {
+              subtitulo: "Efeitos Adversos Neurológicos",
+              conteudo:
+                "Variantes em genes dopaminérgicos (DRD2, DRD3) e no gene COMT influenciam o risco de sintomas extrapiramidais, embora menor que antipsicóticos típicos.",
+            },
+          ],
+        },
+        aplicacao:
+          "Episódios maníacos e mistos agudos. Perfil genético pode orientar seleção devido ao risco metabólico.",
+        eficacia:
+          "Alta eficácia em mania aguda (60-70% resposta), mas risco metabólico geneticamente determinado limita uso prolongado.",
+      },
     },
     {
-      id: 'carbamazepina',
-      nome: 'Carbamazepina',
-      classe: 'Anticonvulsivante / Estabilizador de Humor',
-      icon: 'CBZ',
-      color: 'bg-green-500',
+      id: "lamotrigina",
+      nome: "Lamotrigina",
+      classe: "Anticonvulsivante / Estabilizador",
+      icon: "LTG",
+      color: "bg-purple-500",
       mecanismo: {
-        principal: 'Bloqueio de canais de sódio voltagem-dependentes, reduzindo hiperexcitabilidade neuronal',
+        principal:
+          "Bloqueio de canais de sódio voltagem-dependentes e modulação da liberação de glutamato, com metabolização geneticamente determinada",
         detalhes: [
-          'Inibe canais de sódio rápidos, estabilizando membranas neuronais hiperexcitadas',
-          'Reduz liberação de glutamato (principal neurotransmissor excitatório)',
-          'Modula sistemas de segundo mensageiro intracelular',
-          'Possui propriedades de estabilização de membrana similares ao valproato',
-          'Indução enzimática do citocromo P450 (interações medicamentosas importantes)'
+          "Inibe canais de sódio tipo II codificados por genes SCN (SCN1A, SCN2A, SCN3A)",
+          "Reduz liberação de glutamato em sinapses excitatórias",
+          "Estabiliza membranas neuronais hiperexcitáveis",
+          "Efeitos neuroprotetores e modulação de vias de sinalização",
         ],
-        aplicacao: 'Alternativa ao lítio e valproato. Útil em pacientes com ciclagem rápida e episódios mistos.',
-        eficacia: 'Eficaz em profilaxia de episódios maníacos. Estudos mostram eficácia inferior ao lítio em alguns casos.'
-      }
+        genetica: {
+          titulo: "Genética e Metabolismo da Lamotrigina",
+          aspectos: [
+            {
+              subtitulo: "Metabolismo por Glucuronidação",
+              conteudo:
+                "Metabolizada por UGT1A4 e UGT2B7 (UDP-glucuronosiltransferases). Polimorfismos nesses genes afetam clearance e níveis plasmáticos, influenciando dosagem ideal.",
+            },
+            {
+              subtitulo: "Farmacogenética de Hipersensibilidade",
+              conteudo:
+                "O alelo HLA-B*1502 (prevalente em asiáticos) aumenta em 10x o risco de síndrome de Stevens-Johnson. Teste genético é recomendado antes de iniciar em populações de risco.",
+            },
+            {
+              subtitulo: "Resposta em Depressão Bipolar",
+              conteudo:
+                "Variantes em genes de neurotransmissores (SLC6A4, HTR2A) e neuroplasticidade (BDNF) podem modular a eficácia antidepressiva da lamotrigina.",
+            },
+            {
+              subtitulo: "Interação Gene-Gene",
+              conteudo:
+                "Polimorfismos em genes de canais de sódio (SCN1A) podem influenciar a resposta terapêutica e o limiar para efeitos adversos neurológicos.",
+            },
+          ],
+        },
+        aplicacao:
+          "Primeira linha para prevenção de episódios depressivos bipolares. Screening genético de HLA-B*1502 quando indicado.",
+        eficacia:
+          "Eficaz na profilaxia de depressão bipolar (redução de 40-50% nas recorrências), com resposta modulada geneticamente.",
+      },
     },
     {
-      id: 'quetiapina',
-      nome: 'Quetiapina',
-      classe: 'Antipsicótico Atípico',
-      icon: '5HT',
-      color: 'bg-pink-500',
+      id: "risperidona",
+      nome: "Risperidona",
+      classe: "Antipsicótico Atípico",
+      icon: "D₂",
+      color: "bg-purple-500",
       mecanismo: {
-        principal: 'Antagonista de receptores de dopamina D2 e serotonina 5-HT2A, com dissociação rápida dos receptores D2',
+        principal: "Antagonista D2/5-HT2A com metabolização via CYP2D6, altamente polimórfico na população",
         detalhes: [
-          'Antagonismo de receptores D2 (principalmente mesolímbico)',
-          'Antagonismo 5-HT2A (efeito antidepressivo e antipsicótico)',
-          'Bloqueio de receptores histaminérgicos H1 (sedação)',
-          'Antagonismo α1-adrenérgico (hipotensão ortostática)',
-          'Metabólito ativo (norquetiapina) inibe recaptação de norepinefrina'
+          "Bloqueia receptores D2 (gene DRD2 com variantes funcionais) na via mesolímbica",
+          "Antagoniza 5-HT2A (gene HTR2A) melhorando sintomas negativos",
+          "Menor bloqueio nigroestriatal reduz sintomas extrapiramidais",
+          "Modula receptores α1-adrenérgicos e H1",
         ],
-        aplicacao: 'Aprovado para episódios depressivos, maníacos e mistos no TAB. Usado em monoterapia ou adjuvante.',
-        eficacia: 'Um dos poucos antipsicóticos com eficácia demonstrada em depressão bipolar. Boa tolerabilidade.'
-      }
+        genetica: {
+          titulo: "Farmacogenética da Risperidona",
+          aspectos: [
+            {
+              subtitulo: "Polimorfismos do CYP2D6",
+              conteudo:
+                "A risperidona é metabolizada pelo CYP2D6 em 9-hidroxirisperidona (ativa). Metabolizadores lentos (*4, *5) têm níveis mais altos e maior risco de efeitos adversos; rápidos (*2x2) podem ter resposta subótima.",
+            },
+            {
+              subtitulo: "Genes de Receptores Dopaminérgicos",
+              conteudo:
+                "Polimorfismos em DRD2 (Taq1A, -141C Ins/Del) e DRD3 (Ser9Gly) afetam densidade e função receptor, modulando resposta terapêutica e risco de efeitos extrapiramidais.",
+            },
+            {
+              subtitulo: "Hiperprolactinemia Genética",
+              conteudo:
+                "Variantes em genes relacionados à prolactina e seus receptores (DRD2, PRL) predispõem a níveis mais elevados de prolactina com risperidona.",
+            },
+            {
+              subtitulo: "ABCB1 e Barreira Hematoencefálica",
+              conteudo:
+                "Polimorfismos no gene ABCB1 (glicoproteína-P) afetam a penetração cerebral da risperidona, influenciando eficácia e efeitos no SNC.",
+            },
+          ],
+        },
+        aplicacao: "Episódios maníacos agudos com sintomas psicóticos. Teste de CYP2D6 pode otimizar dosagem.",
+        eficacia:
+          "Alta eficácia em mania aguda (70-75%), com metabolismo geneticamente variável afetando níveis plasmáticos.",
+      },
     },
     {
-      id: 'olanzapina',
-      nome: 'Olanzapina',
-      classe: 'Antipsicótico Atípico',
-      icon: 'OLZ',
-      color: 'bg-indigo-500',
+      id: "clozapina",
+      nome: "Clozapina",
+      classe: "Antipsicótico Atípico",
+      icon: "CLZ",
+      color: "bg-red-500",
       mecanismo: {
-        principal: 'Antagonista de múltiplos receptores: D2, 5-HT2A, H1, muscarínicos e adrenérgicos',
+        principal:
+          "Antagonista multirreceptor com perfil único, metabolismo complexo e risco de agranulocitose geneticamente determinado",
         detalhes: [
-          'Forte antagonismo D2 e 5-HT2A (antipsicótico e estabilizador)',
-          'Antagonismo H1 intenso (sedação, ganho de peso)',
-          'Bloqueio muscarínico (efeitos anticolinérgicos)',
-          'Ação em receptores 5-HT2C (risco metabólico)',
-          'Perfil de ligação mais amplo que outros atípicos'
+          "Antagonismo moderado de D2 com alta ocupação de D4 (gene DRD4)",
+          "Forte antagonismo 5-HT2A (gene HTR2A) e 5-HT2C",
+          "Agonismo parcial em D1 (raro entre antipsicóticos)",
+          "Múltiplas ações em receptores adrenérgicos, histaminérgicos e muscarínicos",
         ],
-        aplicacao: 'Episódios maníacos agudos e mistos. Combinação com fluoxetina aprovada para depressão bipolar.',
-        eficacia: 'Alta eficácia em mania aguda. Preocupações com ganho de peso e síndrome metabólica.'
-      }
+        genetica: {
+          titulo: "Genética Crítica da Clozapina",
+          aspectos: [
+            {
+              subtitulo: "Risco de Agranulocitose (HLA)",
+              conteudo:
+                "Alelos HLA-DQB1 e HLA-B aumentam risco de agranulocitose em 10-20x. Variantes em HLA-DQB1*02:01 conferem alto risco, especialmente em europeus. Screening genético pode prevenir casos fatais.",
+            },
+            {
+              subtitulo: "Metabolismo Complexo (CYP1A2)",
+              conteudo:
+                "Metabolização principal por CYP1A2 (altamente variável). Fumantes têm níveis 50% menores. Polimorfismos em CYP1A2 (*1F) afetam metabolização e risco de toxicidade.",
+            },
+            {
+              subtitulo: "Genes de Neutrófilos",
+              conteudo:
+                "Variantes em genes reguladores de neutrófilos (SLCO1B3, SLCO1B7) modulam risco de leucopenia/agranulocitose além dos fatores HLA.",
+            },
+            {
+              subtitulo: "Resposta Terapêutica Superior",
+              conteudo:
+                "Polimorfismos em DRD3, HTR2A e genes GABAérgicos podem explicar por que a clozapina funciona em casos resistentes onde outros antipsicóticos falham.",
+            },
+          ],
+        },
+        aplicacao:
+          "Reservado para TAB refratário grave. Monitoramento hematológico obrigatório. Teste HLA pode identificar risco.",
+        eficacia:
+          "Mais eficaz em mania refratária (80-85% resposta), mas uso limitado por agranulocitose (1% risco, geneticamente influenciado).",
+      },
     },
     {
-      id: 'haloperidol',
-      nome: 'Haloperidol',
-      classe: 'Antipsicótico Típico',
-      icon: 'HAL',
-      color: 'bg-red-500',
+      id: "valproato",
+      nome: "Valproato de Sódio",
+      classe: "Anticonvulsivante / Estabilizador",
+      icon: "VPA",
+      color: "bg-orange-500",
       mecanismo: {
-        principal: 'Antagonista potente e seletivo de receptores dopaminérgicos D2',
+        principal:
+          "Múltiplos mecanismos (canais de sódio, GABA, inibição HDAC) com metabolização e resposta geneticamente moduladas",
         detalhes: [
-          'Bloqueio D2 em todas as vias dopaminérgicas (mesolímbica, mesocortical, nigroestriatal, tuberoinfundibular)',
-          'Alto risco de sintomas extrapiramidais (SEP) devido ao bloqueio nigroestriatal intenso',
-          'Pode causar hiperprolactinemia (bloqueio tuberoinfundibular)',
-          'Não possui ação 5-HT2A significativa (diferença dos atípicos)',
-          'Potência antipsicótica elevada, mas perfil de efeitos adversos menos favorável'
+          "Bloqueia canais de sódio voltagem-dependentes codificados por genes SCN",
+          "Aumenta GABA via inibição de GABA-transaminase e succinato semialdeído desidrogenase",
+          "Inibe histona desacetilases (HDACi) alterando expressão gênica epigenética",
+          "Modula vias PKC e MAPK afetadas geneticamente no TAB",
         ],
-        aplicacao: 'Reservado para casos graves de mania aguda com agitação intensa. Uso de curto prazo devido aos efeitos adversos.',
-        eficacia: 'Eficaz no controle rápido de sintomas maníacos e agitação. Menos usado atualmente devido aos atípicos.'
-      }
+        genetica: {
+          titulo: "Farmacogenética do Valproato",
+          aspectos: [
+            {
+              subtitulo: "Metabolismo Hepático Variável",
+              conteudo:
+                "Metabolização por UGTs (UGT1A6, UGT1A9, UGT2B7) e CYP2C9. Polimorfismos nesses genes causam grande variabilidade interindividual nos níveis séricos.",
+            },
+            {
+              subtitulo: "Hepatotoxicidade Genética",
+              conteudo:
+                "Variantes em POLG (polimerase mitocondrial γ) aumentam dramaticamente o risco de hepatotoxicidade fatal. Mutações em CPS1 e OTC também elevam risco de hiperamonemia.",
+            },
+            {
+              subtitulo: "Teratogenicidade e MTHFR",
+              conteudo:
+                "Polimorfismos em MTHFR (C677T) aumentam risco de defeitos do tubo neural em fetos expostos ao valproato. Suplementação de folato é crítica em mulheres em idade fértil.",
+            },
+            {
+              subtitulo: "Resposta Terapêutica",
+              conteudo:
+                "Variantes em genes de receptores GABA (GABRB3, GABRA1) e canais de sódio podem prever resposta ao valproato em episódios maníacos e mistos.",
+            },
+          ],
+        },
+        aplicacao:
+          "Primeira linha para mania aguda e episódios mistos. Testes genéticos de POLG em crianças e MTHFR em mulheres férteis.",
+        eficacia:
+          "Rápida ação antimaníaca (70-80% resposta em 1-2 semanas), mas riscos hepáticos e teratogênicos geneticamente influenciados.",
+      },
     },
     {
-      id: 'clonazepam',
-      nome: 'Clonazepam',
-      classe: 'Benzodiazepínico',
-      icon: 'BZD',
-      color: 'bg-teal-500',
+      id: "carbamazepina",
+      nome: "Carbamazepina",
+      classe: "Anticonvulsivante / Estabilizador",
+      icon: "CBZ",
+      color: "bg-green-500",
       mecanismo: {
-        principal: 'Potencializa a neurotransmissão GABAérgica através da ligação alostérica aos receptores GABA-A',
+        principal:
+          "Bloqueio de canais de sódio com metabolização autoinducível e risco de hipersensibilidade HLA-dependente",
         detalhes: [
-          'Liga-se ao sítio benzodiazepínico do complexo receptor GABA-A',
-          'Aumenta a frequência de abertura dos canais de cloreto mediados por GABA',
-          'Hiperpolarização neuronal e redução da excitabilidade',
-          'Efeitos ansiolíticos, sedativos, anticonvulsivantes e miorrelaxantes',
-          'Meia-vida longa (18-50h), permitindo dosagem 2x/dia'
+          "Inibe canais de sódio tipo II (genes SCN1A, SCN2A) estabilizando membranas",
+          "Reduz liberação de glutamato em sinapses excitatórias",
+          "Modula sistemas de segundo mensageiro",
+          "Indução potente do CYP3A4 (autoindução metabólica)",
         ],
-        aplicacao: 'Adjuvante no tratamento agudo de mania e controle de ansiedade/insônia associadas ao TAB. Não é estabilizador de humor.',
-        eficacia: 'Rápido alívio de ansiedade e insônia. Risco de dependência e tolerância limita uso prolongado.'
-      }
-    }
+        genetica: {
+          titulo: "Farmacogenética da Carbamazepina",
+          aspectos: [
+            {
+              subtitulo: "HLA-B*1502 e Reações Cutâneas Graves",
+              conteudo:
+                "O alelo HLA-B*1502 (10-15% em asiáticos) aumenta risco de síndrome de Stevens-Johnson em 100x. FDA recomenda screening genético obrigatório em populações asiáticas.",
+            },
+            {
+              subtitulo: "Metabolismo por CYP3A4/CYP2C19",
+              conteudo:
+                "Metabolização principal por CYP3A4 (autoinducível) e CYP2C19. Polimorfismos em CYP2C19 (*2, *3 - metabolizadores lentos) aumentam risco de toxicidade inicial.",
+            },
+            {
+              subtitulo: "HLA-A*3101 e Hipersensibilidade",
+              conteudo:
+                "O alelo HLA-A*3101 (prevalente em europeus, japoneses) associa-se a rash cutâneo leve-moderado e reações de hipersensibilidade. Screening pode prevenir reações adversas.",
+            },
+            {
+              subtitulo: "Transportadores ABCB1",
+              conteudo:
+                "Polimorfismos em ABCB1 (glicoproteína-P) afetam concentrações cerebrais da carbamazepina, influenciando eficácia em controlar sintomas do TAB.",
+            },
+          ],
+        },
+        aplicacao:
+          "Alternativa ao lítio/valproato. Screening HLA-B*1502 obrigatório em asiáticos, recomendado em outras etnias.",
+        eficacia:
+          "Eficaz em ciclagem rápida e episódios mistos (60-65%), mas interações medicamentosas extensas por indução enzimática.",
+      },
+    },
   ];
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 border-b border-border/50 bg-card/90 backdrop-blur-md z-50">
-        <div className="container px-4 py-3">
-          <div className="flex items-center justify-between gap-4">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate('/')}
-              className="gap-2"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              Voltar
-            </Button>
-            <img src={unicesumarLogo} alt="Unicesumar" className="h-10 object-contain" />
-            <div className="w-20" />
+      {/* Header */}
+      <header className="border-b bg-card sticky top-0 z-50 shadow-sm">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" onClick={() => navigate("/")} className="hover:bg-primary/10">
+                <ArrowLeft className="h-5 w-5" />
+              </Button>
+              <div className="flex items-center gap-3">
+                <div className="bg-gradient-to-r from-blue-500 to-purple-600 p-2 rounded-lg">
+                  <Dna className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Mecanismo de Ação & Genética
+                  </h1>
+                  <p className="text-sm text-muted-foreground">Integração Farmacológica e Farmacogenética</p>
+                </div>
+              </div>
+            </div>
+            <img src={unicesumarLogo} alt="Unicesumar" className="h-12" />
           </div>
         </div>
       </header>
 
+      {/* Main Content */}
       <main className="container mx-auto px-4 py-8 space-y-8">
-        <Card className="bg-gradient-to-r from-primary/10 to-primary/5 border-primary/30">
+        {/* Introduction Card */}
+        <Card className="bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-950/20 dark:to-purple-950/20 border-2 border-primary/20">
           <CardHeader>
-            <div className="flex items-center gap-3">
-              <Brain className="h-8 w-8 text-primary" />
-              <div>
-                <CardTitle className="text-3xl">Mecanismo de Ação dos Medicamentos</CardTitle>
-                <CardDescription className="text-base mt-2">
-                  Entendendo como cada medicamento atua no tratamento do Transtorno Afetivo Bipolar
-                </CardDescription>
-              </div>
-            </div>
-          </CardHeader>
-        </Card>
-
-        {/* NOVA SEÇÃO: Genética do Transtorno Bipolar */}
-        <Card className="border-purple-500/30 bg-gradient-to-r from-purple-50/50 to-pink-50/50 dark:from-purple-950/20 dark:to-pink-950/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-purple-700 dark:text-purple-300">
-              <Dna className="h-6 w-6" />
-              Genética do Transtorno Bipolar
+            <CardTitle className="flex items-center gap-2 text-xl">
+              <Sparkles className="h-6 w-6 text-primary" />
+              Farmacologia Personalizada no Transtorno Afetivo Bipolar
             </CardTitle>
-            <CardDescription className="text-base">
-              Como os genes influenciam o desenvolvimento do TAB
-            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="space-y-3">
-              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Hereditariedade e Risco Familiar</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                O TAB apresenta <strong>forte componente genético</strong>, com herdabilidade estimada em <strong>70-80%</strong> 
-                em estudos com gêmeos monozigóticos (idênticos). O risco de desenvolver o transtorno aumenta significativamente 
-                com histórico familiar:
-              </p>
-              <ul className="space-y-2 ml-4">
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
-                  <span><strong>População geral:</strong> 1-2% de risco de desenvolver TAB</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
-                  <span><strong>Um dos pais com TAB:</strong> 10-25% de risco (aumento de 10x)</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
-                  <span><strong>Ambos os pais com TAB:</strong> 50-75% de risco</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">•</span>
-                  <span><strong>Gêmeo idêntico com TAB:</strong> 70-80% de concordância</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Modelo Poligênico</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                O TAB é uma condição <strong>poligênica complexa</strong> - não há um único gene responsável, mas sim a 
-                interação de <strong>múltiplas variantes genéticas</strong> em combinação com fatores ambientais (estresse, 
-                trauma, uso de substâncias). Cada variante individualmente tem efeito pequeno, mas juntas aumentam 
-                significativamente a vulnerabilidade.
-              </p>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Principais Genes Candidatos</h4>
-              <p className="text-sm text-muted-foreground mb-2">
-                Estudos de associação genômica ampla (GWAS) identificaram diversos genes associados ao TAB:
-              </p>
-              
-              <div className="grid md:grid-cols-2 gap-3">
-                <Card className="bg-white/50 dark:bg-gray-900/30 border-purple-200 dark:border-purple-800">
-                  <CardHeader className="pb-2">
-                    <h5 className="text-sm font-semibold text-purple-700 dark:text-purple-300">
-                      Genes Mais Estudados
-                    </h5>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-1.5 text-xs">
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">CACNA1C:</strong> Canais de cálcio, conectividade cerebral
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">ANK3:</strong> Função neuronal e estabilidade axonal
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">DISC1:</strong> Desenvolvimento neuronal e sinapse
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">TPH2:</strong> Síntese de serotonina
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">DAOA (G72):</strong> Modulação glutamatérgica
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
-
-                <Card className="bg-white/50 dark:bg-gray-900/30 border-purple-200 dark:border-purple-800">
-                  <CardHeader className="pb-2">
-                    <h5 className="text-sm font-semibold text-purple-700 dark:text-purple-300">
-                      Sistemas de Neurotransmissores
-                    </h5>
-                  </CardHeader>
-                  <CardContent>
-                    <ul className="space-y-1.5 text-xs">
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">DRD2, TH:</strong> Sistema dopaminérgico
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">5HTT, COMT:</strong> Sistema serotoninérgico
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">BDNF:</strong> Neuroproteção e plasticidade
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">ODZ4, NCAN:</strong> Mielinização e orientação axonal
-                      </li>
-                      <li className="text-muted-foreground">
-                        <strong className="text-foreground">IL-6, IL-10, TNF-A:</strong> Resposta inflamatória
-                      </li>
-                    </ul>
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
-
-            <div className="space-y-3 pt-2">
-              <h4 className="font-semibold text-purple-800 dark:text-purple-200">Como os Genes Influenciam o Tratamento</h4>
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                A variação genética ajuda a explicar por que:
-              </p>
-              <ul className="space-y-2 ml-4">
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
-                  <span>Alguns pacientes respondem melhor ao lítio (variantes em <strong>CACNA1C, BDNF</strong>)</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
-                  <span>Outros se beneficiam mais de valproato ou antipsicóticos (polimorfismos em genes dopaminérgicos)</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
-                  <span>Há diferenças na metabolização de medicamentos (variantes em <strong>CYP2D6, CYP3A4</strong>)</span>
-                </li>
-                <li className="flex items-start gap-2 text-sm text-muted-foreground">
-                  <span className="text-purple-600 dark:text-purple-400 font-bold mt-0.5">→</span>
-                  <span>Variabilidade na eficácia antidepressiva (polimorfismos em <strong>5HTT</strong>)</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="bg-purple-100/50 dark:bg-purple-900/20 p-4 rounded-lg border border-purple-200 dark:border-purple-800 mt-4">
-              <p className="text-xs text-muted-foreground">
-                <strong className="text-purple-800 dark:text-purple-200">Importante:</strong> Ter variantes genéticas 
-                de risco NÃO significa que a pessoa definitivamente desenvolverá TAB. A genética aumenta a vulnerabilidade, 
-                mas o transtorno resulta da interação complexa entre predisposição genética e fatores ambientais. 
-                Atualmente, não existem testes genéticos clínicos que possam diagnosticar ou prever com certeza 
-                o desenvolvimento do TAB.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-blue-500/30 bg-blue-50/50 dark:bg-blue-950/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <AlertCircle className="h-5 w-5 text-blue-600" />
-              Sobre o Transtorno Afetivo Bipolar (TAB)
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
             <p className="text-sm text-muted-foreground">
-              O TAB é caracterizado por alterações no funcionamento de neurotransmissores cerebrais, 
-              particularmente <strong>dopamina</strong>, <strong>serotonina</strong>, <strong>noradrenalina</strong> e <strong>GABA</strong>.
+              O tratamento do TAB envolve medicamentos que atuam em <strong>neurotransmissores</strong> (dopamina,
+              serotonina, GABA, glutamato) e <strong>vias de sinalização celular</strong>. No entanto, a resposta
+              terapêutica varia drasticamente entre pacientes.
             </p>
             <p className="text-sm text-muted-foreground">
-              Os episódios maníacos estão associados a <strong>hiperatividade dopaminérgica e glutamatérgica</strong>, 
-              enquanto os episódios depressivos envolvem <strong>déficit de monoaminas</strong> (serotonina, noradrenalina).
+              A <strong>farmacogenética</strong> explica essa variabilidade através de polimorfismos em genes que
+              codificam:
             </p>
-            <p className="text-sm text-muted-foreground">
-              Os medicamentos atuam restaurando o equilíbrio neuroquímico através de diversos mecanismos moleculares.
+            <div className="grid md:grid-cols-3 gap-3 mt-4">
+              <Card className="bg-card/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Activity className="h-4 w-4 text-blue-500" />
+                    <h4 className="font-semibold text-sm">Alvos Farmacológicos</h4>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Receptores, enzimas e transportadores onde os medicamentos agem
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="bg-card/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Zap className="h-4 w-4 text-purple-500" />
+                    <h4 className="font-semibold text-sm">Enzimas Metabolizadoras</h4>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    CYP450, UGTs que controlam metabolização e níveis séricos
+                  </p>
+                </CardContent>
+              </Card>
+              <Card className="bg-card/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <AlertCircle className="h-4 w-4 text-red-500" />
+                    <h4 className="font-semibold text-sm">Risco de Reações Adversas</h4>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    HLA e outros genes ligados a toxicidade e hipersensibilidade
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+            <p className="text-sm text-muted-foreground mt-4">
+              A análise a seguir integra <strong>como cada medicamento age</strong> com{" "}
+              <strong>como a genética individual modula essa ação</strong>, permitindo medicina personalizada baseada em
+              evidências.
             </p>
           </CardContent>
         </Card>
 
+        {/* Medication Tabs */}
         <Tabs defaultValue="litio" className="space-y-6">
           <TabsList className="flex flex-wrap h-auto gap-2 bg-muted/50 p-3">
             {medicamentos.map((med) => (
-              <TabsTrigger 
-                key={med.id} 
+              <TabsTrigger
+                key={med.id}
                 value={med.id}
-                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-mono"
+                className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground font-mono flex items-center gap-2"
               >
-                <span className="mr-2 font-bold">{med.icon}</span>
-                {med.nome}
+                <span className="font-bold text-base">{med.icon}</span>
+                <span className="hidden sm:inline">{med.nome}</span>
               </TabsTrigger>
             ))}
           </TabsList>
 
           {medicamentos.map((med) => (
             <TabsContent key={med.id} value={med.id} className="space-y-6">
-              <Card className="border-2" style={{ borderColor: med.color.replace('bg-', 'rgb(var(--') + ')' }}>
+              <Card className="border-2" style={{ borderColor: med.color.replace("bg-", "") }}>
                 <CardHeader>
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-2">
-                        <div className={`${med.color} text-white text-xl font-bold w-14 h-14 rounded-lg flex items-center justify-center font-mono shadow-lg`}>
+                        <div
+                          className={`${med.color} text-white text-xl font-bold w-16 h-16 rounded-lg flex items-center justify-center font-mono shadow-lg`}
+                        >
                           {med.icon}
                         </div>
                         <div>
-                          <CardTitle className="text-2xl">{med.nome}</CardTitle>
-                          <Badge variant="secondary" className="mt-1">{med.classe}</Badge>
+                          <CardTitle className="text-3xl">{med.nome}</CardTitle>
+                          <Badge variant="secondary" className="mt-2">
+                            {med.classe}
+                          </Badge>
                         </div>
                       </div>
                     </div>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-6">
+                  {/* Mecanismo Principal */}
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <Zap className="h-5 w-5 text-primary" />
-                      <h3 className="text-lg font-semibold">Mecanismo Principal</h3>
+                      <h3 className="text-lg font-semibold">Mecanismo Integrado (Farmacologia + Genética)</h3>
                     </div>
-                    <p className="text-foreground bg-muted/50 p-4 rounded-lg border-l-4 border-primary">
+                    <p className="text-foreground bg-gradient-to-r from-primary/10 to-purple-500/10 p-4 rounded-lg border-l-4 border-primary">
                       {med.mecanismo.principal}
                     </p>
                   </div>
 
+                  {/* Detalhes do Mecanismo */}
                   <div>
                     <div className="flex items-center gap-2 mb-3">
                       <Activity className="h-5 w-5 text-primary" />
-                      <h3 className="text-lg font-semibold">Mecanismos Detalhados</h3>
+                      <h3 className="text-lg font-semibold">Ações Farmacológicas Detalhadas</h3>
                     </div>
                     <ul className="space-y-2">
                       {med.mecanismo.detalhes.map((detalhe, idx) => (
-                        <li key={idx} className="flex items-start gap-3">
-                          <span className="text-primary mt-1">▸</span>
+                        <li key={idx} className="flex items-start gap-3 bg-muted/30 p-3 rounded-md">
+                          <span className="text-primary mt-1 font-bold">▸</span>
                           <span className="text-sm text-muted-foreground flex-1">{detalhe}</span>
                         </li>
                       ))}
                     </ul>
                   </div>
 
+                  {/* Integração Genética */}
+                  <Card className="bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 border-2 border-purple-500/30">
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2 text-purple-700 dark:text-purple-300">
+                        <Dna className="h-5 w-5" />
+                        {med.mecanismo.genetica.titulo}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      {med.mecanismo.genetica.aspectos.map((aspecto, idx) => (
+                        <div
+                          key={idx}
+                          className="bg-card/80 p-4 rounded-lg border border-purple-200/50 dark:border-purple-800/50"
+                        >
+                          <h4 className="font-semibold text-sm mb-2 flex items-center gap-2 text-purple-600 dark:text-purple-400">
+                            <Users className="h-4 w-4" />
+                            {aspecto.subtitulo}
+                          </h4>
+                          <p className="text-xs text-muted-foreground leading-relaxed">{aspecto.conteudo}</p>
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+
+                  {/* Aplicação e Eficácia */}
                   <div className="grid md:grid-cols-2 gap-4">
-                    <Card className="bg-primary/5 border-primary/20">
+                    <Card className="bg-blue-50/50 dark:bg-blue-950/20 border-blue-500/30">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
-                          <Pill className="h-4 w-4 text-primary" />
-                          <h4 className="text-sm font-semibold">Aplicação Clínica</h4>
+                          <Pill className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                          <h4 className="text-sm font-semibold">Aplicação Clínica & Genética</h4>
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-xs text-muted-foreground">
-                          {med.mecanismo.aplicacao}
-                        </p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{med.mecanismo.aplicacao}</p>
                       </CardContent>
                     </Card>
 
-                    <Card className="bg-green-50/50 dark:bg-green-950/20 border-green-500/20">
+                    <Card className="bg-green-50/50 dark:bg-green-950/20 border-green-500/30">
                       <CardHeader className="pb-3">
                         <div className="flex items-center gap-2">
                           <TrendingUp className="h-4 w-4 text-green-600 dark:text-green-400" />
-                          <h4 className="text-sm font-semibold">Eficácia</h4>
+                          <h4 className="text-sm font-semibold">Eficácia & Variabilidade Genética</h4>
                         </div>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-xs text-muted-foreground">
-                          {med.mecanismo.eficacia}
-                        </p>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{med.mecanismo.eficacia}</p>
                       </CardContent>
                     </Card>
                   </div>
@@ -463,6 +589,156 @@ const MecanismoAcao = () => {
           ))}
         </Tabs>
 
+        {/* Clinical Implications */}
+        <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-950/20 dark:to-orange-950/20 border-2 border-amber-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
+              <Brain className="h-5 w-5" />
+              Implicações Clínicas da Farmacogenética no TAB
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm flex items-center gap-2">
+                  <Dna className="h-4 w-4 text-primary" />
+                  Testes Genéticos Recomendados
+                </h4>
+                <ul className="text-xs text-muted-foreground space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>HLA-B*1502 e HLA-A*3101:</strong> Antes de carbamazepina (especialmente em asiáticos) e
+                      lamotrigina para prevenir reações cutâneas graves
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>CYP2D6 e CYP2C19:</strong> Para otimizar dosagem de antipsicóticos (risperidona,
+                      quetiapina)
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>HLA-DQB1:</strong> Consideração antes de clozapina em casos refratários para avaliar risco
+                      de agranulocitose
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>MTHFR:</strong> Em mulheres em idade fértil usando valproato para ajustar suplementação de
+                      folato
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="space-y-3">
+                <h4 className="font-semibold text-sm flex items-center gap-2">
+                  <Users className="h-4 w-4 text-primary" />
+                  Medicina Personalizada no TAB
+                </h4>
+                <ul className="text-xs text-muted-foreground space-y-2">
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>Predição de resposta:</strong> Painéis farmacogenéticos podem prever 25-40% da
+                      variabilidade na resposta ao lítio e antipsicóticos
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>Prevenção de efeitos adversos:</strong> Screening HLA evita reações potencialmente fatais
+                      (Stevens-Johnson, agranulocitose)
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>Otimização de dose:</strong> Fenótipos metabólicos (CYP450) permitem ajuste racional de
+                      dosagem desde o início
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-amber-600 mt-0.5">•</span>
+                    <span>
+                      <strong>Redução de tentativa-erro:</strong> Diminui tempo até resposta terapêutica e custos com
+                      trocas de medicação
+                    </span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Genetic Vulnerability Summary */}
+        <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border-2 border-purple-500/30">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Dna className="h-6 w-6 text-purple-600" />
+              Bases Genéticas do TAB e Alvos Terapêuticos
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              O TAB possui <strong>herdabilidade de 60-85%</strong>, com mais de <strong>30 genes de risco</strong>{" "}
+              identificados por estudos GWAS. Muitos desses genes são precisamente os alvos dos medicamentos usados no
+              tratamento:
+            </p>
+
+            <div className="grid md:grid-cols-3 gap-4">
+              <Card className="bg-card/50 border-purple-200 dark:border-purple-800">
+                <CardContent className="p-4">
+                  <h4 className="font-semibold text-sm mb-2 text-purple-600 dark:text-purple-400">
+                    Genes de Sinalização
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    <strong>CACNA1C, ANK3, GSK3B:</strong> Codificam proteínas alvos do lítio e valproato. Variantes
+                    nesses genes conferem risco para TAB e modulam resposta terapêutica.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card/50 border-purple-200 dark:border-purple-800">
+                <CardContent className="p-4">
+                  <h4 className="font-semibold text-sm mb-2 text-purple-600 dark:text-purple-400">
+                    Genes de Neurotransmissores
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    <strong>DRD2, HTR2A, SLC6A4:</strong> Codificam receptores e transportadores alvos dos
+                    antipsicóticos e estabilizadores. Polimorfismos afetam densidade receptor e resposta.
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card className="bg-card/50 border-purple-200 dark:border-purple-800">
+                <CardContent className="p-4">
+                  <h4 className="font-semibold text-sm mb-2 text-purple-600 dark:text-purple-400">
+                    Genes de Neuroplasticidade
+                  </h4>
+                  <p className="text-xs text-muted-foreground">
+                    <strong>BDNF, NTRK2:</strong> Relacionados a fatores neurotróficos. O lítio promove neuroproteção em
+                    portadores de variantes de risco, potencialmente revertendo déficits genéticos.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            <p className="text-sm text-muted-foreground mt-4 bg-purple-100/50 dark:bg-purple-900/20 p-4 rounded-lg border-l-4 border-purple-500">
+              <strong>Integração Gene-Medicamento:</strong> Os medicamentos para TAB não apenas tratam sintomas, mas
+              atuam nos mesmos sistemas biológicos alterados geneticamente na doença. A farmacogenética permite
+              identificar quais medicamentos têm maior probabilidade de sucesso baseado no perfil genético individual do
+              paciente, representando o futuro da psiquiatria personalizada.
+            </p>
+          </CardContent>
+        </Card>
+
+        {/* Important Considerations */}
         <Card className="bg-amber-50/50 dark:bg-amber-950/20 border-amber-500/30">
           <CardHeader>
             <CardTitle className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
@@ -472,36 +748,45 @@ const MecanismoAcao = () => {
           </CardHeader>
           <CardContent className="space-y-3 text-sm">
             <p className="text-muted-foreground">
-              <strong>1. Individualização do Tratamento:</strong> A resposta aos medicamentos varia entre pacientes devido 
-              a diferenças genéticas e fatores ambientais. O tratamento deve ser personalizado considerando eficácia, 
-              tolerabilidade e perfil de efeitos adversos.
+              <strong>1. Limitações Atuais da Farmacogenética:</strong> Embora promissora, a farmacogenética explica
+              apenas parte da variabilidade na resposta. Fatores ambientais, comorbidades, interações medicamentosas e
+              adesão ao tratamento também são cruciais.
             </p>
             <p className="text-muted-foreground">
-              <strong>2. Terapia Combinada:</strong> Muitos pacientes necessitam de combinação de medicamentos 
-              (ex: estabilizador de humor + antipsicótico) para controle adequado dos sintomas.
+              <strong>2. Custo-Benefício:</strong> Testes farmacogenéticos ainda têm custo elevado no Brasil. São mais
+              custo-efetivos quando há: falha terapêutica prévia, alto risco de reações adversas, ou uso de medicamentos
+              com risco grave (clozapina, carbamazepina).
             </p>
             <p className="text-muted-foreground">
-              <strong>3. Acompanhamento:</strong> Monitoramento regular de níveis séricos (especialmente lítio), 
-              função hepática, renal, metabólica e hematológica é essencial.
+              <strong>3. Interpretação Complexa:</strong> Resultados genéticos devem ser interpretados por profissionais
+              treinados. Um alelo de risco não determina destino - é um fator probabilístico que guia decisões clínicas.
             </p>
             <p className="text-muted-foreground">
-              <strong>4. Adesão ao Tratamento:</strong> O uso contínuo e adequado dos medicamentos é fundamental 
-              para prevenir recorrências e manter a estabilidade do humor.
+              <strong>4. Evidências em Evolução:</strong> A farmacogenética psiquiátrica está em desenvolvimento ativo.
+              Novas associações gene-medicamento são descobertas frequentemente, e diretrizes clínicas estão sendo
+              constantemente atualizadas.
             </p>
             <p className="text-muted-foreground">
-              <strong>5. Influência Genética:</strong> A farmacogenética pode ajudar no futuro a prever a resposta 
-              individual aos medicamentos, permitindo tratamentos mais personalizados e eficazes.
+              <strong>5. Abordagem Integrada:</strong> A genética é uma ferramenta adicional, não substituta do
+              julgamento clínico. O tratamento ideal integra: história clínica, sintomas atuais, comorbidades, efeitos
+              adversos prévios, e quando disponível, dados farmacogenéticos.
             </p>
           </CardContent>
         </Card>
 
+        {/* Footer */}
         <Card className="bg-primary/5 border-primary/20">
           <CardContent className="p-6">
-            <p className="text-xs text-muted-foreground text-center">
-              <strong>Fontes:</strong> SciELO Brasil, Psychopharmacology Institute, ANVISA, MSD Manuals, 
-              Lecturio Medical Knowledge, National Institute of Mental Health (NIMH), estudos GWAS publicados, 
-              e literatura científica revisada por pares sobre genética do transtorno bipolar.
-              As informações aqui apresentadas são de caráter educacional e não substituem orientação médica profissional.
+            <p className="text-xs text-muted-foreground text-center leading-relaxed">
+              <strong>Fontes Científicas:</strong> SciELO Brasil, NCBI PubMed (estudos GWAS em TAB), PharmGKB
+              (Pharmacogenomics Knowledgebase), CPIC Guidelines (Clinical Pharmacogenetics Implementation Consortium),
+              FDA Drug Labels, European Medicines Agency (EMA), Psychopharmacology Institute, National Institute of
+              Mental Health (NIMH), International Society of Psychiatric Genetics, e literatura científica revisada por
+              pares sobre farmacogenética psiquiátrica.
+              <br />
+              <strong>Nota:</strong> As informações apresentadas são de caráter educacional e científico, destinadas ao
+              Trabalho de Conclusão de Curso (TCC) de Farmácia da UNICESUMAR. Não substituem avaliação e orientação
+              médica profissional individualizada.
             </p>
           </CardContent>
         </Card>
