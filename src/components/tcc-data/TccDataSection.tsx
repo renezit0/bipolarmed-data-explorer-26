@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
 import { TimeSeriesChart } from '@/components/charts/TimeSeriesChart';
+import { TrendProjectionChart } from '@/components/charts/TrendProjectionChart';
 import { PandemicImpactChart } from './PandemicImpactChart';
 import { RegionalPerCapitaTable } from './RegionalPerCapitaTable';
 import { SeasonalityChart } from '@/components/charts/SeasonalityChart';
@@ -44,14 +45,21 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
 
         <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">
-            Figura 2 – Impacto da Pandemia no Consumo de Medicamentos para TAB
+            Figura 2 – Projeção de Tendência vs Dispensação Real
+          </h3>
+          <TrendProjectionChart data={data} />
+        </div>
+
+        <div>
+          <h3 className="text-lg font-semibold mb-3 text-primary">
+            Figura 3 – Impacto da Pandemia no Consumo de Medicamentos para TAB
           </h3>
           <PandemicImpactChart data={data} />
         </div>
 
         <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">
-            Figura 3 – Distribuição Geográfica do Consumo Per Capita por Estado
+            Figura 4 – Distribuição Geográfica do Consumo Per Capita por Estado
           </h3>
           {loadingByYear ? (
             <div className="flex justify-center p-8">
@@ -81,7 +89,7 @@ export const TccDataSection = ({ data, consumptionByState }: TccDataSectionProps
 
         <div>
           <h3 className="text-lg font-semibold mb-3 text-primary">
-            Figura 4 – Padrão de Sazonalidade Mensal do Consumo
+            Figura 5 – Padrão de Sazonalidade Mensal do Consumo
           </h3>
           <SeasonalityChart data={data} />
         </div>
