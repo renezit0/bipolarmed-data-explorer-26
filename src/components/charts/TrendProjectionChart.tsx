@@ -14,7 +14,7 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
         <CardHeader>
           <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
           <CardDescription>
-            Comparação entre a tendência projetada (jun/2015 a dez/2020) e a dispensação real
+            Comparação entre a tendência projetada (Jun/2015 a Dez/2020) e a dispensação real
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -48,7 +48,7 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
         <CardHeader>
           <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
           <CardDescription>
-            Comparação entre a tendência projetada (jun/2015 a dez/2020) e a dispensação real
+            Comparação entre a tendência projetada (Jun/2015 a Dez/2020) e a dispensação real
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -63,9 +63,9 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
     );
   }
 
-  // Encontrar o índice de jun/2015 e dez/2020
-  const startIndex = monthlyData.findIndex(d => d.month === 'jun/2015');
-  const endIndex = monthlyData.findIndex(d => d.month === 'dez/2020');
+  // Encontrar o índice de 2015/Jun e 2020/Dez
+  const startIndex = monthlyData.findIndex(d => d.month === '2015/Jun');
+  const endIndex = monthlyData.findIndex(d => d.month === '2020/Dez');
 
   if (startIndex === -1 || endIndex === -1 || startIndex >= endIndex) {
     return (
@@ -73,14 +73,14 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
         <CardHeader>
           <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
           <CardDescription>
-            Comparação entre a tendência projetada (jun/2015 a dez/2020) e a dispensação real
+            Comparação entre a tendência projetada (Jun/2015 a Dez/2020) e a dispensação real
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-center h-[400px] text-muted-foreground">
             <div className="text-center">
               <AlertCircle className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>Período de referência (jun/2015 a dez/2020) não encontrado nos dados</p>
+              <p>Período de referência (Jun/2015 a Dez/2020) não encontrado nos dados</p>
             </div>
           </div>
         </CardContent>
@@ -118,7 +118,7 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
       <CardHeader>
         <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
         <CardDescription>
-          Comparação entre a tendência projetada baseada no crescimento de jun/2015 a dez/2020 
+          Comparação entre a tendência projetada baseada no crescimento de Jun/2015 a Dez/2020 
           (taxa mensal: {(growthRate * 100).toFixed(2)}%) e a dispensação real observada
         </CardDescription>
       </CardHeader>
