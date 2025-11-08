@@ -143,7 +143,7 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
               }}
               formatter={(value: number | null, name: string) => {
                 if (value === null) return ['-', name];
-                return [value.toLocaleString('pt-BR'), name === 'real' ? 'Dispensação Real' : 'Tendência Projetada'];
+                return [value.toLocaleString('pt-BR'), name];
               }}
             />
             <Legend />
