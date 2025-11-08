@@ -1,5 +1,5 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader } from '@/components/ui/card';
 import { ProcessedMedicData } from '@/hooks/useMedicData';
 import { AlertCircle } from 'lucide-react';
 
@@ -12,7 +12,6 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
     return (
       <Card className="chart-container">
         <CardHeader>
-          <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
           <CardDescription>
             Comparação entre a tendência projetada (Jun/2015 a Dez/2020) e a dispensação real
           </CardDescription>
@@ -46,7 +45,6 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
     return (
       <Card className="chart-container">
         <CardHeader>
-          <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
           <CardDescription>
             Comparação entre a tendência projetada (Jun/2015 a Dez/2020) e a dispensação real
           </CardDescription>
@@ -71,7 +69,6 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
     return (
       <Card className="chart-container">
         <CardHeader>
-          <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
           <CardDescription>
             Comparação entre a tendência projetada (Jun/2015 a Dez/2020) e a dispensação real
           </CardDescription>
@@ -116,7 +113,6 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
   return (
     <Card className="chart-container">
       <CardHeader>
-        <CardTitle className="academic-title">Projeção de Tendência vs Dispensação Real</CardTitle>
         <CardDescription>
           Comparação entre a tendência projetada baseada no crescimento de Jun/2015 a Dez/2020 
           (taxa mensal: {(growthRate * 100).toFixed(2)}%) e a dispensação real observada
