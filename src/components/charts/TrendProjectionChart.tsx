@@ -95,19 +95,17 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
   const growthRate = Math.pow(endValue / startValue, 1 / monthsInPeriod) - 1;
 
   console.log('📊 Cálculo de Projeção de Tendência:');
-  console.log(`   Período: Jun/2015 (${startValue.toLocaleString('pt-BR')}) a Dez/2020 (${endValue.toLocaleString('pt-BR')})`);
+  console.log(`   Período de referência: Jun/2015 (${startValue.toLocaleString('pt-BR')}) a Dez/2020 (${endValue.toLocaleString('pt-BR')})`);
   console.log(`   Meses no período: ${monthsInPeriod}`);
   console.log(`   Taxa de crescimento mensal: ${(growthRate * 100).toFixed(3)}%`);
   console.log(`   Taxa anual equivalente: ${((Math.pow(1 + growthRate, 12) - 1) * 100).toFixed(2)}%`);
 
-  // Projetar a tendência para todo o período
+  // Projetar a tendência para TODO o período usando Jun/2015 como ponto de referência
   const chartData = monthlyData.map((item, index) => {
-    let projectedValue: number | null = null;
-    
-    if (index >= startIndex) {
-      const monthsFromStart = index - startIndex;
-      projectedValue = Math.round(startValue * Math.pow(1 + growthRate, monthsFromStart));
-    }
+    // Calcular quantos meses de diferença em relação a Jun/2015
+    const monthsFromReference = index - startIndex;
+    // Aplicar a taxa de crescimento (positiva ou negativa) a partir do valor de Jun/2015
+    const projectedValue = Math.round(startValue * Math.pow(1 + growthRate, monthsFromReference));
 
     return {
       month: item.month,
