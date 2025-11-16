@@ -118,8 +118,8 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
     <Card className="chart-container">
       <CardHeader>
         <CardDescription>
-          Comparação entre a tendência projetada baseada no crescimento de Jun/2015 a Dez/2020 
-          (taxa mensal: {(growthRate * 100).toFixed(2)}%) e a dispensação real observada
+          Comparação entre o crescimento observado em Jun/2015-Dez/2020 (taxa mensal: {(growthRate * 100).toFixed(2)}%) 
+          projetado para todo o período versus o crescimento real observado, especialmente em Jan/2021-Jun/2025
         </CardDescription>
       </CardHeader>
       <CardContent>

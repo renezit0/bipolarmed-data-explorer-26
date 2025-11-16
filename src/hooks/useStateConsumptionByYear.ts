@@ -62,8 +62,8 @@ export const useStateConsumptionByYear = () => {
 
         // Buscar dados de todos os estados em paralelo
         const allPromises = Object.entries(STATES).map(async ([code, stateInfo]) => {
-          const { data: rawData, error } = await supabase
-            .from(stateInfo.table as any)
+          const { data: rawData, error } = await (supabase as any)
+            .from(stateInfo.table)
             .select('*');
 
           if (error) {

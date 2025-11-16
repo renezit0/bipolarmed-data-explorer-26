@@ -142,8 +142,8 @@ export const useMedicData = (tableNames: string[] = ['medicbipopr']) => {
         console.log('🔍 =================================');
 
         const allDataPromises = tableNames.map(async (tableName) => {
-          const { data: rawData, error } = await supabase
-            .from(tableName as any)
+          const { data: rawData, error } = await (supabase as any)
+            .from(tableName)
             .select('*');
 
           if (error) {
