@@ -114,6 +114,27 @@ export const TrendProjectionChart = ({ data }: TrendProjectionChartProps) => {
     };
   });
 
+  // Análise do período pós-referência (Jan/2021 em diante)
+  const jan2021Index = monthlyData.findIndex(d => d.month === '2021/Jan');
+  const lastIndex = monthlyData.length - 1;
+  
+  if (jan2021Index !== -1 && jan2021Index <= lastIndex) {
+    const realJan2021 = monthlyData[jan2021Index].total;
+    const realLast = monthlyData[lastIndex].total;
+    const projectedJan2021 = chartData[jan2021Index].projetado;
+    const projectedLast = chartData[lastIndex].projetado;
+    
+    const realGrowthPct = ((realLast - realJan2021) / realJan2021) * 100;
+    const gapJan2021 = ((realJan2021 - projectedJan2021) / projectedJan2021) * 100;
+    const gapLast = ((realLast - projectedLast) / projectedLast) * 100;
+    
+    console.log('📈 ANÁLISE DO PERÍODO JAN/2021 - JUN/2025:');
+    console.log(`   Real Jan/2021: ${realJan2021.toLocaleString('pt-BR')} | Projetado: ${projectedJan2021.toLocaleString('pt-BR')} | Diferença: ${gapJan2021.toFixed(1)}%`);
+    console.log(`   Real ${monthlyData[lastIndex].month}: ${realLast.toLocaleString('pt-BR')} | Projetado: ${projectedLast.toLocaleString('pt-BR')} | Diferença: ${gapLast.toFixed(1)}%`);
+    console.log(`   Crescimento real no período: ${realGrowthPct.toFixed(1)}%`);
+    console.log(`   ${gapLast < 0 ? '⚠️ CONSUMO ABAIXO DA TENDÊNCIA PROJETADA' : '✅ CONSUMO ACIMA DA TENDÊNCIA'}`);
+  }
+
   return (
     <Card className="chart-container">
       <CardHeader>
