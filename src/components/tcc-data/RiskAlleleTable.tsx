@@ -1,19 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import { Dna } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dna } from "lucide-react";
 
 export const RiskAlleleTable = () => {
   const data = [
-    { variant: 'SNP 1', genotype: 'AA', riskAllele: 'A', numRiskAlleles: 2 },
-    { variant: 'SNP 2', genotype: 'AG', riskAllele: 'A', numRiskAlleles: 1 },
-    { variant: 'SNP 3', genotype: 'GG', riskAllele: 'A', numRiskAlleles: 0 },
+    { genotype: "AA", riskAllele: "A", numRiskAlleles: 2 },
+    { genotype: "AG", riskAllele: "A", numRiskAlleles: 1 },
+    { genotype: "GG", riskAllele: "A", numRiskAlleles: 0 },
   ];
 
   return (
