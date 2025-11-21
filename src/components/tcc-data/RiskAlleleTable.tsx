@@ -4,9 +4,9 @@ import { Dna } from "lucide-react";
 
 export const RiskAlleleTable = () => {
   const data = [
-    { genotype: "AA", riskAllele: "A", numRiskAlleles: 2 },
-    { genotype: "AG", riskAllele: "A", numRiskAlleles: 1 },
-    { genotype: "GG", riskAllele: "A", numRiskAlleles: 0 },
+    { genotype: "AA", riskAllele: "A", numRiskAlleles: 2, chanceDes: "+++" },
+    { genotype: "AG", riskAllele: "A", numRiskAlleles: 1, chanceDes: "++" },
+    { genotype: "GG", riskAllele: "A", numRiskAlleles: 0, chanceDes: "+" },
   ];
 
   return (
@@ -31,6 +31,7 @@ export const RiskAlleleTable = () => {
                 <TableHead className="font-semibold">Genótipo do indivíduo</TableHead>
                 <TableHead className="font-semibold">Alelo de risco</TableHead>
                 <TableHead className="font-semibold">Nº de alelos de risco</TableHead>
+                <TableHead className="font-semibold">Chance desenvolvimento</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -39,6 +40,7 @@ export const RiskAlleleTable = () => {
                   <TableCell>{row.genotype}</TableCell>
                   <TableCell>{row.riskAllele}</TableCell>
                   <TableCell className="font-semibold">{row.numRiskAlleles}</TableCell>
+                  <TableCell>{row.chanceDes}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
