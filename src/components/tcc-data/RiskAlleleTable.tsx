@@ -36,7 +36,6 @@ export const RiskAlleleTable = () => {
             <TableBody>
               {data.map((row) => (
                 <TableRow key={row.variant}>
-                  <TableCell className="font-medium">{row.variant}</TableCell>
                   <TableCell>{row.genotype}</TableCell>
                   <TableCell>{row.riskAllele}</TableCell>
                   <TableCell className="font-semibold">{row.numRiskAlleles}</TableCell>
