@@ -28,7 +28,6 @@ export const RiskAlleleTable = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="font-semibold">Variante</TableHead>
                 <TableHead className="font-semibold">Genótipo do indivíduo</TableHead>
                 <TableHead className="font-semibold">Alelo de risco</TableHead>
                 <TableHead className="font-semibold">Nº de alelos de risco</TableHead>
