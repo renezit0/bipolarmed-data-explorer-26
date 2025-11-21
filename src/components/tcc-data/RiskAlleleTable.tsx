@@ -28,19 +28,19 @@ export const RiskAlleleTable = () => {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="font-semibold">Genótipo do indivíduo</TableHead>
-                <TableHead className="font-semibold">Alelo de risco</TableHead>
-                <TableHead className="font-semibold">Nº de alelos de risco</TableHead>
-                <TableHead className="font-semibold">Chance desenvolvimento</TableHead>
+                <TableHead className="font-semibold text-center">Genótipo do indivíduo</TableHead>
+                <TableHead className="font-semibold text-center">Alelo de risco</TableHead>
+                <TableHead className="font-semibold text-center">Nº de alelos de risco</TableHead>
+                <TableHead className="font-semibold text-center">Chance desenvolvimento</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {data.map((row, index) => (
                 <TableRow key={index}>
-                  <TableCell>{row.genotype}</TableCell>
-                  <TableCell>{row.riskAllele}</TableCell>
-                  <TableCell className="font-semibold">{row.numRiskAlleles}</TableCell>
-                  <TableCell>{row.chanceDes}</TableCell>
+                  <TableCell className="text-center">{row.genotype}</TableCell>
+                  <TableCell className="text-center">{row.riskAllele}</TableCell>
+                  <TableCell className="font-semibold text-center">{row.numRiskAlleles}</TableCell>
+                  <TableCell className="text-center">{row.chanceDes}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -78,54 +78,54 @@ export const RiskAlleleTable = () => {
           <div className="bg-primary/10 px-4 py-3 border-b">
             <p className="text-sm font-semibold flex items-center gap-2">
               <Dna className="h-4 w-4" />
-              Tabela — Exemplo de Cálculo de Polygenic Risk Score (PRS)
+              Tabela — Valores para o cálculo do Risco Poligênico (PRS)
             </p>
           </div>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="font-semibold">Variantes</TableHead>
-                <TableHead className="font-semibold">β (log OR)</TableHead>
-                <TableHead className="font-semibold">Genótipo (A) — nº de alelos de risco</TableHead>
-                <TableHead className="font-semibold">Contribuição (β × A)</TableHead>
+                <TableHead className="font-semibold text-center">Variantes</TableHead>
+                <TableHead className="font-semibold text-center">β (log OR)</TableHead>
+                <TableHead className="font-semibold text-center">Genótipo (A) — nº de alelos de risco</TableHead>
+                <TableHead className="font-semibold text-center">Contribuição (β × A)</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow>
-                <TableCell>Variante 1</TableCell>
-                <TableCell>0,10</TableCell>
-                <TableCell className="font-semibold">2</TableCell>
-                <TableCell>0,20</TableCell>
+                <TableCell className="text-center">Variante 1</TableCell>
+                <TableCell className="text-center">0,10</TableCell>
+                <TableCell className="font-semibold text-center">2</TableCell>
+                <TableCell className="text-center">0,20</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Variante 2</TableCell>
-                <TableCell>0,15</TableCell>
-                <TableCell className="font-semibold">1</TableCell>
-                <TableCell>0,15</TableCell>
+                <TableCell className="text-center">Variante 2</TableCell>
+                <TableCell className="text-center">0,15</TableCell>
+                <TableCell className="font-semibold text-center">1</TableCell>
+                <TableCell className="text-center">0,15</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Variante 3</TableCell>
-                <TableCell>0,20</TableCell>
-                <TableCell className="font-semibold">0</TableCell>
-                <TableCell>0,00</TableCell>
+                <TableCell className="text-center">Variante 3</TableCell>
+                <TableCell className="text-center">0,20</TableCell>
+                <TableCell className="font-semibold text-center">0</TableCell>
+                <TableCell className="text-center">0,00</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Variante 4</TableCell>
-                <TableCell>0,08</TableCell>
-                <TableCell className="font-semibold">2</TableCell>
-                <TableCell>0,16</TableCell>
+                <TableCell className="text-center">Variante 4</TableCell>
+                <TableCell className="text-center">0,08</TableCell>
+                <TableCell className="font-semibold text-center">2</TableCell>
+                <TableCell className="text-center">0,16</TableCell>
               </TableRow>
               <TableRow>
-                <TableCell>Variante 5</TableCell>
-                <TableCell>0,12</TableCell>
-                <TableCell className="font-semibold">1</TableCell>
-                <TableCell>0,12</TableCell>
+                <TableCell className="text-center">Variante 5</TableCell>
+                <TableCell className="text-center">0,12</TableCell>
+                <TableCell className="font-semibold text-center">1</TableCell>
+                <TableCell className="text-center">0,12</TableCell>
               </TableRow>
               <TableRow className="font-semibold bg-muted/30">
-                <TableCell>Total</TableCell>
-                <TableCell>—</TableCell>
-                <TableCell>—</TableCell>
-                <TableCell>0,63</TableCell>
+                <TableCell className="text-center">Total</TableCell>
+                <TableCell className="text-center">—</TableCell>
+                <TableCell className="text-center">—</TableCell>
+                <TableCell className="text-center">0,63</TableCell>
               </TableRow>
             </TableBody>
           </Table>
