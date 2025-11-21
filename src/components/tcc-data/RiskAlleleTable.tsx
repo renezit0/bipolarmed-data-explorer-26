@@ -35,8 +35,8 @@ export const RiskAlleleTable = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((row) => (
-                <TableRow key={row.variant}>
+              {data.map((row, index) => (
+                <TableRow key={index}>
                   <TableCell>{row.genotype}</TableCell>
                   <TableCell>{row.riskAllele}</TableCell>
                   <TableCell className="font-semibold">{row.numRiskAlleles}</TableCell>
@@ -72,6 +72,63 @@ export const RiskAlleleTable = () => {
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="bg-card border rounded-lg overflow-hidden">
+          <div className="bg-primary/10 px-4 py-3 border-b">
+            <p className="text-sm font-semibold flex items-center gap-2">
+              <Dna className="h-4 w-4" />
+              Tabela — Exemplo de Cálculo de Polygenic Risk Score (PRS)
+            </p>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="font-semibold">Variantes</TableHead>
+                <TableHead className="font-semibold">β (log OR)</TableHead>
+                <TableHead className="font-semibold">Genótipo (A) — nº de alelos de risco</TableHead>
+                <TableHead className="font-semibold">Contribuição (β × A)</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>Variante 1</TableCell>
+                <TableCell>0,10</TableCell>
+                <TableCell className="font-semibold">2</TableCell>
+                <TableCell>0,20</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Variante 2</TableCell>
+                <TableCell>0,15</TableCell>
+                <TableCell className="font-semibold">1</TableCell>
+                <TableCell>0,15</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Variante 3</TableCell>
+                <TableCell>0,20</TableCell>
+                <TableCell className="font-semibold">0</TableCell>
+                <TableCell>0,00</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Variante 4</TableCell>
+                <TableCell>0,08</TableCell>
+                <TableCell className="font-semibold">2</TableCell>
+                <TableCell>0,16</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Variante 5</TableCell>
+                <TableCell>0,12</TableCell>
+                <TableCell className="font-semibold">1</TableCell>
+                <TableCell>0,12</TableCell>
+              </TableRow>
+              <TableRow className="font-semibold bg-muted/30">
+                <TableCell>Total</TableCell>
+                <TableCell>—</TableCell>
+                <TableCell>—</TableCell>
+                <TableCell>0,63</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
         </div>
       </CardContent>
     </Card>
